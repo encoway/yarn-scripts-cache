@@ -1,3 +1,4 @@
+### Yarn Berry ###
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -10,5 +11,11 @@
 !.yarn/cache
 #.pnp.*
 
-# IntelliJ
+### IntelliJ ###
 .idea
+
+### Build results ###
+bin
+build
+dist
+target
