@@ -1,1 +1,3 @@
-console.log("Hello World!")
+import {GREETING} from "./util/constants"
+
+console.log(`${GREETING} World!`, process.argv)

@@ -1,12 +1,22 @@
 {
-  "name": "yarn-build-cache",
+  "name": "yarn-plugin-build-cache",
   "packageManager": "yarn@3.2.3",
+  "main": "./src-plugin/index.ts",
   "dependencies": {
     "@types/node": "^18.7.18",
+    "@yarnpkg/builder": "^4.0.0-rc.18",
+    "@yarnpkg/cli": "^4.0.0-rc.18",
+    "@yarnpkg/core": "^4.0.0-rc.18",
+    "@yarnpkg/fslib": "^3.0.0-rc.18",
+    "clipanion": "^3.2.0-rc.10",
     "typescript": "^4.8.3"
   },
   "scripts": {
     "build": "tsc",
-    "hello": "yarn node ./bin/index.js"
+    "hello": "yarn node ./bin/index.js",
+    "build-plugin": "builder build plugin"
+  },
+  "devDependencies": {
+    "@yarnpkg/builder": "^4.0.0-rc.18"
   }
 }
