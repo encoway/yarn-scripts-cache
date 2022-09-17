@@ -1,0 +1,4 @@
+{
+  "name": "yarn-build-cache",
+  "packageManager": "yarn@3.2.3"
+}
