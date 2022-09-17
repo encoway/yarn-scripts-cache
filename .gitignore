@@ -19,7 +19,7 @@ bin
 build
 dist
 target
-/src-plugin/**/*.js
+src-plugin/**/*.js
 
 ### build cache ###
 my-cache
