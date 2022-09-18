@@ -173,6 +173,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rgischk/build-result-cache-dummy-project@workspace:build-result-cache-dummy-project":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/build-result-cache-dummy-project@workspace:build-result-cache-dummy-project"
+  dependencies:
+    "@types/node": ^18.7.18
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
+"@rgischk/build-result-cache@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/build-result-cache@workspace:."
+  languageName: unknown
+  linkType: soft
+
+"@rgischk/yarn-plugin-build-result-cache@workspace:yarn-plugin-build-result-cache":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/yarn-plugin-build-result-cache@workspace:yarn-plugin-build-result-cache"
+  dependencies:
+    "@types/node": ^18.7.18
+    "@yarnpkg/builder": ^4.0.0-rc.18
+    "@yarnpkg/cli": ^4.0.0-rc.18
+    "@yarnpkg/core": ^4.0.0-rc.18
+    "@yarnpkg/fslib": ^3.0.0-rc.18
+    clipanion: ^3.2.0-rc.10
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
 "@sindresorhus/is@npm:^4.0.0":
   version: 4.6.0
   resolution: "@sindresorhus/is@npm:4.6.0"
@@ -2371,20 +2400,6 @@ __metadata:
   checksum: 343617202af32df2a15a3be36a5a8c0c8545208f3d3dfbc6bb7c3e3b7e8c6f8e7485432e4f3b88da3031a6e20afa7c711eded32ddfb122896ac5d914e75848d5
   languageName: node
   linkType: hard
-
-"yarn-plugin-build-cache@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "yarn-plugin-build-cache@workspace:."
-  dependencies:
-    "@types/node": ^18.7.18
-    "@yarnpkg/builder": ^4.0.0-rc.18
-    "@yarnpkg/cli": ^4.0.0-rc.18
-    "@yarnpkg/core": ^4.0.0-rc.18
-    "@yarnpkg/fslib": ^3.0.0-rc.18
-    clipanion: ^3.2.0-rc.10
-    typescript: ^4.8.3
-  languageName: unknown
-  linkType: soft
 
 "yoga-layout-prebuilt@npm:^1.9.6":
   version: 1.10.0

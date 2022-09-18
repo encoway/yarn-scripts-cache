@@ -3,11 +3,7 @@ import {Filename, PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
 import crypto from "crypto"
 
 export type Config = {
-    basePath: string
-    inputIncludes: string[]
-    inputExcludes: string[]
-    outputIncludes: string[]
-    outputExcludes: string[]
+    scriptsToCache: string[]
 }
 
 export type CacheEntry = {
@@ -32,6 +28,13 @@ export type CacheEntryValue = {
 export type FileContent = {
     /* file -> content */
     [file: string]: string
+}
+
+export async function readConfig(cwd: PortablePath): Promise<Config | undefined> {
+    const configFile = ppath.join(cwd, toFilename("ybrc.json"))
+    if (await xfs.existsPromise(configFile)) {
+        return JSON.parse(await xfs.readFilePromise(configFile, "utf-8"))
+    }
 }
 
 export async function cachePush(cwd: PortablePath, project: Project) {
@@ -92,13 +95,17 @@ async function createCacheContent(cwd: PortablePath): Promise<CacheEntryValue> {
 async function saveCacheEntry(cwd: PortablePath, cacheEntry: CacheEntry) {
     const filename = Date.now().toString() + ".json"
     const filecontent = JSON.stringify(cacheEntry)
-    const cacheDir = ppath.join(cwd, toFilename("my-cache"))
+    const cacheDir = ppath.join(cwd, toFilename(".build-result-cache"))
+    await xfs.mkdirPromise(cacheDir, {recursive: true})
     const file = ppath.join(cacheDir, toFilename(filename))
     await xfs.writeFilePromise(file, filecontent)
 }
 
 async function loadCacheEntry(cwd: PortablePath, cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
-    const cacheDir = ppath.join(cwd, toFilename("my-cache"))
+    const cacheDir = ppath.join(cwd, toFilename(".build-result-cache"))
+    if (! await xfs.existsPromise(cacheDir)) {
+        return undefined
+    }
     const files = await readdirRecursivePromise(cacheDir)
     for (const file of files) {
         const content = await xfs.readFilePromise(file, "utf8")

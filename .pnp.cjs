@@ -17,14 +17,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     ],\
     "dependencyTreeRoots": [\
       {\
-        "name": "yarn-plugin-build-cache",\
+        "name": "@rgischk/build-result-cache",\
         "reference": "workspace:."\
+      },\
+      {\
+        "name": "@rgischk/build-result-cache-dummy-project",\
+        "reference": "workspace:build-result-cache-dummy-project"\
+      },\
+      {\
+        "name": "@rgischk/yarn-plugin-build-result-cache",\
+        "reference": "workspace:yarn-plugin-build-result-cache"\
       }\
     ],\
     "enableTopLevelFallback": true,\
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
-      ["yarn-plugin-build-cache", ["workspace:."]]\
+      ["@rgischk/build-result-cache", ["workspace:."]],\
+      ["@rgischk/build-result-cache-dummy-project", ["workspace:build-result-cache-dummy-project"]],\
+      ["@rgischk/yarn-plugin-build-result-cache", ["workspace:yarn-plugin-build-result-cache"]]\
     ],\
     "fallbackPool": [\
     ],\
@@ -33,13 +43,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["@types/node", "npm:18.7.18"],\
-            ["@yarnpkg/builder", "npm:4.0.0-rc.18"],\
-            ["@yarnpkg/cli", "virtual:ae190bbcc5494aa7c9ec91ae4b67d47425f962d1fada4d52c0448f0e039a234cb63fa76df878d1f5f8876570ff53ff8efbdd0c0a343ccb91f82822a08d965f74#npm:4.0.0-rc.18"],\
-            ["@yarnpkg/core", "npm:4.0.0-rc.18"],\
-            ["@yarnpkg/fslib", "npm:3.0.0-rc.18"],\
-            ["clipanion", "virtual:f3d2080971cbb0561dab068415a3aa3fa5a8947be9ea90089b547439a977280d853e6796c6b1cbb8f8cdde5000bd51c6a5de68a1c4aed82a0bb76d7f419ddc61#npm:3.2.0-rc.12"],\
-            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -232,6 +235,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fastq", "npm:1.13.0"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@rgischk/build-result-cache", [\
+        ["workspace:.", {\
+          "packageLocation": "./",\
+          "packageDependencies": [\
+            ["@rgischk/build-result-cache", "workspace:."]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@rgischk/build-result-cache-dummy-project", [\
+        ["workspace:build-result-cache-dummy-project", {\
+          "packageLocation": "./build-result-cache-dummy-project/",\
+          "packageDependencies": [\
+            ["@rgischk/build-result-cache-dummy-project", "workspace:build-result-cache-dummy-project"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@rgischk/yarn-plugin-build-result-cache", [\
+        ["workspace:yarn-plugin-build-result-cache", {\
+          "packageLocation": "./yarn-plugin-build-result-cache/",\
+          "packageDependencies": [\
+            ["@rgischk/yarn-plugin-build-result-cache", "workspace:yarn-plugin-build-result-cache"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["@yarnpkg/builder", "npm:4.0.0-rc.18"],\
+            ["@yarnpkg/cli", "virtual:ae190bbcc5494aa7c9ec91ae4b67d47425f962d1fada4d52c0448f0e039a234cb63fa76df878d1f5f8876570ff53ff8efbdd0c0a343ccb91f82822a08d965f74#npm:4.0.0-rc.18"],\
+            ["@yarnpkg/core", "npm:4.0.0-rc.18"],\
+            ["@yarnpkg/fslib", "npm:3.0.0-rc.18"],\
+            ["clipanion", "virtual:f3d2080971cbb0561dab068415a3aa3fa5a8947be9ea90089b547439a977280d853e6796c6b1cbb8f8cdde5000bd51c6a5de68a1c4aed82a0bb76d7f419ddc61#npm:3.2.0-rc.12"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
+          ],\
+          "linkType": "SOFT"\
         }]\
       ]],\
       ["@sindresorhus/is", [\
@@ -3116,22 +3155,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yallist", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
-        }]\
-      ]],\
-      ["yarn-plugin-build-cache", [\
-        ["workspace:.", {\
-          "packageLocation": "./",\
-          "packageDependencies": [\
-            ["yarn-plugin-build-cache", "workspace:."],\
-            ["@types/node", "npm:18.7.18"],\
-            ["@yarnpkg/builder", "npm:4.0.0-rc.18"],\
-            ["@yarnpkg/cli", "virtual:ae190bbcc5494aa7c9ec91ae4b67d47425f962d1fada4d52c0448f0e039a234cb63fa76df878d1f5f8876570ff53ff8efbdd0c0a343ccb91f82822a08d965f74#npm:4.0.0-rc.18"],\
-            ["@yarnpkg/core", "npm:4.0.0-rc.18"],\
-            ["@yarnpkg/fslib", "npm:3.0.0-rc.18"],\
-            ["clipanion", "virtual:f3d2080971cbb0561dab068415a3aa3fa5a8947be9ea90089b547439a977280d853e6796c6b1cbb8f8cdde5000bd51c6a5de68a1c4aed82a0bb76d7f419ddc61#npm:3.2.0-rc.12"],\
-            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
-          ],\
-          "linkType": "SOFT"\
         }]\
       ]],\
       ["yoga-layout-prebuilt", [\
