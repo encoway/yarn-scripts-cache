@@ -28,7 +28,7 @@ export async function updateBuildResultFromCache(cwd: PortablePath, project: Pro
 }
 
 async function buildCacheEntryKey(cwd: PortablePath, project: Project): Promise<CacheEntryKey> {
-    const srcDir = ppath.join(cwd, toFilename("src"))
+    const srcDir = ppath.join(cwd, toFilename("src")) // TODO: Make src and bin directory configurable
     const files = await readdirRecursivePromise(srcDir)
     const fileHashes: FileHashes = {}
     for (const file of files) {
@@ -53,7 +53,7 @@ async function createCacheContent(cwd: PortablePath): Promise<CacheEntryValue> {
     const fileContents: FileContent = {}
     for (const file of files) {
         const relativeFile = ppath.relative(binDir, file)
-        fileContents[relativeFile] = await xfs.readFilePromise(file, "utf8")
+        fileContents[relativeFile] = await xfs.readFilePromise(file, "utf8") // TODO: Check if this works with binary files
     }
     return {
         fileContents

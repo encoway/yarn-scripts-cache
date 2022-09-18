@@ -20,7 +20,7 @@ export type CacheEntry = {
     value: CacheEntryValue
 }
 export type CacheEntryKey = {
-    // packageHashes: string[]
+    // packageHashes: string[] TODO: Add dependencies to cache key
     fileHashes: FileHashes
 }
 export type FileHashes = {
