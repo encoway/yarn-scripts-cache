@@ -44,7 +44,7 @@ const wrapScriptExecution: WrapScriptExecution = async (
   const report = await buildReport(extra)
   const config = await readConfig(extra.cwd, report)
   const scriptToCache = config ? config.scriptsToCache.find(s => s.scriptName === scriptName) : undefined
-  if (config && scriptToCache) {
+  if (config && scriptToCache) { // TODO: Add environment variable to disable caching/restoring
     const caches = buildCaches(extra.cwd, config)
     return async () => {
       if (await updateBuildResultFromCache(project, extra, scriptToCache, caches)) {

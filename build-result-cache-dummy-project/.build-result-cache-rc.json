@@ -3,8 +3,8 @@
     {
       "scriptName": "build-with-cache",
       "inputIncludes": "**",
-      "inputExcludes": "**/bin/**",
-      "outputIncludes": "**/bin/**"
+      "inputExcludes": "bin/**",
+      "outputIncludes": "bin/**"
     }
   ]
 }

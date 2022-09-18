@@ -19,7 +19,9 @@ export type CacheEntry = {
     key: CacheEntryKey
     value: CacheEntryValue
 }
-export type CacheEntryKey = {// TODO: Check what happens when another workspace is changed
+export type CacheEntryKey = {
+    // TODO: Check what happens when another workspace is changed
+    // TODO: Add environment variables, but only those that are whitelisted via the config file
     script: string,
     args: string[],
     lockFileChecksum: string | null
