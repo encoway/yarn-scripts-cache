@@ -1,1 +1,3 @@
-# yarn-build-result-cache
+# build-result-cache
+
+A Yarn Berry plugin to cache build results.
