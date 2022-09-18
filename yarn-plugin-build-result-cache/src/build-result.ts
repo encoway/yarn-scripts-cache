@@ -1,12 +1,23 @@
 import {Project} from '@yarnpkg/core';
-import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
+import {npath, PortablePath, ppath, xfs} from "@yarnpkg/fslib";
 import crypto from "crypto"
-import {Cache, CacheEntry, CacheEntryKey, CacheEntryValue, FileContent, FileHashes} from "./cache";
+import {
+    Cache,
+    CacheEntry,
+    CacheEntryKey,
+    CacheEntryValue,
+    FileContents,
+    FileHashes,
+    GlobFileContents,
+    GlobFileHashes
+} from "./cache";
 import {WrapScriptExecutionExtra} from "./index";
+import {ScriptToCache} from "./config";
+import {glob} from "glob";
 
-export async function updateCacheFromBuildResult(extra: WrapScriptExecutionExtra, project: Project, caches: Cache[]) {
-    const key = await buildCacheEntryKey(extra, project)
-    const value = await createCacheContent(extra.cwd)
+export async function updateCacheFromBuildResult(project: Project, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, caches: Cache[]) {
+    const key = await buildCacheEntryKey(project, extra, scriptToCache)
+    const value = await createCacheContent(extra.cwd, scriptToCache)
     const cacheEntry: CacheEntry = {
         key,
         value
@@ -16,8 +27,8 @@ export async function updateCacheFromBuildResult(extra: WrapScriptExecutionExtra
     }
 }
 
-export async function updateBuildResultFromCache(extra: WrapScriptExecutionExtra, project: Project, caches: Cache[]): Promise<boolean> {
-    const key = await buildCacheEntryKey(extra, project)
+export async function updateBuildResultFromCache(project: Project, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, caches: Cache[]): Promise<boolean> {
+    const key = await buildCacheEntryKey(project, extra, scriptToCache)
     for (const cache of caches) {
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
@@ -28,19 +39,27 @@ export async function updateBuildResultFromCache(extra: WrapScriptExecutionExtra
     return false
 }
 
-async function buildCacheEntryKey(extra: WrapScriptExecutionExtra, project: Project): Promise<CacheEntryKey> {
+async function buildCacheEntryKey(project: Project, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache): Promise<CacheEntryKey> {
     const script = extra.script
     const args = extra.args
     const lockFileChecksum = project.lockFileChecksum
     const topLevelWorkspaceLocatorHash = project.topLevelWorkspace.locator.locatorHash
     const workspaceLocatorHash = project.tryWorkspaceByCwd(extra.cwd)?.locator.locatorHash
 
-    const srcDir = ppath.join(extra.cwd, toFilename("src")) // TODO: Make src and bin directory configurable
-    const files = await readdirRecursivePromise(srcDir)
-    const fileHashes: FileHashes = {}
-    for (const file of files) {
-        const relativeFile = ppath.relative(srcDir, file)
-        fileHashes[relativeFile] = await hashFileContents(file)
+    const globFileHashes: GlobFileHashes = {}
+    for (const inputInclude of toStringArray(scriptToCache.inputIncludes)) {
+        const nativeCwd = npath.fromPortablePath(extra.cwd)
+        const nativeRelativeFiles = glob.sync(inputInclude, {cwd: nativeCwd, ignore: toStringArray(scriptToCache.inputExcludes)})
+        const fileHashes: FileHashes = {}
+        for (const nativeRelativeFile of nativeRelativeFiles) {
+            const relativeFile = npath.toPortablePath(nativeRelativeFile)
+            const file = ppath.resolve(extra.cwd, relativeFile)
+            const stat = await xfs.statPromise(file)
+            if (stat.isFile()) {
+                fileHashes[relativeFile] = await hashFileContents(file)
+            }
+        }
+        globFileHashes[inputInclude] = fileHashes
     }
 
     return {
@@ -49,7 +68,7 @@ async function buildCacheEntryKey(extra: WrapScriptExecutionExtra, project: Proj
         lockFileChecksum,
         topLevelWorkspaceLocatorHash,
         workspaceLocatorHash,
-        fileHashes
+        globFileHashes
     }
 }
 
@@ -60,40 +79,45 @@ async function hashFileContents(file: PortablePath): Promise<string> {
     return hash.digest("base64")
 }
 
-async function createCacheContent(cwd: PortablePath): Promise<CacheEntryValue> {
-    const binDir = ppath.join(cwd, toFilename("bin"))
-    const files = await readdirRecursivePromise(binDir)
-    const fileContents: FileContent = {}
-    for (const file of files) {
-        const relativeFile = ppath.relative(binDir, file)
-        fileContents[relativeFile] = await xfs.readFilePromise(file, "base64")
+async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCache): Promise<CacheEntryValue> {
+    const globFileContents: GlobFileContents = {}
+    for (const outputInclude of toStringArray(scriptToCache.outputIncludes)) {
+        const nativeCwd = npath.fromPortablePath(cwd)
+        const nativeRelativeFiles = glob.sync(outputInclude, {cwd: nativeCwd, ignore: toStringArray(scriptToCache.outputExcludes)})
+        const fileContents: FileContents = {}
+        for (const nativeRelativeFile of nativeRelativeFiles) {
+            const relativeFile = npath.toPortablePath(nativeRelativeFile)
+            const file = ppath.resolve(cwd, relativeFile)
+            const stat = await xfs.statPromise(file)
+            if (stat.isFile()) {
+                fileContents[relativeFile] = await xfs.readFilePromise(file, "base64")
+            }
+        }
+        globFileContents[outputInclude] = fileContents
     }
+
     return {
-        fileContents
+        globFileContents
     }
 }
 
 async function restoreCacheValue(cwd: PortablePath, value: CacheEntryValue) {
-    const binFile = ppath.join(cwd, toFilename("bin"))
-    for (const [relativeFile, content] of Object.entries(value.fileContents)) {
-        const file = ppath.join(binFile, relativeFile as PortablePath)
-        const dir = ppath.dirname(file)
-        await xfs.mkdirPromise(dir, {recursive: true})
-        await xfs.writeFilePromise(file, content, {encoding: "base64"})
+    for (const fileContents of Object.values(value.globFileContents)) {
+        for (const [relativeFile, content] of Object.entries(fileContents)) {
+            const file = ppath.join(cwd, relativeFile as PortablePath)
+            const dir = ppath.dirname(file)
+            await xfs.mkdirPromise(dir, {recursive: true})
+            await xfs.writeFilePromise(file, content, {encoding: "base64"})
+        }
     }
 }
 
-async function readdirRecursivePromise(dir: PortablePath): Promise<PortablePath[]> {
-    const results: PortablePath[] = []
-    const files = await xfs.readdirPromise(dir)
-    for (const file of files) {
-        const fullFile = ppath.join(dir, file)
-        const stat = await xfs.statPromise(fullFile)
-        if (stat.isFile()) {
-            results.push(fullFile)
-        } else if (stat.isDirectory()) {
-            results.push(...await readdirRecursivePromise(fullFile))
-        }
+function toStringArray(globs?: string[] | string): string[] {
+    if (globs === undefined) {
+        return []
+    } if (typeof globs === "string") {
+        return [globs]
+    } else {
+        return globs
     }
-    return results
 }

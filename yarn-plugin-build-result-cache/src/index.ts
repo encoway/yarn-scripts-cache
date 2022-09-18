@@ -43,16 +43,17 @@ const wrapScriptExecution: WrapScriptExecution = async (
 ) => {
   const report = await buildReport(extra)
   const config = await readConfig(extra.cwd, report)
-  if (config && config.scriptsToCache.includes(scriptName)) {
+  const scriptToCache = config ? config.scriptsToCache.find(s => s.scriptName === scriptName) : undefined
+  if (config && scriptToCache) {
     const caches = buildCaches(extra.cwd, config)
     return async () => {
-      if (await updateBuildResultFromCache(extra, project, caches)) {
+      if (await updateBuildResultFromCache(project, extra, scriptToCache, caches)) {
         report.reportInfo(MessageName.UNNAMED, "Build result was restored from cache!")
         return Promise.resolve(0)
       } else {
         const result = await executor()
         if (result === 0) {
-          await updateCacheFromBuildResult(extra, project, caches)
+          await updateCacheFromBuildResult(project, extra, scriptToCache, caches)
           report.reportInfo(MessageName.UNNAMED, "Build result cache was updated!")
         }
         return result

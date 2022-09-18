@@ -1,5 +1,10 @@
 {
   "scriptsToCache": [
-    "build-with-cache"
+    {
+      "scriptName": "build-with-cache",
+      "inputIncludes": "**",
+      "inputExcludes": "**/bin/**",
+      "outputIncludes": "**/bin/**"
+    }
   ]
 }

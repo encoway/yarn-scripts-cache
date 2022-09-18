@@ -25,16 +25,24 @@ export type CacheEntryKey = {
     lockFileChecksum: string | null
     topLevelWorkspaceLocatorHash: string
     workspaceLocatorHash?: string
-    fileHashes: FileHashes
+    globFileHashes: GlobFileHashes
+}
+export type GlobFileHashes = {
+    /* glob -> file hashes */
+    [glob: string]: FileHashes
 }
 export type FileHashes = {
     /* file -> hash */
     [file: string]: string
 }
 export type CacheEntryValue = {
-    fileContents: FileContent
+    globFileContents: GlobFileContents
 }
-export type FileContent = {
+export type GlobFileContents = {
+    /* glob -> file content */
+    [glob: string]: FileContents
+}
+export type FileContents = {
     /* file -> content */
     [file: string]: string
 }
