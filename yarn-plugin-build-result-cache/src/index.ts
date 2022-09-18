@@ -1,7 +1,9 @@
 import {Configuration, Locator, MessageName, Plugin, Project, StreamReport} from '@yarnpkg/core';
 import {PortablePath} from "@yarnpkg/fslib";
-import {cachePop, cachePush, readConfig} from "./build-cache";
-import {Writable, Readable } from "stream"
+import {readConfig} from "./config";
+import {Readable, Writable} from "stream"
+import {buildCaches} from "./cache-factory";
+import {updateBuildResultFromCache, updateCacheFromBuildResult} from "./build-result";
 
 type WrapScriptExecution = (
     executor: () => Promise<number>,
@@ -21,14 +23,14 @@ type WrapScriptExecutionExtra = {
   stderr: Writable
 }
 
-async function log(extra: WrapScriptExecutionExtra, message: string) {
+async function buildReport(extra: WrapScriptExecutionExtra): Promise<StreamReport> {
   const configuration = Configuration.create(extra.cwd);
-  await StreamReport.start({
+  return StreamReport.start({
     configuration,
     includeFooter: false,
-    stdout: extra.stdout
-  }, async report => {
-    report.reportInfo(MessageName.UNNAMED, message)
+    stdout: extra.stdout,
+  }, async () => {
+    /* no-op */
   })
 }
 
@@ -39,17 +41,19 @@ const wrapScriptExecution: WrapScriptExecution = async (
     scriptName,
     extra
 ) => {
-  const config = await readConfig(extra.cwd)
+  const report = await buildReport(extra)
+  const config = await readConfig(extra.cwd, report)
   if (config && config.scriptsToCache.includes(scriptName)) {
+    const caches = buildCaches(extra.cwd, config)
     return async () => {
-      if (await cachePop(extra.cwd, project)) {
-        await log(extra, "Restored from cache!")
+      if (await updateBuildResultFromCache(extra.cwd, project, caches)) {
+        report.reportInfo(MessageName.UNNAMED, "Build result was restored from cache!")
         return Promise.resolve(0)
       } else {
         const result = await executor()
         if (result === 0) {
-          await cachePush(extra.cwd, project)
-          await log(extra, "Cache updated!")
+          await updateCacheFromBuildResult(extra.cwd, project, caches)
+          report.reportInfo(MessageName.UNNAMED, "Build result cache was updated!")
         }
         return result
       }
