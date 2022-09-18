@@ -19,7 +19,7 @@ export type CacheEntry = {
     key: CacheEntryKey
     value: CacheEntryValue
 }
-export type CacheEntryKey = {
+export type CacheEntryKey = {// TODO: Check what happens when another workspace is changed
     script: string,
     args: string[],
     lockFileChecksum: string | null

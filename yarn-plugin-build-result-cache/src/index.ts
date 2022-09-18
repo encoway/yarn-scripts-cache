@@ -53,8 +53,9 @@ const wrapScriptExecution: WrapScriptExecution = async (
       } else {
         const result = await executor()
         if (result === 0) {
-          await updateCacheFromBuildResult(project, extra, scriptToCache, caches)
-          report.reportInfo(MessageName.UNNAMED, "Build result cache was updated!")
+          await report.startTimerPromise("Updating build result cache", async () => {
+            await updateCacheFromBuildResult(project, extra, scriptToCache, caches)
+          })
         }
         return result
       }
