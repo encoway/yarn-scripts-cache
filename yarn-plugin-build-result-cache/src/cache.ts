@@ -20,7 +20,11 @@ export type CacheEntry = {
     value: CacheEntryValue
 }
 export type CacheEntryKey = {
-    // packageHashes: string[] TODO: Add dependencies to cache key
+    script: string,
+    args: string[],
+    lockFileChecksum: string | null
+    topLevelWorkspaceLocatorHash: string
+    workspaceLocatorHash?: string
     fileHashes: FileHashes
 }
 export type FileHashes = {

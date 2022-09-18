@@ -13,7 +13,7 @@ type WrapScriptExecution = (
     extra: WrapScriptExecutionExtra,
 ) => Promise<() => Promise<number>>
 
-type WrapScriptExecutionExtra = {
+export type WrapScriptExecutionExtra = {
   script: string,
   args: Array<string>,
   cwd: PortablePath,
@@ -46,13 +46,13 @@ const wrapScriptExecution: WrapScriptExecution = async (
   if (config && config.scriptsToCache.includes(scriptName)) {
     const caches = buildCaches(extra.cwd, config)
     return async () => {
-      if (await updateBuildResultFromCache(extra.cwd, project, caches)) {
+      if (await updateBuildResultFromCache(extra, project, caches)) {
         report.reportInfo(MessageName.UNNAMED, "Build result was restored from cache!")
         return Promise.resolve(0)
       } else {
         const result = await executor()
         if (result === 0) {
-          await updateCacheFromBuildResult(extra.cwd, project, caches)
+          await updateCacheFromBuildResult(extra, project, caches)
           report.reportInfo(MessageName.UNNAMED, "Build result cache was updated!")
         }
         return result

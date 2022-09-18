@@ -2,10 +2,11 @@ import {Project} from '@yarnpkg/core';
 import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
 import crypto from "crypto"
 import {Cache, CacheEntry, CacheEntryKey, CacheEntryValue, FileContent, FileHashes} from "./cache";
+import {WrapScriptExecutionExtra} from "./index";
 
-export async function updateCacheFromBuildResult(cwd: PortablePath, project: Project, caches: Cache[]) {
-    const key = await buildCacheEntryKey(cwd, project)
-    const value = await createCacheContent(cwd)
+export async function updateCacheFromBuildResult(extra: WrapScriptExecutionExtra, project: Project, caches: Cache[]) {
+    const key = await buildCacheEntryKey(extra, project)
+    const value = await createCacheContent(extra.cwd)
     const cacheEntry: CacheEntry = {
         key,
         value
@@ -15,34 +16,46 @@ export async function updateCacheFromBuildResult(cwd: PortablePath, project: Pro
     }
 }
 
-export async function updateBuildResultFromCache(cwd: PortablePath, project: Project, caches: Cache[]): Promise<boolean> {
-    const key = await buildCacheEntryKey(cwd, project)
+export async function updateBuildResultFromCache(extra: WrapScriptExecutionExtra, project: Project, caches: Cache[]): Promise<boolean> {
+    const key = await buildCacheEntryKey(extra, project)
     for (const cache of caches) {
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
-            await restoreCacheValue(cwd, cacheEntry.value)
+            await restoreCacheValue(extra.cwd, cacheEntry.value)
             return true
         }
     }
     return false
 }
 
-async function buildCacheEntryKey(cwd: PortablePath, project: Project): Promise<CacheEntryKey> {
-    const srcDir = ppath.join(cwd, toFilename("src")) // TODO: Make src and bin directory configurable
+async function buildCacheEntryKey(extra: WrapScriptExecutionExtra, project: Project): Promise<CacheEntryKey> {
+    const script = extra.script
+    const args = extra.args
+    const lockFileChecksum = project.lockFileChecksum
+    const topLevelWorkspaceLocatorHash = project.topLevelWorkspace.locator.locatorHash
+    const workspaceLocatorHash = project.tryWorkspaceByCwd(extra.cwd)?.locator.locatorHash
+
+    const srcDir = ppath.join(extra.cwd, toFilename("src")) // TODO: Make src and bin directory configurable
     const files = await readdirRecursivePromise(srcDir)
     const fileHashes: FileHashes = {}
     for (const file of files) {
         const relativeFile = ppath.relative(srcDir, file)
         fileHashes[relativeFile] = await hashFileContents(file)
     }
+
     return {
+        script,
+        args,
+        lockFileChecksum,
+        topLevelWorkspaceLocatorHash,
+        workspaceLocatorHash,
         fileHashes
     }
 }
 
 async function hashFileContents(file: PortablePath): Promise<string> {
-    const hash = crypto.createHash("md5")
-    const content = await xfs.readFilePromise(file)
+    const hash = crypto.createHash("sha512")
+    const content = await xfs.readFilePromise(file, "base64")
     hash.update(content)
     return hash.digest("base64")
 }
@@ -53,7 +66,7 @@ async function createCacheContent(cwd: PortablePath): Promise<CacheEntryValue> {
     const fileContents: FileContent = {}
     for (const file of files) {
         const relativeFile = ppath.relative(binDir, file)
-        fileContents[relativeFile] = await xfs.readFilePromise(file, "utf8") // TODO: Check if this works with binary files
+        fileContents[relativeFile] = await xfs.readFilePromise(file, "base64") // TODO: Check if this works with binary files
     }
     return {
         fileContents
@@ -66,7 +79,7 @@ async function restoreCacheValue(cwd: PortablePath, value: CacheEntryValue) {
         const file = ppath.join(binFile, relativeFile as PortablePath)
         const dir = ppath.dirname(file)
         await xfs.mkdirPromise(dir, {recursive: true})
-        await xfs.writeFilePromise(file, content)
+        await xfs.writeFilePromise(file, content, {encoding: "base64"})
     }
 }
 
