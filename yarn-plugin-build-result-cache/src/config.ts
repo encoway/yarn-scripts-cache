@@ -1,6 +1,8 @@
 import {MessageName, StreamReport} from "@yarnpkg/core";
 import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
 
+const CONFIG_FILE_NAME = ".build-result-cache-rc.json"
+
 export type Config = {
     scriptsToCache: ScriptToCache[]
     remoteCaches?: string[]
@@ -16,16 +18,16 @@ export type ScriptToCache = {
 
 function isValidConfig(config: any, streamReport: StreamReport): config is Config {
     if (typeof config !== "object") {
-        streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config is not an object!")
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config is not an object!`)
         return false
     }
 
     if (!Array.isArray(config.scriptsToCache)) {
-        streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config.scriptsToCache is not an array!")
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache is not an array!`)
         return false
     }
     if (config.scriptsToCache.find((item: any) => typeof item !== "object") !== undefined) {
-        streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config.scriptsToCache should only contain objects!")
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache should only contain objects!`)
         return false
     }
     if (config.scriptsToCache.find((item: any) => !isValidScriptToCache(item, streamReport)) !== undefined) {
@@ -34,15 +36,15 @@ function isValidConfig(config: any, streamReport: StreamReport): config is Confi
 
     if (config.remoteCaches) {
         if (!Array.isArray(config.remoteCaches)) {
-            streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config.remoteCaches is not an array!")
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCaches is not an array!`)
             return false
         }
         if (config.remoteCaches.find((item: any) => typeof item !== "string") !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config.remoteCaches should only contain strings!")
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCaches should only contain strings!`)
             return false
         }
         if (config.remoteCaches.find((item: string) => !isValidUrl(item)) !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config.remoteCaches should only contain valid URLs!")
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCaches should only contain valid URLs!`)
             return false
         }
     }
@@ -61,50 +63,50 @@ function isValidUrl(url: string): boolean {
 
 function isValidScriptToCache(scriptToCache: any, streamReport: StreamReport): boolean {
     if (typeof scriptToCache.scriptName !== "string") {
-        streamReport.reportError(MessageName.UNNAMED, "build-result-cache-rc.json is not valid: config.scriptsToCache.scriptName is no string!")
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.scriptName is no string!`)
         return false
     }
 
     if (scriptToCache.inputIncludes !== undefined && typeof scriptToCache.inputIncludes !== "string") {
         if (!Array.isArray(scriptToCache.inputIncludes)) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.inputIncludes for ${scriptToCache.scriptName} is not an array!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.inputIncludes for ${scriptToCache.scriptName} is not an array!`)
             return false
         }
         if (scriptToCache.inputIncludes.find((item: any) => typeof item !== "string") !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.inputIncludes for ${scriptToCache.scriptName} should only contain strings!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.inputIncludes for ${scriptToCache.scriptName} should only contain strings!`)
             return false
         }
     }
 
     if (scriptToCache.inputExcludes !== undefined && typeof scriptToCache.inputExcludes !== "string") {
         if (!Array.isArray(scriptToCache.inputExcludes)) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.inputExcludes for ${scriptToCache.scriptName} is not an array!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.inputExcludes for ${scriptToCache.scriptName} is not an array!`)
             return false
         }
         if (scriptToCache.inputExcludes.find((item: any) => typeof item !== "string") !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.inputExcludes for ${scriptToCache.scriptName} should only contain strings!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.inputExcludes for ${scriptToCache.scriptName} should only contain strings!`)
             return false
         }
     }
 
     if (scriptToCache.outputIncludes !== undefined && typeof scriptToCache.outputIncludes !== "string") {
         if (!Array.isArray(scriptToCache.outputIncludes)) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.outputIncludes for ${scriptToCache.scriptName} is not an array!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.outputIncludes for ${scriptToCache.scriptName} is not an array!`)
             return false
         }
         if (scriptToCache.outputIncludes.find((item: any) => typeof item !== "string") !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.outputIncludes for ${scriptToCache.scriptName} should only contain strings!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.outputIncludes for ${scriptToCache.scriptName} should only contain strings!`)
             return false
         }
     }
 
     if (scriptToCache.outputExcludes !== undefined && typeof scriptToCache.outputExcludes !== "string") {
         if (!Array.isArray(scriptToCache.outputExcludes)) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.outputExcludes for ${scriptToCache.scriptName} is not an array!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.outputExcludes for ${scriptToCache.scriptName} is not an array!`)
             return false
         }
         if (scriptToCache.outputExcludes.find((item: any) => typeof item !== "string") !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, `build-result-cache-rc.json is not valid: config.scriptsToCache.outputExcludes for ${scriptToCache.scriptName} should only contain strings!`)
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.outputExcludes for ${scriptToCache.scriptName} should only contain strings!`)
             return false
         }
     }
@@ -113,7 +115,7 @@ function isValidScriptToCache(scriptToCache: any, streamReport: StreamReport): b
 }
 
 export async function readConfig(cwd: PortablePath, streamReport: StreamReport): Promise<Config | undefined> {
-    const configFile = ppath.join(cwd, toFilename("build-result-cache-rc.json"))
+    const configFile = ppath.join(cwd, toFilename(CONFIG_FILE_NAME))
     if (await xfs.existsPromise(configFile)) {
         const configContent = await xfs.readFilePromise(configFile, "utf-8")
         try {
@@ -122,7 +124,7 @@ export async function readConfig(cwd: PortablePath, streamReport: StreamReport):
                 return config
             }
         } catch (error) {
-            streamReport.reportErrorOnce(MessageName.EXCEPTION, "build-result-cache-rc.json is not valid:")
+            streamReport.reportErrorOnce(MessageName.EXCEPTION, `${CONFIG_FILE_NAME} is not valid:`)
             streamReport.reportExceptionOnce(error as Error)
         }
     }

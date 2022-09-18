@@ -22,6 +22,7 @@ export class LocalCache implements Cache {
         if (! await xfs.existsPromise(cacheDir)) {
             return undefined
         }
+        // TODO: Implement cleanup using maxAge and maxAmount config flags
         const files = await xfs.readdirPromise(cacheDir)
         for (const file of files) {
             const fullFile = ppath.join(cacheDir, file)
