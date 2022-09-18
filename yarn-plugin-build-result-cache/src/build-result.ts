@@ -66,7 +66,7 @@ async function createCacheContent(cwd: PortablePath): Promise<CacheEntryValue> {
     const fileContents: FileContent = {}
     for (const file of files) {
         const relativeFile = ppath.relative(binDir, file)
-        fileContents[relativeFile] = await xfs.readFilePromise(file, "base64") // TODO: Check if this works with binary files
+        fileContents[relativeFile] = await xfs.readFilePromise(file, "base64")
     }
     return {
         fileContents
