@@ -8,10 +8,12 @@ export type Config = {
      * Defines which scripts should be cached.
      */
     scriptsToCache: ScriptToCache[]
+
     /**
      * Defines remote cache instances.
      */
     remoteCache?: string
+
     /**
      * Configure how to use the cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE.
      */
@@ -26,6 +28,16 @@ export type Config = {
      * Does not overwrite the more general cacheUsage field.
      */
     remoteCacheUsage?: CacheUsage
+
+    /**
+     * The maximum age of script execution results to store in the local cache in milliseconds.
+     * Defaults to a value that is equivalent to 30 days.
+     */
+    localCacheMaxAge?: number
+    /**
+     * The maximum amount of script execution results to store in the local cache. Defaults to 1000.
+     */
+    localCacheMaxAmount?: number
 }
 
 export type CacheUsage = "enabled" /* default */ | "disabled" | "update-cache-only" | "update-script-execution-result-only"
@@ -107,6 +119,15 @@ function isValidConfig(config: any, streamReport: StreamReport): config is Confi
             streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCacheUsage is not a valid value!`)
             return false
         }
+    }
+
+    if (config.localCacheMaxAge !== undefined && typeof config.localCacheMaxAge !== "number") {
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.localCacheMaxAge should be a number!`)
+        return false
+    }
+    if (config.localCacheMaxAmount !== undefined && typeof config.localCacheMaxAmount !== "number") {
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.localCacheMaxAmount should be a number!`)
+        return false
     }
 
     return true

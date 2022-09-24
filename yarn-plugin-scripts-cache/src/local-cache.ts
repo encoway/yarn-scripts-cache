@@ -5,6 +5,8 @@ import {Config} from "./config";
 import crypto from "crypto";
 
 const CACHE_FOLDER_NAME = ".yarn-scripts-cache" // TODO: Allow to configure the location of this folder
+const DEFAULT_MAX_AGE = 2592000000 // 30 days in milliseconds
+const DEFAULT_MAX_AMOUNT = 1000
 
 export class LocalCache implements Cache {
     cwd: PortablePath
@@ -20,11 +22,13 @@ export class LocalCache implements Cache {
             return
         }
 
-        const fileContent = JSON.stringify(cacheEntry)
         const cacheDir = this.buildCacheDir()
         await xfs.mkdirPromise(cacheDir, {recursive: true})
         const file = this.buildCacheFile(cacheDir, cacheEntry.key)
+        const fileContent = JSON.stringify(cacheEntry)
         await xfs.writeFilePromise(file, fileContent)
+
+        await this.cleanup()
     }
 
     async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
@@ -36,7 +40,6 @@ export class LocalCache implements Cache {
         if (! await xfs.existsPromise(cacheDir)) {
             return undefined
         }
-        // TODO: Implement cleanup using maxAge and maxAmount config flags
 
         let cacheFile = this.buildCacheFile(cacheDir, cacheEntryKey);
         if (await xfs.existsPromise(cacheFile)) {
@@ -47,6 +50,33 @@ export class LocalCache implements Cache {
             }
         }
         return undefined
+    }
+
+    async cleanup() {
+        const maxAge = typeof this.config.localCacheMaxAge === "undefined"
+            ? DEFAULT_MAX_AGE
+            : this.config.localCacheMaxAge
+        const maxAmount = typeof this.config.localCacheMaxAmount === "undefined"
+            ? DEFAULT_MAX_AMOUNT
+            : this.config.localCacheMaxAmount
+
+        const deleteBefore = Date.now() - maxAge
+        const cacheDir = this.buildCacheDir()
+        const files = (await xfs.readdirPromise(cacheDir)).map(file => ppath.join(cacheDir, file))
+        const filesWithCreationDate = files.map(buildFileWithAge)
+        filesWithCreationDate.sort((a, b) => b.creationDate - a.creationDate)
+
+        let amountFiles = 0
+        for (const fileWithCreationDate of filesWithCreationDate) {
+            if (fileWithCreationDate.creationDate < deleteBefore) {
+                await xfs.unlinkPromise(fileWithCreationDate.file)
+            } else {
+                amountFiles += 1
+            }
+            if (amountFiles > maxAmount) {
+                await xfs.unlinkPromise(fileWithCreationDate.file)
+            }
+        }
     }
 
     buildCacheFile(cacheDir: PortablePath, cacheEntryKey: CacheEntryKey): PortablePath {
@@ -62,4 +92,17 @@ export class LocalCache implements Cache {
 
 function isSameKey(key1: CacheEntryKey, key2: CacheEntryKey): boolean {
     return JSON.stringify(key1) === JSON.stringify(key2)
+}
+
+function buildFileWithAge(file: PortablePath): FileWithCreationDate {
+    const stat = xfs.statSync(file)
+    return {
+        file,
+        creationDate: stat.mtime.getTime()
+    }
+}
+
+type FileWithCreationDate = {
+    file: PortablePath
+    creationDate: number
 }

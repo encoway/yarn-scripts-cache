@@ -210,3 +210,21 @@ Environment variable on CI system:
 ```
 YARN_SCRIPTS_CACHE_REMOTE=enabled
 ```
+
+**Limit the size of the local cache folder**
+
+This will limit the maximum age of entries in the cache to 5 days (432000000 milliseconds) and the maximum amount of cache entries to 10:
+```
+{
+  "scriptsToCache": [
+    {
+      "scriptName": "build",
+      "inputIncludes": "**",
+      "inputExcludes": "dist/**",
+      "outputIncludes": "dist/**"
+    }
+  ],
+  "localCacheMaxAge": 432000000,
+  "localCacheMaxAmount": 10
+}
+```
