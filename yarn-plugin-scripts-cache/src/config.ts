@@ -11,8 +11,24 @@ export type Config = {
     /**
      * Defines remote cache instances.
      */
-    remoteCaches?: string[]
+    remoteCache?: string
+    /**
+     * Configure how to use the cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE.
+     */
+    cacheUsage?: CacheUsage
+    /**
+     * Configure how to use the local cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE_LOCAL.
+     * Does not overwrite the more general cacheUsage field.
+     */
+    localCacheUsage?: CacheUsage
+    /**
+     * Configure how to use the remote cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE_REMOTE.
+     * Does not overwrite the more general cacheUsage field.
+     */
+    remoteCacheUsage?: CacheUsage
 }
+
+export type CacheUsage = "enabled" | "disabled" | "update-cache-only" | "update-script-execution-result-only"
 
 export type ScriptToCache = {
     /**
@@ -63,22 +79,41 @@ function isValidConfig(config: any, streamReport: StreamReport): config is Confi
         return false
     }
 
-    if (config.remoteCaches) {
-        if (!Array.isArray(config.remoteCaches)) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCaches is not an array!`)
+    if (config.remoteCache) {
+        if (typeof config.remoteCache !== "string") {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCache should be a string!`)
             return false
         }
-        if (config.remoteCaches.find((item: any) => typeof item !== "string") !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCaches should only contain strings!`)
+        if (!isValidUrl(config.remoteCache)) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCache should be a valid URLs!`)
             return false
         }
-        if (config.remoteCaches.find((item: string) => !isValidUrl(item)) !== undefined) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCaches should only contain valid URLs!`)
+    }
+
+    if (config.cacheUsage) {
+        if (!isValidCacheUsage(config.cacheUsage)) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.cacheUsage is not a valid value!`)
+            return false
+        }
+    }
+    if (config.localCacheUsage) {
+        if (!isValidCacheUsage(config.localCacheUsage)) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.localCacheUsage is not a valid value!`)
+            return false
+        }
+    }
+    if (config.remoteCacheUsage) {
+        if (!isValidCacheUsage(config.remoteCacheUsage)) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCacheUsage is not a valid value!`)
             return false
         }
     }
 
     return true
+}
+
+function isValidCacheUsage(cacheUsage: string) {
+    return cacheUsage === "enabled" || cacheUsage === "disabled" || cacheUsage === "update-cache-only" || cacheUsage === "update-script-execution-result-only"
 }
 
 function isValidUrl(url: string): boolean {

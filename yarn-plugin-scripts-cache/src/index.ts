@@ -4,6 +4,7 @@ import {readConfig} from "./config";
 import {Readable, Writable} from "stream"
 import {buildCaches} from "./cache-factory";
 import {updateScriptExecutionResultFromCache, updateCacheFromScriptExecutionResult} from "./script-result";
+import {isCacheDisabled, shouldUpdateCache, shouldUpdateScriptExecutionResult} from "./environment-util";
 
 export type WrapScriptExecution = (
     executor: () => Promise<number>,
@@ -47,32 +48,41 @@ const wrapScriptExecution: WrapScriptExecution = async (
 ) => {
   const report = await buildReport(extra)
   const config = await readConfig(extra.cwd, report)
-  const scriptToCache = config ? config.scriptsToCache.find(s => s.scriptName === scriptName) : undefined
-  if (config && scriptToCache) { // TODO: Add environment variable to disable caching/restoring
-    const caches = buildCaches(extra.cwd, config)
-    return async () => {
-      if (await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)) {
-        report.reportInfo(MessageName.UNNAMED, "Script execution result was restored from cache!")
-        return Promise.resolve(0)
-      } else {
-        const result = await executor()
-        if (result === 0) {
-          await report.startTimerPromise("Updating script execution result cache", async () => {
-            await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
-          })
-        }
-        return result
-      }
-    }
-  } else {
+  if (!config) {
     return executor
   }
-};
+
+  if (isCacheDisabled(config)) {
+    return executor
+  }
+
+  const scriptToCache = config.scriptsToCache.find(s => s.scriptName === scriptName)
+  if (!scriptToCache) {
+    return executor
+  }
+
+  const caches = buildCaches(extra.cwd, config)
+
+  return async () => {
+    if (shouldUpdateScriptExecutionResult(config) && await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)) {
+      report.reportInfo(MessageName.UNNAMED, "Script execution result was restored from cache!")
+      return Promise.resolve(0)
+    } else {
+      const result = await executor()
+      if (result === 0 && shouldUpdateCache(config)) {
+        await report.startTimerPromise("Updating script execution result cache", async () => {
+          await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
+        })
+      }
+      return result
+    }
+  }
+}
 
 const plugin: Plugin = {
   hooks: {
     wrapScriptExecution
   }
-};
+}
 
-export default plugin;
+export default plugin
