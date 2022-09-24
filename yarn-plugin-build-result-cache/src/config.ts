@@ -4,16 +4,44 @@ import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
 export const CONFIG_FILE_NAME = ".build-result-cache-rc.json"
 
 export type Config = {
+    /**
+     * Defines which scripts should be cached.
+     */
     scriptsToCache: ScriptToCache[]
+    /**
+     * Defines remote cache instances.
+     */
     remoteCaches?: string[]
 }
 
 export type ScriptToCache = {
+    /**
+     * The name of the script to cache, as defined in the package.jsons "scripts"-field.
+     */
     scriptName: string
+    /**
+     * One or multiple globs defining which files should be included in the 'input' files used to check whether two runs are the same.
+     * The globs are matched against paths relative to the current working directory.
+     */
     inputIncludes?: string[] | string
+    /**
+     * One or multiple globs defining exceptions from the previous option.
+     * The globs are matched against paths relative to the current working directory.
+     */
     inputExcludes?: string[] | string
+    /**
+     * One or multiple globs defining which files should be copied into the cache to be restored on consecutive script executions.
+     * The globs are matched against paths relative to the current working directory.
+     */
     outputIncludes?: string[] | string
+    /**
+     * One or multiple globs defining exceptions from the previous option.
+     * The globs are matched against paths relative to the current working directory.
+     */
     outputExcludes?: string[] | string
+    /**
+     * One or multiple regular expressions to match against environment variable names that should be checked for changes on consecutive script executions.
+     */
     environmentVariableIncludes?: string[] | string
 }
 
