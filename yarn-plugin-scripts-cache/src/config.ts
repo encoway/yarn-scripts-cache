@@ -28,7 +28,7 @@ export type Config = {
     remoteCacheUsage?: CacheUsage
 }
 
-export type CacheUsage = "enabled" | "disabled" | "update-cache-only" | "update-script-execution-result-only"
+export type CacheUsage = "enabled" /* default */ | "disabled" | "update-cache-only" | "update-script-execution-result-only"
 
 export type ScriptToCache = {
     /**

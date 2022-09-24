@@ -16,7 +16,16 @@ See [the type declaration](yarn-plugin-scripts-cache/src/config.ts) for the poss
 
 ### Environment variables
 
-* TBD
+The following environment variables can be used to overwrite the `cacheUsage` settings in the config file:
+* `SCRIPT_RESULTS_CACHE` overwrites `cacheUsage`
+* `SCRIPT_RESULTS_CACHE_LOCAL` overwrites `localCacheUsage`
+* `SCRIPT_RESULTS_CACHE_REMOTE` overwrites `remoteCacheUsage`
+
+The following values are valid:
+* `enabled` (default): The cache will be used
+* `disabled`: The cache will not be used
+* `update-cache-only`: The cache will be updated, but the script execution results will not be loaded from the cache.
+* `update-script-execution-result-only`: The script execution results will be loaded from the cache, but the cache will not be updated.
 
 ## How does it work?
 
@@ -119,6 +128,9 @@ You only want to make sure to include the correct output files.
 }
 ```
 
+### Remote caching
+
+* TBD
 
 ## Examples
 
@@ -175,4 +187,26 @@ This will consider changes in the values of any environment variables starting w
     }
   ]
 }
+```
+
+**Update remote cache only from CI system**
+
+This will not update the remote cache by default, which is overwritten by an environment variable on the CI system: 
+```
+{
+  "scriptsToCache": [
+    {
+      "scriptName": "build",
+      "inputIncludes": "**",
+      "inputExcludes": "dist/**",
+      "outputIncludes": "dist/**"
+    }
+  ],
+  "remoteCache": "https://yarn-scripts-cache.my-company.org",
+  "remoteCacheUsage": "update-script-execution-result-only"
+}
+```
+Environment variable on CI system:
+```
+YARN_SCRIPTS_CACHE_REMOTE=enabled
 ```
