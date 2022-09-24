@@ -64,18 +64,25 @@ const wrapScriptExecution: WrapScriptExecution = async (
   const caches = buildCaches(extra.cwd, config)
 
   return async () => {
-    if (shouldUpdateScriptExecutionResult(config) && await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)) {
-      report.reportInfo(MessageName.UNNAMED, "Script execution result was restored from cache!")
-      return Promise.resolve(0)
-    } else {
-      const result = await executor()
-      if (result === 0 && shouldUpdateCache(config)) {
-        await report.startTimerPromise("Updating script execution result cache", async () => {
-          await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
-        })
+    if (shouldUpdateScriptExecutionResult(config)) {
+      const cacheEntry = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)
+      if (cacheEntry) {
+        const createdAt = new Date(cacheEntry.value.createdAt).toUTCString()
+        const createdBy = cacheEntry.value.createdBy
+        report.reportInfo(MessageName.UNNAMED,
+            `Script execution result was restored from cache! Created ${createdAt} by ${createdBy}`)
+        return Promise.resolve(0)
       }
-      return result
     }
+
+    const result = await executor()
+
+    if (result === 0 && shouldUpdateCache(config)) {
+      await report.startTimerPromise("Updating script execution result cache", async () => {
+        await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
+      })
+    }
+    return result
   }
 }
 

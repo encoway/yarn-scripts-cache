@@ -14,6 +14,7 @@ import {
 import {WrapScriptExecutionExtra} from "./index";
 import {CONFIG_FILE_NAME, readConfig, ScriptToCache} from "./config";
 import {glob} from "glob";
+import os from "os";
 
 export async function updateCacheFromScriptExecutionResult(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]) {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
@@ -30,19 +31,19 @@ export async function updateCacheFromScriptExecutionResult(project: Project, loc
     }
 }
 
-export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<boolean> {
+export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<CacheEntry | undefined> {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
     if (!key) {
-        return false
+        return undefined
     }
     for (const cache of caches) {
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
             await restoreCacheValue(extra.cwd, cacheEntry.value)
-            return true
+            return cacheEntry
         }
     }
-    return false
+    return undefined
 }
 
 async function buildCacheEntryKey(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport): Promise<CacheEntryKey | undefined> {
@@ -149,8 +150,13 @@ async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCach
         globFileContents[outputInclude] = fileContents
     }
 
+    const createdAt = Date.now()
+    const createdBy = os.hostname()
+
     return {
-        globFileContents
+        globFileContents,
+        createdAt,
+        createdBy
     }
 }
 

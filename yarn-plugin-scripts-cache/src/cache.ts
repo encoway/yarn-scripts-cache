@@ -16,7 +16,6 @@ export interface Cache {
 }
 
 export type CacheEntry = {
-    // TODO: Add some meta information for debugging (e.g. creation date, hostname, username etc...)
     key: CacheEntryKey
     value: CacheEntryValue
 }
@@ -44,6 +43,8 @@ export type FileHashes = {
 }
 export type CacheEntryValue = {
     globFileContents: GlobFileContents
+    createdAt: number
+    createdBy: string
 }
 export type GlobFileContents = {
     [glob: string]: FileContents
