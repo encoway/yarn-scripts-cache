@@ -4,7 +4,7 @@ A Yarn Berry plugin to cache script execution results.
 
 ## Installation
 
-* TBD
+* TODO
 
 ## Configuration options
 
@@ -130,7 +130,7 @@ You only want to make sure to include the correct output files.
 
 ### Remote caching
 
-* TBD
+* TODO
 
 ## Examples
 
