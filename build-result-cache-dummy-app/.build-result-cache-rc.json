@@ -1,0 +1,11 @@
+{
+  "scriptsToCache": [
+    {
+      "scriptName": "dummy-build",
+      "inputIncludes": "**",
+      "inputExcludes": "build/**",
+      "outputIncludes": "build/**",
+      "environmentVariableIncludes": "REACT_APP.*"
+    }
+  ]
+}
