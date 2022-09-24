@@ -7,13 +7,15 @@
     "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .build-result-cache",
     "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
     "dummy-clean": "yarn workspaces foreach --verbose --all exec rimraf bin",
-    "dummy-hello": "yarn workspaces foreach --verbose --topological --all run dummy-hello"
+    "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
+    "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve"
   },
   "workspaces": [
     "yarn-plugin-build-result-cache",
     "build-result-cache-dummy-lib2",
     "build-result-cache-dummy-lib",
-    "build-result-cache-dummy-project"
+    "build-result-cache-dummy-project",
+    "build-result-cache-dummy-app"
   ],
   "devDependencies": {
     "rimraf": "^3.0.2"

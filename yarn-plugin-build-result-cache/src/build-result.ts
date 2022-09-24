@@ -5,11 +5,11 @@ import {
     Cache,
     CacheEntry,
     CacheEntryKey,
-    CacheEntryValue,
+    CacheEntryValue, EnvVars,
     FileContents,
     FileHashes,
     GlobFileContents,
-    GlobFileHashes, ScriptFileHashes, WorkspaceGlobFileHashes
+    GlobFileHashes, RegexEnvVars, ScriptFileHashes, WorkspaceGlobFileHashes
 } from "./cache";
 import {WrapScriptExecutionExtra} from "./index";
 import {CONFIG_FILE_NAME, readConfig, ScriptToCache} from "./config";
@@ -53,6 +53,7 @@ async function buildCacheEntryKey(project: Project, locator: Locator, extra: Wra
     const workspaceLocator = locatorToString(locator)
     const globFileHashes = await buildGlobFileHashes(extra.cwd, scriptToCache.inputIncludes, scriptToCache.inputExcludes)
     const dependencyWorkspacesGlobFileHashes = await buildDependencyWorkspacesGlobFileHashes(project, locator, streamReport)
+    const environmentVariables = buildEnvironmentVariables(extra, scriptToCache)
 
     if (!dependencyWorkspacesGlobFileHashes) {
         return undefined
@@ -65,8 +66,24 @@ async function buildCacheEntryKey(project: Project, locator: Locator, extra: Wra
         topLevelWorkspaceLocator,
         workspaceLocator,
         globFileHashes,
-        dependencyWorkspacesGlobFileHashes
+        dependencyWorkspacesGlobFileHashes,
+        environmentVariables
     }
+}
+
+function buildEnvironmentVariables(extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache): RegexEnvVars {
+    const regexEnvVars: RegexEnvVars = {}
+    for (const envVarRegex of toStringArray(scriptToCache.environmentVariableIncludes)) {
+        const envVars: EnvVars = {}
+        const regex = new RegExp(envVarRegex)
+        for (const [name, value] of Object.entries(extra.env)) {
+            if (regex.test(name)) {
+                envVars[name] = value
+            }
+        }
+        regexEnvVars[envVarRegex] = envVars
+    }
+    return regexEnvVars
 }
 
 async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator: Locator, streamReport: StreamReport): Promise<WorkspaceGlobFileHashes | undefined> {
@@ -155,12 +172,12 @@ function locatorToString(locator: Locator): string {
     return `${locator.name}@${locator.reference}`
 }
 
-function toStringArray(globs?: string[] | string): string[] {
-    if (globs === undefined) {
+function toStringArray(entries?: string[] | string): string[] {
+    if (entries === undefined) {
         return []
-    } if (typeof globs === "string") {
-        return [globs]
+    } if (typeof entries === "string") {
+        return [entries]
     } else {
-        return globs
+        return entries
     }
 }

@@ -5,7 +5,7 @@ import {Readable, Writable} from "stream"
 import {buildCaches} from "./cache-factory";
 import {updateBuildResultFromCache, updateCacheFromBuildResult} from "./build-result";
 
-type WrapScriptExecution = (
+export type WrapScriptExecution = (
     executor: () => Promise<number>,
     project: Project,
     locator: Locator,
@@ -17,10 +17,14 @@ export type WrapScriptExecutionExtra = {
   script: string,
   args: Array<string>,
   cwd: PortablePath,
-  env: any,
+  env: ProcessEnvironment,
   stdin: Readable | null,
   stdout: Writable,
   stderr: Writable
+}
+
+export type ProcessEnvironment = {
+  [key: string]: string
 }
 
 async function buildReport(extra: WrapScriptExecutionExtra): Promise<StreamReport> {

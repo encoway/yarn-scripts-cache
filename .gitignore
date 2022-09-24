@@ -12,13 +12,16 @@
 #.pnp.*
 
 ### IntelliJ ###
-.idea
+.idea/
 
 ### Build results ###
-bin
-build
-dist
-target
+bin/
+build/
+dist/
+target/
+
+### Node ###
+node_modules/
 
 ### build cache ###
-.build-result-cache
+.build-result-cache/

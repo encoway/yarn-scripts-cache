@@ -23,11 +23,18 @@ export type CacheEntryKey = {
     // TODO: Add environment variables, but only those that are whitelisted via the config file
     script: string,
     args: string[],
+    environmentVariables: RegexEnvVars
     lockFileChecksum: string | null
     topLevelWorkspaceLocator: string
     workspaceLocator?: string
     globFileHashes: GlobFileHashes
     dependencyWorkspacesGlobFileHashes: WorkspaceGlobFileHashes
+}
+export type RegexEnvVars = {
+    [regex: string]: EnvVars
+}
+export type EnvVars = {
+    [envVar: string]: string
 }
 export type GlobFileHashes = {
     [glob: string]: FileHashes

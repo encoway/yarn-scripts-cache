@@ -14,6 +14,7 @@ export type ScriptToCache = {
     inputExcludes?: string[] | string
     outputIncludes?: string[] | string
     outputExcludes?: string[] | string
+    environmentVariableIncludes?: string[] | string
 }
 
 function isValidConfig(config: any, streamReport: StreamReport): config is Config {
@@ -107,6 +108,17 @@ function isValidScriptToCache(scriptToCache: any, streamReport: StreamReport): b
         }
         if (scriptToCache.outputExcludes.find((item: any) => typeof item !== "string") !== undefined) {
             streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.outputExcludes for ${scriptToCache.scriptName} should only contain strings!`)
+            return false
+        }
+    }
+
+    if (scriptToCache.environmentVariableIncludes !== undefined && typeof scriptToCache.environmentVariableIncludes !== "string") {
+        if (!Array.isArray(scriptToCache.environmentVariableIncludes)) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.environmentVariableIncludes for ${scriptToCache.scriptName} is not an array!`)
+            return false
+        }
+        if (scriptToCache.environmentVariableIncludes.find((item: any) => typeof item !== "string") !== undefined) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.environmentVariableIncludes for ${scriptToCache.scriptName} should only contain strings!`)
             return false
         }
     }
