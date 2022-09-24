@@ -2,15 +2,18 @@
   "name": "@rgischk/build-result-cache-dummy-project",
   "packageManager": "yarn@3.2.3",
   "main": "src/index.ts",
+  "version": "0.0.1",
   "devDependencies": {
     "@types/node": "^18.7.18",
     "copyfiles": "^2.4.1",
     "typescript": "^4.8.3"
   },
   "scripts": {
-    "build": "tsc && yarn copy-non-ts-files",
-    "build-with-cache": "tsc && yarn copy-non-ts-files",
-    "copy-non-ts-files": "copyfiles -u 1 src/**/*.png bin/",
-    "hello": "yarn node ./bin/index.js"
+    "dummy-build": "tsc && yarn dummy-copy-non-ts-files",
+    "dummy-copy-non-ts-files": "copyfiles -u 1 src/**/*.png bin/",
+    "dummy-hello": "yarn node ./bin/index.js"
+  },
+  "dependencies": {
+    "@rgischk/build-result-cache-dummy-lib": "0.0.1"
   }
 }

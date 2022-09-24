@@ -21,6 +21,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:."\
       },\
       {\
+        "name": "@rgischk/build-result-cache-dummy-lib",\
+        "reference": "workspace:build-result-cache-dummy-lib"\
+      },\
+      {\
+        "name": "@rgischk/build-result-cache-dummy-lib2",\
+        "reference": "workspace:build-result-cache-dummy-lib2"\
+      },\
+      {\
         "name": "@rgischk/build-result-cache-dummy-project",\
         "reference": "workspace:build-result-cache-dummy-project"\
       },\
@@ -33,6 +41,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
       ["@rgischk/build-result-cache", ["workspace:."]],\
+      ["@rgischk/build-result-cache-dummy-lib", ["workspace:build-result-cache-dummy-lib"]],\
+      ["@rgischk/build-result-cache-dummy-lib2", ["workspace:build-result-cache-dummy-lib2"]],\
       ["@rgischk/build-result-cache-dummy-project", ["workspace:build-result-cache-dummy-project"]],\
       ["@rgischk/yarn-plugin-build-result-cache", ["workspace:yarn-plugin-build-result-cache"]]\
     ],\
@@ -43,6 +53,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
+            ["rimraf", "npm:3.0.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -241,7 +252,31 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["workspace:.", {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["@rgischk/build-result-cache", "workspace:."]\
+            ["@rgischk/build-result-cache", "workspace:."],\
+            ["rimraf", "npm:3.0.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@rgischk/build-result-cache-dummy-lib", [\
+        ["workspace:build-result-cache-dummy-lib", {\
+          "packageLocation": "./build-result-cache-dummy-lib/",\
+          "packageDependencies": [\
+            ["@rgischk/build-result-cache-dummy-lib", "workspace:build-result-cache-dummy-lib"],\
+            ["@rgischk/build-result-cache-dummy-lib2", "workspace:build-result-cache-dummy-lib2"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@rgischk/build-result-cache-dummy-lib2", [\
+        ["workspace:build-result-cache-dummy-lib2", {\
+          "packageLocation": "./build-result-cache-dummy-lib2/",\
+          "packageDependencies": [\
+            ["@rgischk/build-result-cache-dummy-lib2", "workspace:build-result-cache-dummy-lib2"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -251,6 +286,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./build-result-cache-dummy-project/",\
           "packageDependencies": [\
             ["@rgischk/build-result-cache-dummy-project", "workspace:build-result-cache-dummy-project"],\
+            ["@rgischk/build-result-cache-dummy-lib", "workspace:build-result-cache-dummy-lib"],\
             ["@types/node", "npm:18.7.18"],\
             ["copyfiles", "npm:2.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
@@ -2990,6 +3026,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/reusify-npm-1.0.4-95ac4aec11-c3076ebcc2.zip/node_modules/reusify/",\
           "packageDependencies": [\
             ["reusify", "npm:1.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["rimraf", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/rimraf-npm-3.0.2-2cb7dac69a-87f4164e39.zip/node_modules/rimraf/",\
+          "packageDependencies": [\
+            ["rimraf", "npm:3.0.2"],\
+            ["glob", "npm:7.2.3"]\
           ],\
           "linkType": "HARD"\
         }]\

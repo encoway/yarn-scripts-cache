@@ -1,12 +1,21 @@
 {
   "name": "@rgischk/build-result-cache",
   "packageManager": "yarn@3.2.3",
+  "version": "0.0.1",
   "scripts": {
-    "build": "yarn workspaces foreach --verbose --all run build",
-    "build-with-cache": "yarn workspaces foreach --verbose --all run build-with-cache"
+    "build": "yarn workspaces foreach --verbose --topological --all run build",
+    "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .build-result-cache",
+    "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
+    "dummy-clean": "yarn workspaces foreach --verbose --all exec rimraf bin",
+    "dummy-hello": "yarn workspaces foreach --verbose --topological --all run dummy-hello"
   },
   "workspaces": [
     "yarn-plugin-build-result-cache",
+    "build-result-cache-dummy-lib2",
+    "build-result-cache-dummy-lib",
     "build-result-cache-dummy-project"
-  ]
+  ],
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }

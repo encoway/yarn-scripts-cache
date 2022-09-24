@@ -47,14 +47,14 @@ const wrapScriptExecution: WrapScriptExecution = async (
   if (config && scriptToCache) { // TODO: Add environment variable to disable caching/restoring
     const caches = buildCaches(extra.cwd, config)
     return async () => {
-      if (await updateBuildResultFromCache(project, extra, scriptToCache, caches)) {
+      if (await updateBuildResultFromCache(project, locator, extra, scriptToCache, report, caches)) {
         report.reportInfo(MessageName.UNNAMED, "Build result was restored from cache!")
         return Promise.resolve(0)
       } else {
         const result = await executor()
         if (result === 0) {
           await report.startTimerPromise("Updating build result cache", async () => {
-            await updateCacheFromBuildResult(project, extra, scriptToCache, caches)
+            await updateCacheFromBuildResult(project, locator, extra, scriptToCache, report, caches)
           })
         }
         return result

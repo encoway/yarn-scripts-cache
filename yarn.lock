@@ -173,10 +173,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rgischk/build-result-cache-dummy-lib2@^0.0.1, @rgischk/build-result-cache-dummy-lib2@workspace:build-result-cache-dummy-lib2":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/build-result-cache-dummy-lib2@workspace:build-result-cache-dummy-lib2"
+  dependencies:
+    "@types/node": ^18.7.18
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
+"@rgischk/build-result-cache-dummy-lib@0.0.1, @rgischk/build-result-cache-dummy-lib@workspace:build-result-cache-dummy-lib":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/build-result-cache-dummy-lib@workspace:build-result-cache-dummy-lib"
+  dependencies:
+    "@rgischk/build-result-cache-dummy-lib2": ^0.0.1
+    "@types/node": ^18.7.18
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
 "@rgischk/build-result-cache-dummy-project@workspace:build-result-cache-dummy-project":
   version: 0.0.0-use.local
   resolution: "@rgischk/build-result-cache-dummy-project@workspace:build-result-cache-dummy-project"
   dependencies:
+    "@rgischk/build-result-cache-dummy-lib": 0.0.1
     "@types/node": ^18.7.18
     copyfiles: ^2.4.1
     typescript: ^4.8.3
@@ -186,6 +206,8 @@ __metadata:
 "@rgischk/build-result-cache@workspace:.":
   version: 0.0.0-use.local
   resolution: "@rgischk/build-result-cache@workspace:."
+  dependencies:
+    rimraf: ^3.0.2
   languageName: unknown
   linkType: soft
 
@@ -1472,7 +1494,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.0.5":
+"glob@npm:^7.0.5, glob@npm:^7.1.3":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
@@ -2263,6 +2285,17 @@ __metadata:
   version: 1.0.4
   resolution: "reusify@npm:1.0.4"
   checksum: c3076ebcc22a6bc252cb0b9c77561795256c22b757f40c0d8110b1300723f15ec0fc8685e8d4ea6d7666f36c79ccc793b1939c748bf36f18f542744a4e379fcc
+  languageName: node
+  linkType: hard
+
+"rimraf@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "rimraf@npm:3.0.2"
+  dependencies:
+    glob: ^7.1.3
+  bin:
+    rimraf: bin.js
+  checksum: 87f4164e396f0171b0a3386cc1877a817f572148ee13a7e113b238e48e8a9f2f31d009a92ec38a591ff1567d9662c6b67fd8818a2dbbaed74bc26a87a2a4a9a0
   languageName: node
   linkType: hard
 

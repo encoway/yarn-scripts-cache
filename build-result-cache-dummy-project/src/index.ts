@@ -1,3 +1,4 @@
-import {GREETING} from "./util/constants"
+import {WORLD} from "./util/constants"
+import {randomGreeting} from "@rgischk/build-result-cache-dummy-lib";
 
-console.log(`${GREETING} World!`)
+console.log(`${randomGreeting()} ${WORLD}!`)

@@ -1,7 +1,7 @@
 import {MessageName, StreamReport} from "@yarnpkg/core";
 import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
 
-const CONFIG_FILE_NAME = ".build-result-cache-rc.json"
+export const CONFIG_FILE_NAME = ".build-result-cache-rc.json"
 
 export type Config = {
     scriptsToCache: ScriptToCache[]
