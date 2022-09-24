@@ -20,7 +20,6 @@ export type CacheEntry = {
     value: CacheEntryValue
 }
 export type CacheEntryKey = {
-    // TODO: Add environment variables, but only those that are whitelisted via the config file
     script: string,
     args: string[],
     environmentVariables: RegexEnvVars
