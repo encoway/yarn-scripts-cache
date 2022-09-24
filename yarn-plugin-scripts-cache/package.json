@@ -1,0 +1,23 @@
+{
+  "name": "@rgischk/yarn-plugin-scripts-cache",
+  "packageManager": "yarn@3.2.3",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@types/node": "^18.7.18",
+    "@yarnpkg/builder": "^4.0.0-rc.18",
+    "@yarnpkg/cli": "^4.0.0-rc.18",
+    "@yarnpkg/core": "^4.0.0-rc.18",
+    "@yarnpkg/fslib": "^3.0.0-rc.18",
+    "clipanion": "^3.2.0-rc.10",
+    "glob": "^8.0.3",
+    "typescript": "^4.8.3"
+  },
+  "scripts": {
+    "build": "builder build plugin"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@yarnpkg/builder": "^4.0.0-rc.18"
+  }
+}

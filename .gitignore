@@ -23,5 +23,5 @@ target/
 ### Node ###
 node_modules/
 
-### build cache ###
-.build-result-cache/
+### scripts cache ###
+.yarn-scripts-cache/

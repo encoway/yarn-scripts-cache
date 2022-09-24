@@ -10,9 +10,9 @@ A Yarn Berry plugin to cache script execution results.
 
 ### Config file
 
-The plugin requires a file called `.build-result-cache-rc.json` to be placed in the root directory of your project (next to the package.json).
+The plugin requires a file called `.yarn-scripts-cache-rc.json` to be placed in the root directory of your project (next to the package.json).
 This file can be checked into version control and contains all your project related configuration.
-See [the type declaration](yarn-plugin-build-result-cache/src/config.ts) for the possible configuration options.
+See [the type declaration](yarn-plugin-scripts-cache/src/config.ts) for the possible configuration options.
 
 ### Environment variables
 
@@ -48,7 +48,7 @@ By running the `build` script, you execute the typescript compiler, which transp
 You could of course also use a different compiler, e.g. use babel or webpack to build your project.
 But what these have in common, is that they will work on some set of files as an input, and produce another set of files as their output.
 
-Add a configuration file called `.build-result-cache-rc.json` to your projects root-directory with the following content.
+Add a configuration file called `.yarn-scripts-cache-rc.json` to your projects root-directory with the following content.
 (Note: The comments are only added for readability, remove them to get a valid JSON file!)
 ```
 {
@@ -66,7 +66,7 @@ Add a configuration file called `.build-result-cache-rc.json` to your projects r
 Now run the `build` script once:
 ```
 > yarn run build
-➤ YN0000: ┌ Updating build result cache
+➤ YN0000: ┌ Updating script execution result cache
 ➤ YN0000: └ Completed
 ```
 This will execute your `build` script normally.
@@ -75,7 +75,7 @@ Additionally, it will place those files matching the "output" configuration in t
 Now run the same `build` script a second time:
 ```
 > yarn run build
-➤ YN0000: Build result was restored from cache!
+➤ YN0000: Script execution result was restored from cache!
 ```
 This time you will notice, that the command exited a lot faster.
 Because you did not make any changes to the "input" files, the "output" files where simply restored from the cache.
@@ -85,7 +85,7 @@ Finally, make some changes to your source files, e.g. the `my-project/src/util/s
 Then run the `build` script one more time:
 ```
 > yarn run build
-➤ YN0000: ┌ Updating build result cache
+➤ YN0000: ┌ Updating script execution result cache
 ➤ YN0000: └ Completed
 ```
 As you can see, this time the script execution was not skipped.
@@ -102,7 +102,7 @@ This is because if one workspace's contents change, all dependent workspaces nee
 To do this, we check the combined outputs of all scripts defined in all workspaces another workspace depends on, when caching it.
 
 We do not relate between multiple scripts to cache in different workspaces based on their name.
-For example if `workspace-b` depends on `workspace-a`, and both workspaces have a cached `build` and a `validate` script, then when running the `build` script in `workspace-b`, we will check the outputs of both the `build` **and** the `validate` scripts of `workspace-a` for changes.
+For example if `workspace-b` depends on `workspace-a`, and both workspaces have a cached `build` and `validate` script, then when running the `build` script in `workspace-b`, we will check the outputs of both the `build` **and** the `validate` scripts of `workspace-a` for changes.
 This may result in unnecessary script executions, but we can't know for sure whether the `build` script from `workspace-b` only depends on the `build` result of `workspace-a`, or also on the `validate` result.
 
 If you do not actually want to cache any script executions in a workspace, but need a cache configuration because you want to cache dependent workspaces, then you can simply add a "dummy" script cache configuration.
