@@ -91,6 +91,9 @@ Then run the `build` script one more time:
 As you can see, this time the script execution was not skipped.
 The plugin detected that you made a change to one of the input files, executed the `build` script, and then updated the cache with the new output files.
 
+By the way, the script execution results will only be copied to the cache, if your script terminated successfully.
+If it failed with an exit code other than zero, it will not add the output to the cache.
+
 ### Monorepo with yarn workspaces
 
 When working in a monorepo project with multiple workspaces, you need to add a dedicated configuration file for each workspace that you want to enable caching for.
