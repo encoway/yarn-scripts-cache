@@ -25,7 +25,7 @@ export type CacheEntryKey = {
     environmentVariables: RegexEnvVars
     lockFileChecksum: string | null
     topLevelWorkspaceLocator: string
-    workspaceLocator?: string
+    workspaceLocator: string
     globFileHashes: GlobFileHashes
     dependencyWorkspacesGlobFileHashes: WorkspaceGlobFileHashes
 }
