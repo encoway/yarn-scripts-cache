@@ -2367,9 +2367,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rgischk/yarn-plugin-scripts-cache-file@workspace:yarn-plugin-scripts-cache-file":
+"@rgischk/yarn-plugin-scripts-cache-file@workspace:packages/yarn-plugin-scripts-cache-file":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-plugin-scripts-cache-file@workspace:yarn-plugin-scripts-cache-file"
+  resolution: "@rgischk/yarn-plugin-scripts-cache-file@workspace:packages/yarn-plugin-scripts-cache-file"
   dependencies:
     "@rgischk/yarn-scripts-cache-api": 0.0.1
     "@types/node": ^18.7.18
@@ -2383,9 +2383,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-plugin-scripts-cache-nexus@workspace:yarn-plugin-scripts-cache-nexus":
+"@rgischk/yarn-plugin-scripts-cache-nexus@workspace:packages/yarn-plugin-scripts-cache-nexus":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-plugin-scripts-cache-nexus@workspace:yarn-plugin-scripts-cache-nexus"
+  resolution: "@rgischk/yarn-plugin-scripts-cache-nexus@workspace:packages/yarn-plugin-scripts-cache-nexus"
   dependencies:
     "@rgischk/yarn-scripts-cache-api": 0.0.1
     "@types/node": ^18.7.18
@@ -2399,9 +2399,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-plugin-scripts-cache@workspace:yarn-plugin-scripts-cache":
+"@rgischk/yarn-plugin-scripts-cache@workspace:packages/yarn-plugin-scripts-cache":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-plugin-scripts-cache@workspace:yarn-plugin-scripts-cache"
+  resolution: "@rgischk/yarn-plugin-scripts-cache@workspace:packages/yarn-plugin-scripts-cache"
   dependencies:
     "@rgischk/yarn-scripts-cache-api": 0.0.1
     "@types/glob": ^8.0.0
@@ -2417,9 +2417,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-scripts-cache-api@0.0.1, @rgischk/yarn-scripts-cache-api@workspace:yarn-scripts-cache-api":
+"@rgischk/yarn-scripts-cache-api@0.0.1, @rgischk/yarn-scripts-cache-api@workspace:packages/yarn-scripts-cache-api":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-scripts-cache-api@workspace:yarn-scripts-cache-api"
+  resolution: "@rgischk/yarn-scripts-cache-api@workspace:packages/yarn-scripts-cache-api"
   dependencies:
     "@types/node": ^18.7.18
     "@yarnpkg/core": ^4.0.0-rc.18
@@ -2427,9 +2427,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-scripts-cache-dummy-app@workspace:yarn-scripts-cache-dummy-app":
+"@rgischk/yarn-scripts-cache-dummy-app@workspace:dummy-packages/yarn-scripts-cache-dummy-app":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-scripts-cache-dummy-app@workspace:yarn-scripts-cache-dummy-app"
+  resolution: "@rgischk/yarn-scripts-cache-dummy-app@workspace:dummy-packages/yarn-scripts-cache-dummy-app"
   dependencies:
     "@rgischk/yarn-scripts-cache-dummy-lib": ^0.0.1
     "@testing-library/dom": ^8.5.0
@@ -2451,18 +2451,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-scripts-cache-dummy-lib2@^0.0.1, @rgischk/yarn-scripts-cache-dummy-lib2@workspace:yarn-scripts-cache-dummy-lib2":
+"@rgischk/yarn-scripts-cache-dummy-lib2@^0.0.1, @rgischk/yarn-scripts-cache-dummy-lib2@workspace:dummy-packages/yarn-scripts-cache-dummy-lib2":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-scripts-cache-dummy-lib2@workspace:yarn-scripts-cache-dummy-lib2"
+  resolution: "@rgischk/yarn-scripts-cache-dummy-lib2@workspace:dummy-packages/yarn-scripts-cache-dummy-lib2"
   dependencies:
     "@types/node": ^18.7.18
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-scripts-cache-dummy-lib@0.0.1, @rgischk/yarn-scripts-cache-dummy-lib@^0.0.1, @rgischk/yarn-scripts-cache-dummy-lib@workspace:yarn-scripts-cache-dummy-lib":
+"@rgischk/yarn-scripts-cache-dummy-lib@0.0.1, @rgischk/yarn-scripts-cache-dummy-lib@^0.0.1, @rgischk/yarn-scripts-cache-dummy-lib@workspace:dummy-packages/yarn-scripts-cache-dummy-lib":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-scripts-cache-dummy-lib@workspace:yarn-scripts-cache-dummy-lib"
+  resolution: "@rgischk/yarn-scripts-cache-dummy-lib@workspace:dummy-packages/yarn-scripts-cache-dummy-lib"
   dependencies:
     "@rgischk/yarn-scripts-cache-dummy-lib2": ^0.0.1
     "@types/node": ^18.7.18
@@ -2470,9 +2470,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rgischk/yarn-scripts-cache-dummy-project@workspace:yarn-scripts-cache-dummy-project":
+"@rgischk/yarn-scripts-cache-dummy-project@workspace:dummy-packages/yarn-scripts-cache-dummy-project":
   version: 0.0.0-use.local
-  resolution: "@rgischk/yarn-scripts-cache-dummy-project@workspace:yarn-scripts-cache-dummy-project"
+  resolution: "@rgischk/yarn-scripts-cache-dummy-project@workspace:dummy-packages/yarn-scripts-cache-dummy-project"
   dependencies:
     "@rgischk/yarn-scripts-cache-dummy-lib": 0.0.1
     "@types/node": ^18.7.18
