@@ -8,37 +8,18 @@ export type Config = {
     scriptsToCache: ScriptToCache[]
 
     /**
-     * Defines remote cache instances.
+     * Whether the cache should be disabled. Can be overwritten with the environment variable
+     * YARN_SCRIPTS_CACHE_DISABLED.
      */
-    remoteCache?: string
+    cacheDisabled?: boolean
 
     /**
-     * Configure how to use the cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE.
+     * Configuration options for cache implementations.
      */
-    cacheUsage?: CacheUsage
-    /**
-     * Configure how to use the local cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE_LOCAL.
-     * Does not overwrite the more general cacheUsage field.
-     */
-    localCacheUsage?: CacheUsage
-    /**
-     * Configure how to use the remote cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE_REMOTE.
-     * Does not overwrite the more general cacheUsage field.
-     */
-    remoteCacheUsage?: CacheUsage
-
-    /**
-     * The maximum age of script execution results to store in the local cache in milliseconds.
-     * Defaults to a value that is equivalent to 30 days.
-     */
-    localCacheMaxAge?: number
-    /**
-     * The maximum amount of script execution results to store in the local cache. Defaults to 1000.
-     */
-    localCacheMaxAmount?: number
+    cacheConfigs?: {
+        [cacheName: string]: any
+    }
 }
-
-export type CacheUsage = "enabled" /* default */ | "disabled" | "update-cache-only" | "update-script-execution-result-only"
 
 /**
  * Defines the name of a script that should be cached and the files that are relevant for that script.
@@ -72,4 +53,26 @@ export type ScriptToCache = {
      * One or multiple regular expressions to match against environment variable names that should be checked for changes on consecutive script executions.
      */
     environmentVariableIncludes?: string[] | string
+}
+
+export function readIntConfigValue<T>(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: T): number | T {
+    const maxAgeEnvironmentValue = process.env[environmentVariableName]
+    if (maxAgeEnvironmentValue && !isNaN(parseInt(maxAgeEnvironmentValue))) {
+        return parseInt(maxAgeEnvironmentValue)
+    }
+    if (config.cacheConfigs && config.cacheConfigs[pluginName] && typeof config.cacheConfigs[pluginName][configFieldName] === "number") {
+        return config.cacheConfigs[pluginName][configFieldName]
+    }
+    return defaultValue
+}
+
+export function readStringConfigValue<T>(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: T): string | T {
+    const maxAgeEnvironmentValue = process.env[environmentVariableName]
+    if (maxAgeEnvironmentValue) {
+        return maxAgeEnvironmentValue
+    }
+    if (config.cacheConfigs && config.cacheConfigs[pluginName] && typeof config.cacheConfigs[pluginName][configFieldName] === "string") {
+        return config.cacheConfigs[pluginName][configFieldName]
+    }
+    return defaultValue
 }

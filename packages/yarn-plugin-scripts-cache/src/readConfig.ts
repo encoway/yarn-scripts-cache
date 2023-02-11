@@ -45,59 +45,19 @@ function isValidConfig(config: any, streamReport: StreamReport): config is Confi
         return false
     }
 
-    if (config.remoteCache) {
-        if (typeof config.remoteCache !== "string") {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCache should be a string!`)
-            return false
-        }
-        if (!isValidUrl(config.remoteCache)) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCache should be a valid URLs!`)
-            return false
-        }
-    }
-
-    if (config.cacheUsage) {
-        if (!isValidCacheUsage(config.cacheUsage)) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.cacheUsage is not a valid value!`)
-            return false
-        }
-    }
-    if (config.localCacheUsage) {
-        if (!isValidCacheUsage(config.localCacheUsage)) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.localCacheUsage is not a valid value!`)
-            return false
-        }
-    }
-    if (config.remoteCacheUsage) {
-        if (!isValidCacheUsage(config.remoteCacheUsage)) {
-            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.remoteCacheUsage is not a valid value!`)
-            return false
-        }
-    }
-
-    if (config.localCacheMaxAge !== undefined && typeof config.localCacheMaxAge !== "number") {
-        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.localCacheMaxAge should be a number!`)
+    if (config.cacheDisabled !== undefined && typeof config.cacheDisabled !== "boolean") {
+        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.cacheDisabled should be a boolean!`)
         return false
     }
-    if (config.localCacheMaxAmount !== undefined && typeof config.localCacheMaxAmount !== "number") {
-        streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.localCacheMaxAmount should be a number!`)
-        return false
+
+    if (config.cacheConfigs) {
+        if (typeof config.cacheConfigs !== "object") {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.cacheConfigs should be an object!`)
+            return false
+        }
     }
 
     return true
-}
-
-function isValidCacheUsage(cacheUsage: string) {
-    return cacheUsage === "enabled" || cacheUsage === "disabled" || cacheUsage === "update-cache-only" || cacheUsage === "update-script-execution-result-only"
-}
-
-function isValidUrl(url: string): boolean {
-    try {
-        new URL(url)
-        return true
-    } catch (error) {
-        return false
-    }
 }
 
 function isValidScriptToCache(scriptToCache: any, streamReport: StreamReport): boolean {

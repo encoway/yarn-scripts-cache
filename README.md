@@ -16,16 +16,13 @@ See [the type declaration](packages/yarn-scripts-cache-api/src/Config.ts) for th
 
 ### Environment variables
 
-The following environment variables can be used to overwrite the `cacheUsage` settings in the config file:
-* `SCRIPT_RESULTS_CACHE` overwrites `cacheUsage`
-* `SCRIPT_RESULTS_CACHE_LOCAL` overwrites `localCacheUsage`
-* `SCRIPT_RESULTS_CACHE_REMOTE` overwrites `remoteCacheUsage`
+The cache can be disabled by setting the environment variable `YARN_SCRIPTS_CACHE_DISABLED` to `true`.
 
-The following values are valid:
-* `enabled` (default): The cache will be used
-* `disabled`: The cache will not be used
-* `update-cache-only`: The cache will be updated, but the script execution results will not be loaded from the cache.
-* `update-script-execution-result-only`: The script execution results will be loaded from the cache, but the cache will not be updated.
+### Cache configuration options
+
+For the configuration options of the different cache implementations, see their respective README files:
+* [File Cache](./packages/yarn-plugin-scripts-cache-file/README.md)
+* [Nexus Cache](./packages/yarn-plugin-scripts-cache-nexus/README.md)
 
 ## How does it work?
 
@@ -106,7 +103,9 @@ If it failed with an exit code other than zero, it will not add the output to th
 ### Monorepo with yarn workspaces
 
 When working in a monorepo project with multiple workspaces, you need to add a dedicated configuration file for each workspace that you want to enable caching for.
-**Important note: A workspaces scripts can only be cached, if all workspaces that it depends on also have their own cache configuration!**
+
+> Note: A workspace's scripts can only be cached, if all workspaces that it depends on also have their own cache configuration!
+
 This is because if one workspace's contents change, all dependent workspaces need to be re-build as well.
 To do this, we check the combined outputs of all scripts defined in all workspaces another workspace depends on, when caching it.
 
@@ -127,10 +126,6 @@ You only want to make sure to include the correct output files.
   ]
 }
 ```
-
-### Remote caching
-
-* TODO
 
 ## Examples
 
@@ -186,45 +181,5 @@ This will consider changes in the values of any environment variables starting w
       "environmentVariableIncludes": "REACT_APP.*"
     }
   ]
-}
-```
-
-**Update remote cache only from CI system**
-
-This will not update the remote cache by default, which is overwritten by an environment variable on the CI system: 
-```
-{
-  "scriptsToCache": [
-    {
-      "scriptName": "build",
-      "inputIncludes": "**",
-      "inputExcludes": "dist/**",
-      "outputIncludes": "dist/**"
-    }
-  ],
-  "remoteCache": "https://yarn-scripts-cache.my-company.org",
-  "remoteCacheUsage": "update-script-execution-result-only"
-}
-```
-Environment variable on CI system:
-```
-YARN_SCRIPTS_CACHE_REMOTE=enabled
-```
-
-**Limit the size of the local cache folder**
-
-This will limit the maximum age of entries in the cache to 5 days (432000000 milliseconds) and the maximum amount of cache entries to 10:
-```
-{
-  "scriptsToCache": [
-    {
-      "scriptName": "build",
-      "inputIncludes": "**",
-      "inputExcludes": "dist/**",
-      "outputIncludes": "dist/**"
-    }
-  ],
-  "localCacheMaxAge": 432000000,
-  "localCacheMaxAmount": 10
 }
 ```

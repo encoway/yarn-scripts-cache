@@ -7,6 +7,9 @@
       "outputIncludes": "bin/**"
     }
   ],
-  "remoteCache": "http://localhost:1234/yarn-scripts-cache",
-  "remoteCacheUsage": "update-script-execution-result-only"
+  "cacheConfigs": {
+    "nexus": {
+      "host": "http://localhost:8081"
+    }
+  }
 }

@@ -15,7 +15,7 @@ const beforeYarnScriptsCacheUsage: BeforeYarnScriptsCacheUsage = async (
     config: Config,
     wrapScriptExecutionArgs: InitiatingScriptExecutionParameters
 ) => {
-    cacheRegistry.push(new NexusCache())
+    cacheRegistry.push(new NexusCache(config))
 }
 
 const hooks: YarnScriptsCacheHooks = {
