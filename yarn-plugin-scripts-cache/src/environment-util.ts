@@ -1,4 +1,4 @@
-import {Config} from "./config";
+import {Config} from "@rgischk/yarn-scripts-cache-api"
 
 export const BASE_ENV_VAR_NAME = "SCRIPT_RESULTS_CACHE"
 export const LOCAL_CACHE_ENV_VAR_NAME = BASE_ENV_VAR_NAME + "_LOCAL"

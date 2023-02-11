@@ -12,7 +12,7 @@ A Yarn Berry plugin to cache script execution results.
 
 The plugin requires a file called `.yarn-scripts-cache-rc.json` to be placed in the root directory of your project (next to the package.json).
 This file can be checked into version control and contains all your project related configuration.
-See [the type declaration](yarn-plugin-scripts-cache/src/config.ts) for the possible configuration options.
+See [the type declaration](yarn-scripts-cache-api/src/Config.ts) for the possible configuration options.
 
 ### Environment variables
 

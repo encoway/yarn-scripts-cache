@@ -11,7 +11,10 @@
     "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve"
   },
   "workspaces": [
+    "yarn-scripts-cache-api",
     "yarn-plugin-scripts-cache",
+    "yarn-plugin-scripts-cache-file",
+    "yarn-plugin-scripts-cache-nexus",
     "yarn-scripts-cache-dummy-lib2",
     "yarn-scripts-cache-dummy-lib",
     "yarn-scripts-cache-dummy-project",

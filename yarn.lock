@@ -2367,10 +2367,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rgischk/yarn-plugin-scripts-cache-file@workspace:yarn-plugin-scripts-cache-file":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/yarn-plugin-scripts-cache-file@workspace:yarn-plugin-scripts-cache-file"
+  dependencies:
+    "@rgischk/yarn-scripts-cache-api": 0.0.1
+    "@types/node": ^18.7.18
+    "@yarnpkg/builder": ^4.0.0-rc.18
+    "@yarnpkg/cli": ^4.0.0-rc.18
+    "@yarnpkg/core": ^4.0.0-rc.18
+    "@yarnpkg/fslib": ^3.0.0-rc.18
+    clipanion: ^3.2.0-rc.10
+    node-fetch: ^3.3.0
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
+"@rgischk/yarn-plugin-scripts-cache-nexus@workspace:yarn-plugin-scripts-cache-nexus":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/yarn-plugin-scripts-cache-nexus@workspace:yarn-plugin-scripts-cache-nexus"
+  dependencies:
+    "@rgischk/yarn-scripts-cache-api": 0.0.1
+    "@types/node": ^18.7.18
+    "@yarnpkg/builder": ^4.0.0-rc.18
+    "@yarnpkg/cli": ^4.0.0-rc.18
+    "@yarnpkg/core": ^4.0.0-rc.18
+    "@yarnpkg/fslib": ^3.0.0-rc.18
+    clipanion: ^3.2.0-rc.10
+    node-fetch: ^3.3.0
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
 "@rgischk/yarn-plugin-scripts-cache@workspace:yarn-plugin-scripts-cache":
   version: 0.0.0-use.local
   resolution: "@rgischk/yarn-plugin-scripts-cache@workspace:yarn-plugin-scripts-cache"
   dependencies:
+    "@rgischk/yarn-scripts-cache-api": 0.0.1
     "@types/glob": ^8.0.0
     "@types/node": ^18.7.18
     "@yarnpkg/builder": ^4.0.0-rc.18
@@ -2380,6 +2413,16 @@ __metadata:
     clipanion: ^3.2.0-rc.10
     glob: ^8.0.3
     node-fetch: ^3.3.0
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
+"@rgischk/yarn-scripts-cache-api@0.0.1, @rgischk/yarn-scripts-cache-api@workspace:yarn-scripts-cache-api":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/yarn-scripts-cache-api@workspace:yarn-scripts-cache-api"
+  dependencies:
+    "@types/node": ^18.7.18
+    "@yarnpkg/core": ^4.0.0-rc.18
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft

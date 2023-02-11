@@ -1,26 +1,32 @@
-import {Cache, CacheEntry, CacheEntryKey} from "./cache";
-import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
-import {shouldUpdateLocalCache, shouldUpdateScriptExecutionResultFromLocalCache} from "./environment-util";
-import {Config} from "./config";
-import crypto from "crypto";
+import {Cache, CacheEntry, CacheEntryKey, Config} from "@rgischk/yarn-scripts-cache-api"
+import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
+import crypto from "crypto"
 
 const CACHE_FOLDER_NAME = ".yarn-scripts-cache" // TODO: Allow to configure the location of this folder
 const DEFAULT_MAX_AGE = 2592000000 // 30 days in milliseconds
 const DEFAULT_MAX_AMOUNT = 1000
 
-export class LocalCache implements Cache {
+const NAME = "file"
+const ORDER = 10
+
+export class FileCache implements Cache {
     cwd: PortablePath
     config: Config
+    name: string
+    order: number
 
     constructor(cwd: PortablePath, config: Config) {
+        this.name = NAME
+        this.order = ORDER
         this.cwd = cwd
         this.config = config
     }
 
+
     async saveCacheEntry(cacheEntry: CacheEntry) {
-        if (!shouldUpdateLocalCache(this.config)) {
-            return
-        }
+        // if (!shouldUpdateLocalCache(this.config)) {
+        //     return
+        // }
 
         const cacheDir = this.buildCacheDir()
         await xfs.mkdirPromise(cacheDir, {recursive: true})
@@ -32,9 +38,9 @@ export class LocalCache implements Cache {
     }
 
     async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
-        if (!shouldUpdateScriptExecutionResultFromLocalCache(this.config)) {
-            return undefined
-        }
+        // if (!shouldUpdateScriptExecutionResultFromLocalCache(this.config)) {
+        //     return undefined
+        // }
 
         const cacheDir = this.buildCacheDir()
         if (! await xfs.existsPromise(cacheDir)) {

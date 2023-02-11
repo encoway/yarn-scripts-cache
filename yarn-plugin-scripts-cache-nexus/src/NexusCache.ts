@@ -1,10 +1,7 @@
-import {shouldUpdateRemoteCache, shouldUpdateScriptExecutionResultFromRemoteCache} from "./environment-util";
-import {Cache, CacheEntry, CacheEntryKey} from "./cache";
-import {Config} from "./config";
+import fetch, {Blob, FormData, Headers, Response} from "node-fetch"
+import crypto from "crypto"
 
-import * as URL from "url";
-import fetch, {Blob, FormData, Headers, Response} from "node-fetch";
-import crypto from "crypto";
+import {Cache, CacheEntry, CacheEntryKey} from "@rgischk/yarn-scripts-cache-api"
 
 // TODO: Replace with configuration via environment variables
 const HOST = "http://localhost:8081"
@@ -22,22 +19,25 @@ const UPLOAD_FORM_PARAM_FILE = "raw.asset1"
 
 const NO_REDEPLOY_MESSAGE = "Repository does not allow updating assets"
 
+const NAME = "nexus"
+const ORDER = 100
 
 // TODO: Replace console outputs with yarns reporting feature
 
-export class RemoteCache implements Cache {
-    url: URL
-    config: Config
+export class NexusCache implements Cache {
+    name: string
+    order: number
 
-    constructor(url: URL, config: Config) {
-        this.url = url
-        this.config = config
+    constructor() {
+        this.name = NAME
+        this.order = ORDER
     }
 
+
     async saveCacheEntry(cacheEntry: CacheEntry) {
-        if (!shouldUpdateRemoteCache(this.config)) {
-            return
-        }
+        // if (!shouldUpdateRemoteCache(this.config)) {
+        //     return
+        // }
 
         const filename = buildFilename(cacheEntry.key)
         const uploader = () => uploadJsonAsset(HOST, REPOSITORY, cacheEntry.key.workspaceLocator, filename, USER, PASSWORD, cacheEntry)
@@ -57,9 +57,9 @@ export class RemoteCache implements Cache {
     }
 
     async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
-        if (!shouldUpdateScriptExecutionResultFromRemoteCache(this.config)) {
-            return undefined
-        }
+        // if (!shouldUpdateScriptExecutionResultFromRemoteCache(this.config)) {
+        //     return undefined
+        // }
 
         const filename = buildFilename(cacheEntryKey)
         const downloader = () => downloadJsonAsset<CacheEntry>(HOST, REPOSITORY, cacheEntryKey.workspaceLocator, filename)

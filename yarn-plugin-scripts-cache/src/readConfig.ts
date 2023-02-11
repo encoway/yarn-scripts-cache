@@ -1,76 +1,30 @@
-import {MessageName, StreamReport} from "@yarnpkg/core";
-import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib";
+import {MessageName, StreamReport} from "@yarnpkg/core"
+import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
+
+import {Config} from "@rgischk/yarn-scripts-cache-api"
 
 export const CONFIG_FILE_NAME = ".yarn-scripts-cache-rc.json"
 
-export type Config = {
-    /**
-     * Defines which scripts should be cached.
-     */
-    scriptsToCache: ScriptToCache[]
-
-    /**
-     * Defines remote cache instances.
-     */
-    remoteCache?: string
-
-    /**
-     * Configure how to use the cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE.
-     */
-    cacheUsage?: CacheUsage
-    /**
-     * Configure how to use the local cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE_LOCAL.
-     * Does not overwrite the more general cacheUsage field.
-     */
-    localCacheUsage?: CacheUsage
-    /**
-     * Configure how to use the remote cache. Can be overwritten with the environment variable SCRIPT_RESULTS_CACHE_REMOTE.
-     * Does not overwrite the more general cacheUsage field.
-     */
-    remoteCacheUsage?: CacheUsage
-
-    /**
-     * The maximum age of script execution results to store in the local cache in milliseconds.
-     * Defaults to a value that is equivalent to 30 days.
-     */
-    localCacheMaxAge?: number
-    /**
-     * The maximum amount of script execution results to store in the local cache. Defaults to 1000.
-     */
-    localCacheMaxAmount?: number
-}
-
-export type CacheUsage = "enabled" /* default */ | "disabled" | "update-cache-only" | "update-script-execution-result-only"
-
-export type ScriptToCache = {
-    /**
-     * The name of the script to cache, as defined in the package.jsons "scripts"-field.
-     */
-    scriptName: string
-    /**
-     * One or multiple globs defining which files should be included in the 'input' files used to check whether two runs are the same.
-     * The globs are matched against paths relative to the current working directory.
-     */
-    inputIncludes?: string[] | string
-    /**
-     * One or multiple globs defining exceptions from the previous option.
-     * The globs are matched against paths relative to the current working directory.
-     */
-    inputExcludes?: string[] | string
-    /**
-     * One or multiple globs defining which files should be copied into the cache to be restored on consecutive script executions.
-     * The globs are matched against paths relative to the current working directory.
-     */
-    outputIncludes?: string[] | string
-    /**
-     * One or multiple globs defining exceptions from the previous option.
-     * The globs are matched against paths relative to the current working directory.
-     */
-    outputExcludes?: string[] | string
-    /**
-     * One or multiple regular expressions to match against environment variable names that should be checked for changes on consecutive script executions.
-     */
-    environmentVariableIncludes?: string[] | string
+/**
+ * Reads the yarn-scripts-cache config file from the workspace at the given location.
+ *
+ * @param cwd The location of the workspace to read the config file for
+ * @param streamReport The report object to write error messages
+ */
+export async function readConfig(cwd: PortablePath, streamReport: StreamReport): Promise<Config | undefined> {
+    const configFile = ppath.join(cwd, toFilename(CONFIG_FILE_NAME))
+    if (await xfs.existsPromise(configFile)) {
+        const configContent = await xfs.readFilePromise(configFile, "utf-8")
+        try {
+            const config = JSON.parse(configContent)
+            if (isValidConfig(config, streamReport)) {
+                return config
+            }
+        } catch (error) {
+            streamReport.reportErrorOnce(MessageName.EXCEPTION, `${CONFIG_FILE_NAME} is not valid:`)
+            streamReport.reportExceptionOnce(error as Error)
+        }
+    }
 }
 
 function isValidConfig(config: any, streamReport: StreamReport): config is Config {
@@ -208,20 +162,4 @@ function isValidScriptToCache(scriptToCache: any, streamReport: StreamReport): b
     }
 
     return true
-}
-
-export async function readConfig(cwd: PortablePath, streamReport: StreamReport): Promise<Config | undefined> {
-    const configFile = ppath.join(cwd, toFilename(CONFIG_FILE_NAME))
-    if (await xfs.existsPromise(configFile)) {
-        const configContent = await xfs.readFilePromise(configFile, "utf-8")
-        try {
-            const config = JSON.parse(configContent)
-            if (isValidConfig(config, streamReport)) {
-                return config
-            }
-        } catch (error) {
-            streamReport.reportErrorOnce(MessageName.EXCEPTION, `${CONFIG_FILE_NAME} is not valid:`)
-            streamReport.reportExceptionOnce(error as Error)
-        }
-    }
 }

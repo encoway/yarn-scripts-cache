@@ -1,42 +1,21 @@
-import {Configuration, Locator, MessageName, Plugin, Project, StreamReport} from '@yarnpkg/core';
-import {PortablePath} from "@yarnpkg/fslib";
-import {readConfig} from "./config";
-import {Readable, Writable} from "stream"
-import {buildCaches} from "./cache-factory";
-import {updateScriptExecutionResultFromCache, updateCacheFromScriptExecutionResult} from "./script-result";
-import {isCacheDisabled, shouldUpdateCache, shouldUpdateScriptExecutionResult} from "./environment-util";
+import {Configuration, MessageName, Plugin, StreamReport} from "@yarnpkg/core"
 
-export type WrapScriptExecution = (
-    executor: () => Promise<number>,
-    project: Project,
-    locator: Locator,
-    scriptName: string,
-    extra: WrapScriptExecutionExtra,
-) => Promise<() => Promise<number>>
+import {WrapScriptExecution, WrapScriptExecutionExtra} from "@rgischk/yarn-scripts-cache-api"
 
-export type WrapScriptExecutionExtra = {
-  script: string,
-  args: Array<string>,
-  cwd: PortablePath,
-  env: ProcessEnvironment,
-  stdin: Readable | null,
-  stdout: Writable,
-  stderr: Writable
-}
-
-export type ProcessEnvironment = {
-  [key: string]: string
-}
+import {readConfig} from "./readConfig"
+import {buildCaches} from "./buildCaches"
+import {updateScriptExecutionResultFromCache, updateCacheFromScriptExecutionResult} from "./scriptResult"
+import {isCacheDisabled, shouldUpdateCache, shouldUpdateScriptExecutionResult} from "./environment-util"
 
 async function buildReport(extra: WrapScriptExecutionExtra): Promise<StreamReport> {
-  const configuration = Configuration.create(extra.cwd);
-  return StreamReport.start({
-    configuration,
-    includeFooter: false,
-    stdout: extra.stdout,
-  }, async () => {
-    /* no-op */
-  })
+    const configuration = Configuration.create(extra.cwd);
+    return StreamReport.start({
+        configuration,
+        includeFooter: false,
+        stdout: extra.stdout,
+    }, async () => {
+        /* no-op */
+    })
 }
 
 const wrapScriptExecution: WrapScriptExecution = async (
@@ -46,50 +25,51 @@ const wrapScriptExecution: WrapScriptExecution = async (
     scriptName,
     extra
 ) => {
-  const report = await buildReport(extra)
-  const config = await readConfig(extra.cwd, report)
-  if (!config) {
-    return executor
-  }
-
-  if (isCacheDisabled(config)) {
-    return executor
-  }
-
-  const scriptToCache = config.scriptsToCache.find(s => s.scriptName === scriptName)
-  if (!scriptToCache) {
-    return executor
-  }
-
-  const caches = buildCaches(extra.cwd, config)
-
-  return async () => {
-    if (shouldUpdateScriptExecutionResult(config)) {
-      const cacheEntry = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)
-      if (cacheEntry) {
-        const createdAt = new Date(cacheEntry.value.createdAt).toUTCString()
-        const createdBy = cacheEntry.value.createdBy
-        report.reportInfo(MessageName.UNNAMED,
-            `Script execution result was restored from cache! Created ${createdAt} by ${createdBy}`)
-        return Promise.resolve(0)
-      }
+    const report = await buildReport(extra)
+    const config = await readConfig(extra.cwd, report)
+    if (!config) {
+        return executor
     }
 
-    const result = await executor()
-
-    if (result === 0 && shouldUpdateCache(config)) {
-      await report.startTimerPromise("Updating script execution result cache", async () => {
-        await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
-      })
+    if (isCacheDisabled(config)) {
+        return executor
     }
-    return result
-  }
+
+    const scriptToCache = config.scriptsToCache.find(s => s.scriptName === scriptName)
+    if (!scriptToCache) {
+        return executor
+    }
+
+    const caches = await buildCaches(config, {project, locator, scriptName, extra})
+
+    return async () => {
+        if (shouldUpdateScriptExecutionResult(config)) {
+            const result = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)
+            if (result) {
+                const [cacheEntry, cache] = result
+                const createdAt = new Date(cacheEntry.value.createdAt).toUTCString()
+                const createdBy = cacheEntry.value.createdBy
+                report.reportInfo(MessageName.UNNAMED,
+                    `Script execution result was restored from ${cache.name} cache! Created ${createdAt} by ${createdBy}`)
+                return Promise.resolve(0)
+            }
+        }
+
+        const result = await executor()
+
+        if (result === 0 && shouldUpdateCache(config)) {
+            await report.startTimerPromise("Updating script execution result cache", async () => {
+                await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
+            })
+        }
+        return result
+    }
 }
 
 const plugin: Plugin = {
-  hooks: {
-    wrapScriptExecution
-  }
+    hooks: {
+        wrapScriptExecution
+    }
 }
 
 export default plugin

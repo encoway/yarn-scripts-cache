@@ -25,6 +25,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:yarn-plugin-scripts-cache"\
       },\
       {\
+        "name": "@rgischk/yarn-plugin-scripts-cache-file",\
+        "reference": "workspace:yarn-plugin-scripts-cache-file"\
+      },\
+      {\
+        "name": "@rgischk/yarn-plugin-scripts-cache-nexus",\
+        "reference": "workspace:yarn-plugin-scripts-cache-nexus"\
+      },\
+      {\
+        "name": "@rgischk/yarn-scripts-cache-api",\
+        "reference": "workspace:yarn-scripts-cache-api"\
+      },\
+      {\
         "name": "@rgischk/yarn-scripts-cache-dummy-app",\
         "reference": "workspace:yarn-scripts-cache-dummy-app"\
       },\
@@ -45,7 +57,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
       ["@rgischk/yarn-plugin-scripts-cache", ["workspace:yarn-plugin-scripts-cache"]],\
+      ["@rgischk/yarn-plugin-scripts-cache-file", ["workspace:yarn-plugin-scripts-cache-file"]],\
+      ["@rgischk/yarn-plugin-scripts-cache-nexus", ["workspace:yarn-plugin-scripts-cache-nexus"]],\
       ["@rgischk/yarn-scripts-cache", ["workspace:."]],\
+      ["@rgischk/yarn-scripts-cache-api", ["workspace:yarn-scripts-cache-api"]],\
       ["@rgischk/yarn-scripts-cache-dummy-app", ["workspace:yarn-scripts-cache-dummy-app"]],\
       ["@rgischk/yarn-scripts-cache-dummy-lib", ["workspace:yarn-scripts-cache-dummy-lib"]],\
       ["@rgischk/yarn-scripts-cache-dummy-lib2", ["workspace:yarn-scripts-cache-dummy-lib2"]],\
@@ -3984,6 +3999,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./yarn-plugin-scripts-cache/",\
           "packageDependencies": [\
             ["@rgischk/yarn-plugin-scripts-cache", "workspace:yarn-plugin-scripts-cache"],\
+            ["@rgischk/yarn-scripts-cache-api", "workspace:yarn-scripts-cache-api"],\
             ["@types/glob", "npm:8.0.0"],\
             ["@types/node", "npm:18.7.18"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
@@ -3998,12 +4014,60 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT"\
         }]\
       ]],\
+      ["@rgischk/yarn-plugin-scripts-cache-file", [\
+        ["workspace:yarn-plugin-scripts-cache-file", {\
+          "packageLocation": "./yarn-plugin-scripts-cache-file/",\
+          "packageDependencies": [\
+            ["@rgischk/yarn-plugin-scripts-cache-file", "workspace:yarn-plugin-scripts-cache-file"],\
+            ["@rgischk/yarn-scripts-cache-api", "workspace:yarn-scripts-cache-api"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
+            ["@yarnpkg/cli", "virtual:396ec5a0c0494ab0e684bc7e4f00422404246e165a4abde5a1edc3905f1c15dc8240e3efb97224eb28ba437f7f00f38b18fc813b6ea4263285f106dfeb5ef620#npm:4.0.0-rc.20"],\
+            ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
+            ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
+            ["clipanion", "virtual:b53c57b18bb765b9443ba48787c9811cb18de60cf253795b90b0946d8d72c165f809ed1ac1370af0c18fd849a1e66a0519de63c50aff04d9cd9b7eb7d3333082#npm:3.2.0-rc.12"],\
+            ["node-fetch", "npm:3.3.0"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@rgischk/yarn-plugin-scripts-cache-nexus", [\
+        ["workspace:yarn-plugin-scripts-cache-nexus", {\
+          "packageLocation": "./yarn-plugin-scripts-cache-nexus/",\
+          "packageDependencies": [\
+            ["@rgischk/yarn-plugin-scripts-cache-nexus", "workspace:yarn-plugin-scripts-cache-nexus"],\
+            ["@rgischk/yarn-scripts-cache-api", "workspace:yarn-scripts-cache-api"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
+            ["@yarnpkg/cli", "virtual:396ec5a0c0494ab0e684bc7e4f00422404246e165a4abde5a1edc3905f1c15dc8240e3efb97224eb28ba437f7f00f38b18fc813b6ea4263285f106dfeb5ef620#npm:4.0.0-rc.20"],\
+            ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
+            ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
+            ["clipanion", "virtual:b53c57b18bb765b9443ba48787c9811cb18de60cf253795b90b0946d8d72c165f809ed1ac1370af0c18fd849a1e66a0519de63c50aff04d9cd9b7eb7d3333082#npm:3.2.0-rc.12"],\
+            ["node-fetch", "npm:3.3.0"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
       ["@rgischk/yarn-scripts-cache", [\
         ["workspace:.", {\
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@rgischk/yarn-scripts-cache", "workspace:."],\
             ["rimraf", "npm:3.0.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@rgischk/yarn-scripts-cache-api", [\
+        ["workspace:yarn-scripts-cache-api", {\
+          "packageLocation": "./yarn-scripts-cache-api/",\
+          "packageDependencies": [\
+            ["@rgischk/yarn-scripts-cache-api", "workspace:yarn-scripts-cache-api"],\
+            ["@types/node", "npm:18.7.18"],\
+            ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
+            ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
         }]\

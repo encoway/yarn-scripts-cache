@@ -1,6 +1,9 @@
-import {Locator, MessageName, Project, StreamReport} from '@yarnpkg/core';
-import {npath, PortablePath, ppath, xfs} from "@yarnpkg/fslib";
+import {Locator, MessageName, Project, StreamReport} from "@yarnpkg/core"
+import {npath, PortablePath, ppath, xfs} from "@yarnpkg/fslib"
 import crypto from "crypto"
+import {glob} from "glob"
+import os from "os"
+
 import {
     Cache,
     CacheEntry,
@@ -9,12 +12,10 @@ import {
     FileContents,
     FileHashes,
     GlobFileContents,
-    GlobFileHashes, RegexEnvVars, ScriptFileHashes, WorkspaceGlobFileHashes
-} from "./cache";
-import {WrapScriptExecutionExtra} from "./index";
-import {CONFIG_FILE_NAME, readConfig, ScriptToCache} from "./config";
-import {glob} from "glob";
-import os from "os";
+    GlobFileHashes, RegexEnvVars, ScriptFileHashes, ScriptToCache, WorkspaceGlobFileHashes, WrapScriptExecutionExtra
+} from "@rgischk/yarn-scripts-cache-api"
+
+import {CONFIG_FILE_NAME, readConfig, } from "./readConfig"
 
 export async function updateCacheFromScriptExecutionResult(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]) {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
@@ -31,7 +32,7 @@ export async function updateCacheFromScriptExecutionResult(project: Project, loc
     }
 }
 
-export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<CacheEntry | undefined> {
+export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<[CacheEntry, Cache] | undefined> {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
     if (!key) {
         return undefined
@@ -40,7 +41,7 @@ export async function updateScriptExecutionResultFromCache(project: Project, loc
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
             await restoreCacheValue(extra.cwd, cacheEntry.value)
-            return cacheEntry
+            return [cacheEntry, cache]
         }
     }
     return undefined
