@@ -1,9 +1,9 @@
 import {Config} from "@rgischk/yarn-scripts-cache-api"
 
-export const YARN_SCRIPTS_CACHE_DISABLED = "YARN_SCRIPTS_CACHE_DISABLED"
+export const YSC_DISABLED = "YSC_DISABLED"
 
 export function isCacheDisabled(config: Config) {
-    const environmentVariableValue = process.env[YARN_SCRIPTS_CACHE_DISABLED]
+    const environmentVariableValue = process.env[YSC_DISABLED]
     if (typeof environmentVariableValue === "string") {
         return environmentVariableValue === "true"
     }

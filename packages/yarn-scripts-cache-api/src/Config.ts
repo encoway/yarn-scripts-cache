@@ -9,7 +9,7 @@ export type Config = {
 
     /**
      * Whether the cache should be disabled. Can be overwritten with the environment variable
-     * YARN_SCRIPTS_CACHE_DISABLED.
+     * YSC_DISABLED.
      */
     cacheDisabled?: boolean
 

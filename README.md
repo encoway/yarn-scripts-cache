@@ -16,7 +16,7 @@ See [the type declaration](packages/yarn-scripts-cache-api/src/Config.ts) for th
 
 ### Environment variables
 
-The cache can be disabled by setting the environment variable `YARN_SCRIPTS_CACHE_DISABLED` to `true`.
+The cache can be disabled by setting the environment variable `YSC_DISABLED` to `true`.
 
 ### Cache configuration options
 

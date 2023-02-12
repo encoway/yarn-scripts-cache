@@ -10,7 +10,7 @@ The following configuration options are available:
 
 The maximum age in milliseconds of script execution results to store.
 
-* Environment variable: `YARN_SCRIPTS_CACHE_FILE_MAX_AGE`
+* Environment variable: `YSC_FILE_MAX_AGE`
 * Config field: `cacheConfigs.file.maxAge`
 * Default value: `2592000000` (30 days in milliseconds)
 
@@ -18,7 +18,7 @@ The maximum age in milliseconds of script execution results to store.
 
 The maximum amount of script execution results to store.
 
-* Environment variable: `YARN_SCRIPTS_CACHE_FILE_MAX_AMOUNT`
+* Environment variable: `YSC_FILE_MAX_AMOUNT`
 * Config field: `cacheConfigs.file.maxAmount`
 * Default value: `1000`
 
@@ -26,6 +26,6 @@ The maximum amount of script execution results to store.
 
 The name of the folder to store the cache in.
 
-* Environment variable: `YARN_SCRIPTS_CACHE_FILE_CACHE_FOLDER_NAME`
+* Environment variable: `YSC_FILE_CACHE_FOLDER_NAME`
 * Config field: `cacheConfigs.file.cacheFolderName`
 * Default value: `.yarn-scripts-cache`

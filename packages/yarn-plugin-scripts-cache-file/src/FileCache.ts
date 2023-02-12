@@ -16,21 +16,21 @@ const ORDER = 10
  * The maximum age of script execution results to store in the local cache in milliseconds.
  * Defaults to a value that is equivalent to 30 days.
  */
-const MAX_AGE_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_FILE_MAX_AGE"
+const MAX_AGE_ENVIRONMENT_VARIABLE = "YSC_FILE_MAX_AGE"
 const MAX_AGE_CONFIG_FIELD = "maxAge"
 const MAX_AGE_DEFAULT_VALUE = 2592000000 // 30 days in milliseconds
 
 /**
  * The maximum amount of script execution results to store in the local cache. Defaults to 1000.
  */
-const MAX_AMOUNT_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_FILE_MAX_AMOUNT"
+const MAX_AMOUNT_ENVIRONMENT_VARIABLE = "YSC_FILE_MAX_AMOUNT"
 const MAX_AMOUNT_CONFIG_FIELD = "maxAmount"
 const MAX_AMOUNT_DEFAULT_VALUE = 1000
 
 /**
  * The name of the folder to store the cache in.
  */
-const CACHE_FOLDER_NAME_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_FILE_CACHE_FOLDER_NAME"
+const CACHE_FOLDER_NAME_ENVIRONMENT_VARIABLE = "YSC_FILE_CACHE_FOLDER_NAME"
 const CACHE_FOLDER_NAME_CONFIG_FIELD = "cacheFolderName"
 const CACHE_FOLDER_NAME_DEFAULT_VALUE = ".yarn-scripts-cache"
 

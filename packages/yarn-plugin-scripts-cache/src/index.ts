@@ -41,6 +41,10 @@ const wrapScriptExecution: WrapScriptExecution = async (
     }
 
     const caches = await buildCaches(config, {project, locator, scriptName, extra})
+    if (caches.length === 0) {
+        report.reportError(MessageName.UNNAMED,
+            "Script was configured to be cached but no cache implementation was found! Please make sure to add cache implementations via their own plugin.")
+    }
 
     return async () => {
         const cacheResult = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)

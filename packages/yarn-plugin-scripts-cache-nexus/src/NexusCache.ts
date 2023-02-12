@@ -25,14 +25,14 @@ const NO_REDEPLOY_MESSAGE = "Repository does not allow updating assets"
  * The host of the nexus instance to use as a cache. Note: If the host is not configured, this cache will be disabled.
  * Example: http://localhost:8081
  */
-const HOST_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_NEXUS_HOST"
+const HOST_ENVIRONMENT_VARIABLE = "YSC_NEXUS_HOST"
 const HOST_CONFIG_FIELD = "host"
 
 /**
  * The name of the nexus repository to store the cache entries in. The repository should be of type "raw (hosted)".
  * Defaults to yarn-scripts-cache.
  */
-const REPOSITORY_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_NEXUS_REPOSITORY"
+const REPOSITORY_ENVIRONMENT_VARIABLE = "YSC_NEXUS_REPOSITORY"
 const REPOSITORY_CONFIG_FIELD = "repository"
 const REPOSITORY_DEFAULT_VALUE = "yarn-scripts-cache"
 
@@ -40,7 +40,7 @@ const REPOSITORY_DEFAULT_VALUE = "yarn-scripts-cache"
  * The nexus username used to authenticate when uploading cache entries. Make sure this user is allowed to upload
  * components to the configured repository. Note: If the username is not configured, the cache will not be updated.
  */
-const USERNAME_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_NEXUS_USERNAME"
+const USERNAME_ENVIRONMENT_VARIABLE = "YSC_NEXUS_USERNAME"
 const USERNAME_CONFIG_FIELD = "username"
 
 /**
@@ -48,13 +48,13 @@ const USERNAME_CONFIG_FIELD = "username"
  * the password in the config file, as the file is not encrypted. Note: If the password is not configured, the cache
  * will not be updated.
  */
-const PASSWORD_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_NEXUS_PASSWORD"
+const PASSWORD_ENVIRONMENT_VARIABLE = "YSC_NEXUS_PASSWORD"
 const PASSWORD_CONFIG_FIELD = "password"
 
 /**
  * The maximum amount of attempts when performing a network request to the nexus instance. Defaults to 3.
  */
-const MAX_RETRIES_ENVIRONMENT_VARIABLE = "YARN_SCRIPTS_CACHE_NEXUS_MAX_RETRIES"
+const MAX_RETRIES_ENVIRONMENT_VARIABLE = "YSC_NEXUS_MAX_RETRIES"
 const MAX_RETRIES_CONFIG_FIELD = "maxRetries"
 const MAX_RETRIES_DEFAULT_VALUE = 3
 
