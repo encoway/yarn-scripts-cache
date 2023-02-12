@@ -6,7 +6,7 @@
   "module": "bin/index.js",
   "types": "bin/index.d.ts",
   "devDependencies": {
-    "@types/node": "^16.18.12",
+    "@types/node": "^18.13.0",
     "@yarnpkg/core": "^4.0.0-rc.18",
     "typescript": "^4.8.3"
   },
