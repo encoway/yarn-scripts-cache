@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-scripts-cache",
   "packageManager": "yarn@3.2.3",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Parent for the Yarn Scripts Cache.",
   "license": "MIT",
   "author": "Roman Gischkowski <dev@rgischk.de",

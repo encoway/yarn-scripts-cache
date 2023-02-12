@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache-nexus",
   "packageManager": "yarn@3.2.3",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Cache implementation for yarn-scripts-cache using a remote sonatype nexus repository.",
   "main": "./src/index.ts",
   "license": "MIT",
