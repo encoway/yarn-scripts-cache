@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache",
   "packageManager": "yarn@3.2.3",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./src/index.ts",
   "scripts": {
     "check-types": "tsc --noEmit",

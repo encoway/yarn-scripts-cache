@@ -1,6 +1,6 @@
 {
   "name": "@rgischk/yarn-scripts-cache-dummy-app",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": ".",
   "dependencies": {
     "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*",

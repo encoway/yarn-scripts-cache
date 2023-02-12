@@ -4,7 +4,7 @@
   "main": "bin/index.js",
   "module": "bin/index.js",
   "types": "bin/index.d.ts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "devDependencies": {
     "@types/node": "^18.13.0",
     "typescript": "^4.8.3"

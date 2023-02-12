@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-scripts-cache-api",
   "packageManager": "yarn@3.2.3",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "bin/index.js",
   "module": "bin/index.js",
   "types": "bin/index.d.ts",
