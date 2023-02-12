@@ -1,10 +1,43 @@
 # Yarn Scripts Cache
 
 A Yarn Berry plugin to cache script execution results.
+Previous build results can be restored, even from a remote cache server.
+This allows for build result sharing with a team of developers, significantly increasing build times and eliminating downtime.
 
 ## Installation
 
-* TODO
+First install the plugin, e.g. using the latest version:
+
+```sh
+yarn plugin import https://github.com/rgischk/yarn-scripts-cache/releases/latest/download/plugin-scripts-cache.js
+```
+
+Then install at least one of the cache implementations, that are implemented in their own plugin.
+The file cache plugin is recommended as a starting point, since it is the most basic cache implementation:
+
+```sh
+yarn plugin import https://github.com/rgischk/yarn-scripts-cache/releases/latest/download/plugin-scripts-cache-file.js
+```
+
+Finally, add a configuration file called `.yarn-scripts-cache-rc.json` to your project:
+
+```
+{
+  "scriptsToCache": [
+    {
+      "scriptName": "build",
+      "inputIncludes": "**",
+      "inputExcludes": "dist/**",
+      "outputIncludes": "dist/**"
+    }
+  ]
+}
+```
+Now, when executing the `build` script, all files in the `dist` directory will be cached.
+
+For a detailed list of configuration options, see [Configuration Options](#configuration-options).
+If you are using a monorepo with workspaces, check out the [Monorepo with yarn workspaces](#monorepo-with-yarn-workspaces) section.
+Finally, for more examples, have a look at [Examples](#examples).
 
 ## Configuration options
 

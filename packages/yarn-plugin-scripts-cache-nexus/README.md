@@ -1,6 +1,6 @@
 # Yarn Scripts Cache: Nexus
 
-A Yarn Scripts Cache implementation using a remote nexus repository.
+A Yarn Scripts Cache implementation using a remote sonatype nexus repository.
 
 ## Configuration
 
