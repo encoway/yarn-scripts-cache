@@ -2374,11 +2374,8 @@ __metadata:
     "@rgischk/yarn-scripts-cache-api": 0.0.1
     "@types/node": ^18.7.18
     "@yarnpkg/builder": ^4.0.0-rc.18
-    "@yarnpkg/cli": ^4.0.0-rc.18
     "@yarnpkg/core": ^4.0.0-rc.18
     "@yarnpkg/fslib": ^3.0.0-rc.18
-    clipanion: ^3.2.0-rc.10
-    node-fetch: ^3.3.0
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -2390,10 +2387,7 @@ __metadata:
     "@rgischk/yarn-scripts-cache-api": 0.0.1
     "@types/node": ^18.7.18
     "@yarnpkg/builder": ^4.0.0-rc.18
-    "@yarnpkg/cli": ^4.0.0-rc.18
     "@yarnpkg/core": ^4.0.0-rc.18
-    "@yarnpkg/fslib": ^3.0.0-rc.18
-    clipanion: ^3.2.0-rc.10
     node-fetch: ^3.3.0
     typescript: ^4.8.3
   languageName: unknown
@@ -2407,12 +2401,9 @@ __metadata:
     "@types/glob": ^8.0.0
     "@types/node": ^18.7.18
     "@yarnpkg/builder": ^4.0.0-rc.18
-    "@yarnpkg/cli": ^4.0.0-rc.18
     "@yarnpkg/core": ^4.0.0-rc.18
     "@yarnpkg/fslib": ^3.0.0-rc.18
-    clipanion: ^3.2.0-rc.10
     glob: ^8.0.3
-    node-fetch: ^3.3.0
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -3642,7 +3633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/cli@npm:^4.0.0-rc.18, @yarnpkg/cli@npm:^4.0.0-rc.20":
+"@yarnpkg/cli@npm:^4.0.0-rc.20":
   version: 4.0.0-rc.20
   resolution: "@yarnpkg/cli@npm:4.0.0-rc.20"
   dependencies:

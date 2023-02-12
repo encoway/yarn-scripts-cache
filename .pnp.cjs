@@ -4003,12 +4003,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/glob", "npm:8.0.0"],\
             ["@types/node", "npm:18.7.18"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
-            ["@yarnpkg/cli", "virtual:396ec5a0c0494ab0e684bc7e4f00422404246e165a4abde5a1edc3905f1c15dc8240e3efb97224eb28ba437f7f00f38b18fc813b6ea4263285f106dfeb5ef620#npm:4.0.0-rc.20"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
-            ["clipanion", "virtual:b53c57b18bb765b9443ba48787c9811cb18de60cf253795b90b0946d8d72c165f809ed1ac1370af0c18fd849a1e66a0519de63c50aff04d9cd9b7eb7d3333082#npm:3.2.0-rc.12"],\
             ["glob", "npm:8.0.3"],\
-            ["node-fetch", "npm:3.3.0"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
@@ -4022,11 +4019,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
             ["@types/node", "npm:18.7.18"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
-            ["@yarnpkg/cli", "virtual:396ec5a0c0494ab0e684bc7e4f00422404246e165a4abde5a1edc3905f1c15dc8240e3efb97224eb28ba437f7f00f38b18fc813b6ea4263285f106dfeb5ef620#npm:4.0.0-rc.20"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
-            ["clipanion", "virtual:b53c57b18bb765b9443ba48787c9811cb18de60cf253795b90b0946d8d72c165f809ed1ac1370af0c18fd849a1e66a0519de63c50aff04d9cd9b7eb7d3333082#npm:3.2.0-rc.12"],\
-            ["node-fetch", "npm:3.3.0"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
@@ -4040,10 +4034,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
             ["@types/node", "npm:18.7.18"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
-            ["@yarnpkg/cli", "virtual:396ec5a0c0494ab0e684bc7e4f00422404246e165a4abde5a1edc3905f1c15dc8240e3efb97224eb28ba437f7f00f38b18fc813b6ea4263285f106dfeb5ef620#npm:4.0.0-rc.20"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
-            ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
-            ["clipanion", "virtual:b53c57b18bb765b9443ba48787c9811cb18de60cf253795b90b0946d8d72c165f809ed1ac1370af0c18fd849a1e66a0519de63c50aff04d9cd9b7eb7d3333082#npm:3.2.0-rc.12"],\
             ["node-fetch", "npm:3.3.0"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
