@@ -1,3 +1,4 @@
+import {MessageName, StreamReport} from "@yarnpkg/core"
 import fetch, {Blob, FormData, Headers, Response} from "node-fetch"
 import crypto from "crypto"
 
@@ -10,7 +11,6 @@ import {
     readIntConfigValue,
     readStringConfigValue
 } from "@rgischk/yarn-scripts-cache-api"
-import {MessageName, StreamReport} from "@yarnpkg/core";
 
 const NAME = "nexus"
 const ORDER = 100
@@ -114,18 +114,14 @@ export class NexusCache implements Cache {
         const downloader = () => downloadJsonAsset<CacheEntry>(host, repository, cacheEntryKey.workspaceLocator, filename, verbose, this.report)
         const cacheEntry = await retry(downloader, maxRetries, r => r === "FAILED", verbose, this.report)
 
-        if (cacheEntry === "CACHE_MISS") {
-            // console.debug("Cache miss", cacheEntryKey)
-            return undefined
-        }
-
-        if (cacheEntry === "FAILED") {
-            console.warn("Failed to load cache entry.", cacheEntryKey)
+        if (cacheEntry === "CACHE_MISS" || cacheEntry === "FAILED") {
             return undefined
         }
 
         if (!cacheEntry.hasOwnProperty("key") || JSON.stringify(cacheEntry.key) !== JSON.stringify(cacheEntryKey)) {
-            console.error("Remote cache returned invalid cache entry.", {cacheEntryKey, cacheEntry})
+            if (verbose) {
+                this.report.reportError(MessageName.UNNAMED, `Remote cache returned invalid cache entry. Key: ${JSON.stringify(cacheEntryKey)} entry: ${JSON.stringify(cacheEntry)}`)
+            }
             return undefined
         }
 
