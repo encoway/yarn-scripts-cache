@@ -1,3 +1,6 @@
+import {npath, PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
+import crypto from "crypto"
+
 import {
     Cache,
     CacheEntry,
@@ -7,8 +10,6 @@ import {
     readIntConfigValue,
     readStringConfigValue
 } from "@rgischk/yarn-scripts-cache-api"
-import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
-import crypto from "crypto"
 
 const NAME = "file"
 const ORDER = 10
@@ -56,6 +57,17 @@ const CACHE_FOLDER_NAME_ENVIRONMENT_VARIABLE = "YSC_FILE_CACHE_FOLDER_NAME"
 const CACHE_FOLDER_NAME_CONFIG_FIELD = "cacheFolderName"
 const CACHE_FOLDER_NAME_DEFAULT_VALUE = ".yarn-scripts-cache"
 
+/**
+ * The location of the folder to store the cache in. If this option is provided, the cache folder name option is
+ * ignored.
+ *
+ * Examples:
+ * - C:\path\to\cache
+ * - path\to\cache\within\current\working\directory
+ */
+const CACHE_FOLDER_LOCATION_ENVIRONMENT_VARIABLE = "YSC_FILE_CACHE_FOLDER_LOCATION"
+const CACHE_FOLDER_LOCATION_CONFIG_FIELD = "cacheFolderLocation"
+
 export class FileCache implements Cache {
     cwd: PortablePath
     config: Config
@@ -89,7 +101,7 @@ export class FileCache implements Cache {
         }
 
         const cacheDir = this.buildCacheDir()
-        if (! await xfs.existsPromise(cacheDir)) {
+        if (!await xfs.existsPromise(cacheDir)) {
             return undefined
         }
 
@@ -133,6 +145,11 @@ export class FileCache implements Cache {
     }
 
     private buildCacheDir(): PortablePath {
+        const path = this.getCacheFolderLocation()
+        if (path) {
+            const portablePath = npath.toPortablePath(path)
+            return npath.isAbsolute(path) ? portablePath : ppath.join(this.cwd, portablePath)
+        }
         return ppath.join(this.cwd, toFilename(this.getCacheFolderName()))
     }
 
@@ -158,6 +175,10 @@ export class FileCache implements Cache {
 
     private getCacheFolderName() {
         return readStringConfigValue(this.config, NAME, CACHE_FOLDER_NAME_ENVIRONMENT_VARIABLE, CACHE_FOLDER_NAME_CONFIG_FIELD, CACHE_FOLDER_NAME_DEFAULT_VALUE)
+    }
+
+    private getCacheFolderLocation() {
+        return readStringConfigValue(this.config, NAME, CACHE_FOLDER_LOCATION_ENVIRONMENT_VARIABLE, CACHE_FOLDER_LOCATION_CONFIG_FIELD, undefined)
     }
 
 }

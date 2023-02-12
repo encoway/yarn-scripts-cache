@@ -53,3 +53,18 @@ The name of the folder to store the cache in.
 * Environment variable: `YSC_FILE_CACHE_FOLDER_NAME`
 * Config field: `cacheConfigs.file.cacheFolderName`
 * Default value: `.yarn-scripts-cache`
+
+### Cache folder location
+
+The location of the folder to store the cache in.
+If this option is provided, the cache folder name option is ignored.
+
+> Note: You can use the same cache folder location for multiple projects or workspaces.
+> But note that the cleanup options do not distinguish between different projects or workspaces, therefore you might want to increase the default options accordingly. 
+
+* Environment variable: `YSC_FILE_CACHE_FOLDER_LOCATION`
+* Config field: `cacheConfigs.file.cacheFolderLocation`
+* Default value: Current working directory.
+* Examples:
+  * `C:\path\to\cache`
+  * `path\to\cache\within\current\working\directory`
