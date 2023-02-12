@@ -3,9 +3,9 @@
   "packageManager": "yarn@3.2.3",
   "version": "0.0.1",
   "scripts": {
-    "check-types": "yarn workspaces foreach --verbose --topological --all run check-types",
-    "build-only": "yarn workspaces foreach --verbose --topological --all run build-only",
-    "build": "yarn workspaces foreach --verbose --topological --all run build",
+    "check-types": "yarn workspaces foreach --verbose --topological-dev --all run check-types",
+    "build-only": "yarn workspaces foreach --verbose --topological-dev --all run build-only",
+    "build": "yarn workspaces foreach --verbose --topological-dev --all run build",
     "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .yarn-scripts-cache",
     "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
     "dummy-clean": "yarn workspaces foreach --verbose --all exec rimraf bin",
