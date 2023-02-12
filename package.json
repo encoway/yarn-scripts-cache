@@ -2,6 +2,19 @@
   "name": "@rgischk/yarn-scripts-cache",
   "packageManager": "yarn@3.2.3",
   "version": "1.0.2",
+  "description": "Parent for the Yarn Scripts Cache.",
+  "license": "MIT",
+  "author": "Roman Gischkowski <dev@rgischk.de",
+  "keywords": [
+    "yarn",
+    "berry",
+    "cache"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rgischk/yarn-scripts-cache.git"
+  },
+  "homepage": "https://github.com/rgischk/yarn-scripts-cache#readme",
   "scripts": {
     "check-types": "yarn workspaces foreach --verbose --topological-dev --all run check-types",
     "build-only": "yarn workspaces foreach --verbose --topological-dev --all run build-only",
@@ -10,7 +23,8 @@
     "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
     "dummy-clean": "yarn workspaces foreach --verbose --all exec rimraf bin",
     "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
-    "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve"
+    "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
+    "publish": "yarn workspaces foreach --verbose --all run publish"
   },
   "workspaces": [
     "packages/*",

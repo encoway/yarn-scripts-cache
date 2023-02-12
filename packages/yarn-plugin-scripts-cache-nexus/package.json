@@ -2,7 +2,21 @@
   "name": "@rgischk/yarn-plugin-scripts-cache-nexus",
   "packageManager": "yarn@3.2.3",
   "version": "1.0.2",
+  "description": "Cache implementation for yarn-scripts-cache using a remote sonatype nexus repository.",
   "main": "./src/index.ts",
+  "license": "MIT",
+  "author": "Roman Gischkowski <dev@rgischk.de",
+  "keywords": [
+    "yarn",
+    "berry",
+    "cache"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rgischk/yarn-scripts-cache.git",
+    "directory": "packages/yarn-plugin-scripts-cache-nexus"
+  },
+  "homepage": "https://github.com/rgischk/yarn-scripts-cache#readme",
   "scripts": {
     "check-types": "tsc --noEmit",
     "build-only": "builder build plugin",
