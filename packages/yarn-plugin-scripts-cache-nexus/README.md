@@ -2,6 +2,13 @@
 
 A Yarn Scripts Cache implementation using a remote sonatype nexus repository.
 
+## Nexus setup
+
+The nexus repository must be of type "raw (hosted)".
+It is recommended to not allow redeployment of assets.
+A user needs to be available to upload components.
+Downloading components should not allow authentication.
+
 ## Configuration
 
 The following configuration options are available:

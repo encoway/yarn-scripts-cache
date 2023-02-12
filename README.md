@@ -57,6 +57,50 @@ For the configuration options of the different cache implementations, see their 
 * [File Cache](./packages/yarn-plugin-scripts-cache-file/README.md)
 * [Nexus Cache](./packages/yarn-plugin-scripts-cache-nexus/README.md)
 
+## Cache implementations
+
+The package `yarn-plugin-scripts-cache` is the main Yarn Berry plugin that wraps around the script executions and checks for changes to be cached or restored.
+The actual caching is done by different cache implementations.
+Cache implementations are Yarn Berry plugins themselves, they simply need to implement a custom hook called `beforeYarnScriptsCacheUsage`.
+
+Currently, these cache implementations are available:
+
+### File cache
+
+The [file cache](./packages/yarn-plugin-scripts-cache-file/README.md) stores the cache entries in a folder of the local file system.
+This is a very basic cache that is a good option as the first cache to use.
+It works great together with remote caches.
+
+### Nexus cache
+
+The [nexus cache](./packages/yarn-plugin-scripts-cache-nexus/README.md) stores the cache entries in a sonatype nexus repository.
+Since this is a remote cache, it can be shared between multiple developers, even including a CI/CD system.
+This can significantly increase build times in big teams working on complex monorepos.
+
+### Create a new cache implementation
+
+To create a new cache implementation, first follow the official [Plugin Tutorial](https://yarnpkg.com/advanced/plugin-tutorial) to create a simple Yarn Berry plugin.
+Then add the `yarn-scripts-cache-api` package as a dependency:
+
+```sh
+yarn add --dev @rgischk/yarn-scripts-cache-api
+```
+
+
+Then register a hook like this:
+
+```js
+const plugin = {
+  hooks: {
+    beforeYarnScriptsCacheUsage: (cacheRegistry) => {
+      cacheRegistry.push(...) // Register a cache implementation
+    }
+  }
+}
+```
+
+An example of this can be found in the [file plugin](./packages/yarn-plugin-scripts-cache-file/src/index.ts).
+
 ## How does it work?
 
 Let's imagine you have the following directory structure:
