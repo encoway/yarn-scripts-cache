@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@rgischk/yarn-scripts-cache-api": "workspace:*",
-    "@types/node": "^18.7.18",
+    "@types/node": "^16.18.12",
     "@yarnpkg/builder": "^4.0.0-rc.18",
     "@yarnpkg/core": "^4.0.0-rc.18",
     "@yarnpkg/fslib": "^3.0.0-rc.18",

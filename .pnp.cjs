@@ -4001,7 +4001,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@rgischk/yarn-plugin-scripts-cache", "workspace:packages/yarn-plugin-scripts-cache"],\
             ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
             ["@types/glob", "npm:8.0.0"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
@@ -4017,7 +4017,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@rgischk/yarn-plugin-scripts-cache-file", "workspace:packages/yarn-plugin-scripts-cache-file"],\
             ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/fslib", "npm:3.0.0-rc.20"],\
@@ -4032,7 +4032,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@rgischk/yarn-plugin-scripts-cache-nexus", "workspace:packages/yarn-plugin-scripts-cache-nexus"],\
             ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.20"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
             ["node-fetch", "npm:3.3.0"],\
@@ -4056,7 +4056,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/yarn-scripts-cache-api/",\
           "packageDependencies": [\
             ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.20"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
@@ -4074,7 +4074,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:13.5.0"],\
             ["@types/jest", "npm:27.5.2"],\
-            ["@types/node", "npm:16.11.60"],\
+            ["@types/node", "npm:16.18.12"],\
             ["@types/react", "npm:18.0.21"],\
             ["@types/react-dom", "npm:18.0.6"],\
             ["@types/testing-library__jest-dom", "npm:5.14.5"],\
@@ -4095,7 +4095,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@rgischk/yarn-scripts-cache-dummy-lib", "workspace:dummy-packages/yarn-scripts-cache-dummy-lib"],\
             ["@rgischk/yarn-scripts-cache-dummy-lib2", "workspace:dummy-packages/yarn-scripts-cache-dummy-lib2"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
@@ -4106,7 +4106,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./dummy-packages/yarn-scripts-cache-dummy-lib2/",\
           "packageDependencies": [\
             ["@rgischk/yarn-scripts-cache-dummy-lib2", "workspace:dummy-packages/yarn-scripts-cache-dummy-lib2"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
           "linkType": "SOFT"\
@@ -4118,7 +4118,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@rgischk/yarn-scripts-cache-dummy-project", "workspace:dummy-packages/yarn-scripts-cache-dummy-project"],\
             ["@rgischk/yarn-scripts-cache-dummy-lib", "workspace:dummy-packages/yarn-scripts-cache-dummy-lib"],\
-            ["@types/node", "npm:18.7.18"],\
+            ["@types/node", "npm:16.18.12"],\
             ["copyfiles", "npm:2.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"]\
           ],\
@@ -4897,10 +4897,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/node", [\
-        ["npm:16.11.60", {\
-          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.60-02f48990e1-8c9670801f.zip/node_modules/@types/node/",\
+        ["npm:16.18.12", {\
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.18.12-74fb2c13d9-fc32711824.zip/node_modules/@types/node/",\
           "packageDependencies": [\
-            ["@types/node", "npm:16.11.60"]\
+            ["@types/node", "npm:16.18.12"]\
           ],\
           "linkType": "HARD"\
         }],\
