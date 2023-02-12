@@ -13,6 +13,6 @@
     "dummy-build": "tsc"
   },
   "dependencies": {
-    "@rgischk/yarn-scripts-cache-dummy-lib2": "^0.0.1"
+    "@rgischk/yarn-scripts-cache-dummy-lib2": "workspace:*"
   }
 }

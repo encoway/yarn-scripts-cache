@@ -14,6 +14,6 @@
     "dummy-hello": "yarn node ./bin/index.js"
   },
   "dependencies": {
-    "@rgischk/yarn-scripts-cache-dummy-lib": "0.0.1"
+    "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*"
   }
 }

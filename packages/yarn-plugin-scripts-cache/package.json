@@ -9,7 +9,7 @@
     "build": "yarn run check-types && yarn run build-only"
   },
   "devDependencies": {
-    "@rgischk/yarn-scripts-cache-api": "0.0.1",
+    "@rgischk/yarn-scripts-cache-api": "workspace:*",
     "@types/glob": "^8.0.0",
     "@types/node": "^18.7.18",
     "@yarnpkg/builder": "^4.0.0-rc.18",
