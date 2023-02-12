@@ -14112,22 +14112,22 @@ __metadata:
   linkType: hard
 
 "typescript@npm:^4.4.2, typescript@npm:^4.8.3":
-  version: 4.8.3
-  resolution: "typescript@npm:4.8.3"
+  version: 4.9.5
+  resolution: "typescript@npm:4.9.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8286a5edcaf3d68e65c451aa1e7150ad1cf53ee0813c07ec35b7abdfdb10f355ecaa13c6a226a694ae7a67785fd7eeebf89f845da0b4f7e4a35561ddc459aba0
+  checksum: ee000bc26848147ad423b581bd250075662a354d84f0e06eb76d3b892328d8d4440b7487b5a83e851b12b255f55d71835b008a66cbf8f255a11e4400159237db
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>, typescript@patch:typescript@^4.8.3#~builtin<compat/typescript>":
-  version: 4.8.3
-  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=3b564f"
+  version: 4.9.5
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: dfe2ee3b9da1d74b9e06784ae90c20c435db9ad6ab23172911f6cdbfd7ab7213ae3611c4254c5a2c6dc2e89f05a658b95493890bf62d218267033b3d8a2e4dd6
+  checksum: ab417a2f398380c90a6cf5a5f74badd17866adf57f1165617d6a551f059c3ba0a3e4da0d147b3ac5681db9ac76a303c5876394b13b3de75fdd5b1eaa06181c9d
   languageName: node
   linkType: hard
 
