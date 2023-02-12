@@ -6,9 +6,11 @@ import {
     CacheEntry,
     CacheEntryKey,
     Config,
+    readBooleanConfigValue,
     readIntConfigValue,
     readStringConfigValue
 } from "@rgischk/yarn-scripts-cache-api"
+import {MessageName, StreamReport} from "@yarnpkg/core";
 
 const NAME = "nexus"
 const ORDER = 100
@@ -58,17 +60,24 @@ const MAX_RETRIES_ENVIRONMENT_VARIABLE = "YSC_NEXUS_MAX_RETRIES"
 const MAX_RETRIES_CONFIG_FIELD = "maxRetries"
 const MAX_RETRIES_DEFAULT_VALUE = 3
 
-// TODO: Replace console outputs with yarns reporting feature
+/**
+ * Whether verbose output should be generated. This is useful for analysing errors. Defaults to false.
+ */
+const VERBOSE_ENVIRONMENT_VARIABLE = "YSC_NEXUS_VERBOSE"
+const VERBOSE_RETRIES_CONFIG_FIELD = "verbose"
+const VERBOSE_RETRIES_DEFAULT_VALUE = false
 
 export class NexusCache implements Cache {
     name: string
     order: number
     config: Config
+    report: StreamReport
 
-    constructor(config: Config) {
+    constructor(config: Config, report: StreamReport) {
         this.name = NAME
         this.order = ORDER
         this.config = config
+        this.report = report
     }
 
     async saveCacheEntry(cacheEntry: CacheEntry) {
@@ -77,41 +86,33 @@ export class NexusCache implements Cache {
         const username = this.readUsername()
         const password = this.readPassword()
         const maxRetries = this.readMaxRetries()
+        const verbose = this.readVerbose()
 
         if (!host || !username || !password) {
             return
         }
 
         const filename = buildFilename(cacheEntry.key)
-        const uploader = () => uploadJsonAsset(host, repository, cacheEntry.key.workspaceLocator, filename, username, password, cacheEntry)
-        const result = await retry(uploader, maxRetries, r => r === "FAILED")
-
-        switch (result) {
-            case "FAILED":
-                console.warn("Failed to update cache!")
-                break
-            case "NO_REDEPLOY":
-                console.info("Cache already up-to-date.")
-                break
-            case "SUCCESS":
-                console.debug("Successfully updated cache.")
-                break
-        }
+        const uploader = () => uploadJsonAsset(host, repository, cacheEntry.key.workspaceLocator, filename, username, password, cacheEntry, verbose, this.report)
+        await retry(uploader, maxRetries, r => r === "FAILED", verbose, this.report)
     }
 
     async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
         const host = this.readHost()
         const repository = this.readRepository()
         const maxRetries = this.readMaxRetries()
+        const verbose = this.readVerbose()
 
         if (!host) {
-            console.warn("Nexus cache is disabled because no host was configured!")
+            if (verbose) {
+                this.report.reportWarning(MessageName.UNNAMED, "Nexus cache is disabled because no host was configured!")
+            }
             return
         }
 
         const filename = buildFilename(cacheEntryKey)
-        const downloader = () => downloadJsonAsset<CacheEntry>(host, repository, cacheEntryKey.workspaceLocator, filename)
-        const cacheEntry = await retry(downloader, maxRetries, r => r === "FAILED")
+        const downloader = () => downloadJsonAsset<CacheEntry>(host, repository, cacheEntryKey.workspaceLocator, filename, verbose, this.report)
+        const cacheEntry = await retry(downloader, maxRetries, r => r === "FAILED", verbose, this.report)
 
         if (cacheEntry === "CACHE_MISS") {
             // console.debug("Cache miss", cacheEntryKey)
@@ -150,6 +151,10 @@ export class NexusCache implements Cache {
     private readMaxRetries() {
         return readIntConfigValue(this.config, NAME, MAX_RETRIES_ENVIRONMENT_VARIABLE, MAX_RETRIES_CONFIG_FIELD, MAX_RETRIES_DEFAULT_VALUE)
     }
+
+    private readVerbose() {
+        return readBooleanConfigValue(this.config, NAME, VERBOSE_ENVIRONMENT_VARIABLE, VERBOSE_RETRIES_CONFIG_FIELD, VERBOSE_RETRIES_DEFAULT_VALUE)
+    }
 }
 
 function buildFilename(cacheEntryKey: CacheEntryKey): string {
@@ -158,22 +163,26 @@ function buildFilename(cacheEntryKey: CacheEntryKey): string {
     return `${hash.digest("base64url")}.json`
 }
 
-async function retry<T>(work: () => Promise<T>, retries: number, retryFilter: (result: T) => boolean): Promise<T> {
+async function retry<T>(work: () => Promise<T>, retries: number, retryFilter: (result: T) => boolean, verbose: boolean, report: StreamReport): Promise<T> {
     let result: T
     for (let i = 0; i < retries; i++) {
-        if (i > 0) {
-            console.log(`Attempt ${i} failed, retrying...`)
+        if (i > 0 && verbose) {
+            report.reportInfo(MessageName.UNNAMED, `Attempt ${i} failed, retrying...`)
         }
         result = await work()
         if (!retryFilter(result)) {
             return result
         }
     }
-    console.log(`All ${retries} retry attempts failed.`)
+
+    if (verbose) {
+        report.reportWarning(MessageName.UNNAMED, `All ${retries} retry attempts failed.`)
+    }
+
     return result!
 }
 
-async function uploadJsonAsset(host: string, repository: string, group: string, filename: string, username: string, password: string, json: unknown): Promise<"SUCCESS" | "NO_REDEPLOY" | "FAILED"> {
+async function uploadJsonAsset(host: string, repository: string, group: string, filename: string, username: string, password: string, json: unknown, verbose: boolean, report: StreamReport): Promise<"SUCCESS" | "NO_REDEPLOY" | "FAILED"> {
     group = ensurePathStartsWithSlash(group)
     const url = `${host}${UPLOAD_PATH}?${UPLOAD_URL_PARAM_REPOSITORY}=${repository}`
 
@@ -195,28 +204,36 @@ async function uploadJsonAsset(host: string, repository: string, group: string, 
             redirect: "follow"
         })
     } catch (error) {
-        console.warn("Error while uploading asset", {url, group, filename, error})
+        if (verbose) {
+            report.reportErrorOnce(MessageName.UNNAMED,
+                `Error while uploading asset. URL: ${url} group: ${group} filename: ${filename}`)
+            report.reportExceptionOnce(error as Error)
+        }
         return "FAILED"
     }
 
     const text = await tryReadText(response)
 
     if (response.status === 400 && text?.includes(NO_REDEPLOY_MESSAGE)) {
+        if (verbose) {
+            report.reportInfo(MessageName.UNNAMED,
+                `Cache entry was created by another client while this one was executing the script. No update necessary. URL: ${url} group: ${group} filename: ${filename}`)
+        }
         return "NO_REDEPLOY"
     }
 
     if (!response.ok) {
-        console.warn("Failed to upload asset, non-200-ok-status received.", {
-            url,
-            group,
-            filename,
-            status: response.status,
-            text
-        })
+        if (verbose) {
+            report.reportErrorOnce(MessageName.UNNAMED,
+                `Failed to upload asset, non-200-ok-status received. URL: ${url} group: ${group} filename: ${filename} status: ${response.status} text: ${text}`)
+        }
         return "FAILED"
     }
 
-    console.debug("Uploaded successfully", {url, group, filename, json})
+    if (verbose) {
+        report.reportInfo(MessageName.UNNAMED,
+            `Uploaded successfully. URL: ${url} group: ${group} filename: ${filename}`)
+    }
     return "SUCCESS"
 }
 
@@ -229,7 +246,7 @@ async function tryReadText(response: Response): Promise<string | undefined> {
     }
 }
 
-async function downloadJsonAsset<T>(host: string, repository: string, group: string, filename: string): Promise<T | "CACHE_MISS" | "FAILED"> {
+async function downloadJsonAsset<T>(host: string, repository: string, group: string, filename: string, verbose: boolean, report: StreamReport): Promise<T | "CACHE_MISS" | "FAILED"> {
     group = ensurePathStartsWithSlash(group)
     const url = `${host}${DOWNLOAD_PATH}/${repository}/${group}/${filename}`
 
@@ -237,25 +254,47 @@ async function downloadJsonAsset<T>(host: string, repository: string, group: str
     try {
         response = await fetch(url)
     } catch (error) {
-        console.warn("Error while downloading asset.", {url, error})
+        if (verbose) {
+            report.reportErrorOnce(MessageName.UNNAMED,
+                `Error while downloading asset. URL: ${url}`)
+            report.reportExceptionOnce(error as Error)
+        }
         return "FAILED"
     }
 
     if (response.status === 404) {
+        if (verbose) {
+            report.reportInfo(MessageName.UNNAMED,
+                `Cache entry does not exist (cache miss). URL: ${url}`)
+        }
         return "CACHE_MISS"
     }
 
     if (!response.ok) {
-        console.warn("Failed to download asset, non-200-ok-status received.", {url, status: response.status})
+        if (verbose) {
+            report.reportInfo(MessageName.UNNAMED,
+                `Failed to download asset, non-200-ok-status received. URL: ${url} status: ${response.status}`)
+        }
         return "FAILED"
     }
 
+    let json
     try {
-        return await response.json() as T
+        json = await response.json() as T
     } catch (error) {
-        console.warn("Error while parsing asset", error)
+        if (verbose) {
+            report.reportErrorOnce(MessageName.UNNAMED,
+                `Error while parsing asset. URL: ${url}`)
+            report.reportExceptionOnce(error as Error)
+        }
         return "FAILED"
     }
+
+    if (verbose) {
+        report.reportInfo(MessageName.UNNAMED,
+            `Downloaded successfully. URL: ${url}`)
+    }
+    return json
 }
 
 function ensurePathStartsWithSlash(path: string): string {

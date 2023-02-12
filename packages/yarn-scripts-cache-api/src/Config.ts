@@ -76,3 +76,14 @@ export function readStringConfigValue<T>(config: Config, pluginName: string, env
     }
     return defaultValue
 }
+
+export function readBooleanConfigValue(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: boolean): boolean {
+    const maxAgeEnvironmentValue = process.env[environmentVariableName]
+    if (maxAgeEnvironmentValue) {
+        return maxAgeEnvironmentValue === "true"
+    }
+    if (config.cacheConfigs && config.cacheConfigs[pluginName] && typeof config.cacheConfigs[pluginName][configFieldName] === "boolean") {
+        return config.cacheConfigs[pluginName][configFieldName]
+    }
+    return defaultValue
+}

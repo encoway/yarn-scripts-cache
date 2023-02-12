@@ -55,3 +55,10 @@ The maximum amount of attempts when performing a network request to the nexus in
 * Environment variable: `YSC_NEXUS_MAX_RETRIES`
 * Config field: `cacheConfigs.nexus.maxRetries`
 * Default value: `3`
+
+### Verbose
+
+Whether verbose output should be generated. This is useful for analysing errors.
+* Environment variable: `YSC_NEXUS_VERBOSE`
+* Config field: `cacheConfigs.nexus.verbose`
+* Default value: `false`
