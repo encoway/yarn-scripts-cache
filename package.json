@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-scripts-cache",
   "packageManager": "yarn@3.2.3",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "check-types": "yarn workspaces foreach --verbose --topological-dev --all run check-types",
     "build-only": "yarn workspaces foreach --verbose --topological-dev --all run build-only",
