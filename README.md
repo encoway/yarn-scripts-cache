@@ -49,7 +49,10 @@ See [the type declaration](packages/yarn-scripts-cache-api/src/Config.ts) for th
 
 ### Environment variables
 
-The cache can be disabled by setting the environment variable `YSC_DISABLED` to `true`.
+The following environment variables can be used to overwrite the according option in the config file:
+* `YSC_DISABLED` Disables this plugin entirely, no caches will be used.
+* `YSC_READ_DISABLED` Disable reading and restoring script results from all caches.
+* `YSC_WRITE_DISABLED` Disable updating any caches with script results.
 
 ### Cache configuration options
 

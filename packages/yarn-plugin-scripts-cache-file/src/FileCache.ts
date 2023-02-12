@@ -3,6 +3,7 @@ import {
     CacheEntry,
     CacheEntryKey,
     Config,
+    readBooleanConfigValue,
     readIntConfigValue,
     readStringConfigValue
 } from "@rgischk/yarn-scripts-cache-api"
@@ -11,6 +12,27 @@ import crypto from "crypto"
 
 const NAME = "file"
 const ORDER = 10
+
+/**
+ * Whether this cache is disabled. Defaults to false.
+ */
+const CACHE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_FILE_DISABLED"
+const CACHE_DISABLED_CONFIG_FIELD = "cacheDisabled"
+const CACHE_DISABLED_DEFAULT_VALUE = false
+
+/**
+ * Whether reading from this cache is disabled. Defaults to false.
+ */
+const CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE = "YSC_FILE_READ_DISABLED"
+const CACHE_READ_DISABLED_CONFIG_FIELD = "cacheReadDisabled"
+const CACHE_READ_DISABLED_DEFAULT_VALUE = false
+
+/**
+ * Whether writing to this cache is disabled. Defaults to false.
+ */
+const CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_FILE_WRITE_DISABLED"
+const CACHE_WRITE_DISABLED_CONFIG_FIELD = "cacheWriteDisabled"
+const CACHE_WRITE_DISABLED_DEFAULT_VALUE = false
 
 /**
  * The maximum age of script execution results to store in the local cache in milliseconds.
@@ -47,8 +69,11 @@ export class FileCache implements Cache {
         this.config = config
     }
 
-
     async saveCacheEntry(cacheEntry: CacheEntry) {
+        if (this.getCacheDisabled() || this.getCacheWriteDisabled()) {
+            return
+        }
+
         const cacheDir = this.buildCacheDir()
         await xfs.mkdirPromise(cacheDir, {recursive: true})
         const file = this.buildCacheFile(cacheDir, cacheEntry.key)
@@ -59,6 +84,10 @@ export class FileCache implements Cache {
     }
 
     async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
+        if (this.getCacheDisabled() || this.getCacheReadDisabled()) {
+            return undefined
+        }
+
         const cacheDir = this.buildCacheDir()
         if (! await xfs.existsPromise(cacheDir)) {
             return undefined
@@ -76,8 +105,8 @@ export class FileCache implements Cache {
     }
 
     private async cleanup() {
-        const maxAge = this.readMaxAge()
-        const maxAmount = this.readMaxAmount()
+        const maxAge = this.getMaxAge()
+        const maxAmount = this.getMaxAmount()
         const deleteBefore = Date.now() - maxAge
         const cacheDir = this.buildCacheDir()
         const files = (await xfs.readdirPromise(cacheDir)).map(file => ppath.join(cacheDir, file))
@@ -104,18 +133,30 @@ export class FileCache implements Cache {
     }
 
     private buildCacheDir(): PortablePath {
-        return ppath.join(this.cwd, toFilename(this.readCacheFolderName()))
+        return ppath.join(this.cwd, toFilename(this.getCacheFolderName()))
     }
 
-    private readMaxAge() {
+    private getCacheDisabled() {
+        return readBooleanConfigValue(this.config, NAME, CACHE_DISABLED_ENVIRONMENT_VARIABLE, CACHE_DISABLED_CONFIG_FIELD, CACHE_DISABLED_DEFAULT_VALUE)
+    }
+
+    private getCacheReadDisabled() {
+        return readBooleanConfigValue(this.config, NAME, CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE, CACHE_READ_DISABLED_CONFIG_FIELD, CACHE_READ_DISABLED_DEFAULT_VALUE)
+    }
+
+    private getCacheWriteDisabled() {
+        return readBooleanConfigValue(this.config, NAME, CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE, CACHE_WRITE_DISABLED_CONFIG_FIELD, CACHE_WRITE_DISABLED_DEFAULT_VALUE)
+    }
+
+    private getMaxAge() {
         return readIntConfigValue(this.config, NAME, MAX_AGE_ENVIRONMENT_VARIABLE, MAX_AGE_CONFIG_FIELD, MAX_AGE_DEFAULT_VALUE)
     }
 
-    private readMaxAmount() {
+    private getMaxAmount() {
         return readIntConfigValue(this.config, NAME, MAX_AMOUNT_ENVIRONMENT_VARIABLE, MAX_AMOUNT_CONFIG_FIELD, MAX_AMOUNT_DEFAULT_VALUE)
     }
 
-    private readCacheFolderName() {
+    private getCacheFolderName() {
         return readStringConfigValue(this.config, NAME, CACHE_FOLDER_NAME_ENVIRONMENT_VARIABLE, CACHE_FOLDER_NAME_CONFIG_FIELD, CACHE_FOLDER_NAME_DEFAULT_VALUE)
     }
 

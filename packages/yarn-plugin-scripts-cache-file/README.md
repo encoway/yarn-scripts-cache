@@ -6,6 +6,30 @@ A Yarn Scripts Cache implementation using the local file system.
 
 The following configuration options are available:
 
+### Disable file cache
+
+Disables this cache entirely. No reads or writes are performed.
+
+* Environment variable: `YSC_FILE_DISABLED`
+* Config field: `cacheConfigs.file.cacheDisabled`
+* Default value: false
+
+### Disable reading from file cache
+
+Disables reading from the file cache.
+
+* Environment variable: `YSC_FILE_READ_DISABLED`
+* Config field: `cacheConfigs.file.cacheReadDisabled`
+* Default value: false
+
+### Disable writing to file cache
+
+Disables writing to the file cache.
+
+* Environment variable: `YSC_FILE_WRITE_DISABLED`
+* Config field: `cacheConfigs.file.cacheWriteDisabled`
+* Default value: false
+
 ### Max age
 
 The maximum age in milliseconds of script execution results to store.

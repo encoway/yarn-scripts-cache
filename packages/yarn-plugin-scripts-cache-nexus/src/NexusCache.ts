@@ -24,6 +24,27 @@ const UPLOAD_FORM_PARAM_FILE = "raw.asset1"
 const NO_REDEPLOY_MESSAGE = "Repository does not allow updating assets"
 
 /**
+ * Whether this cache is disabled. Defaults to false.
+ */
+const CACHE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_NEXUS_DISABLED"
+const CACHE_DISABLED_CONFIG_FIELD = "cacheDisabled"
+const CACHE_DISABLED_DEFAULT_VALUE = false
+
+/**
+ * Whether reading from this cache is disabled. Defaults to false.
+ */
+const CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE = "YSC_NEXUS_READ_DISABLED"
+const CACHE_READ_DISABLED_CONFIG_FIELD = "cacheReadDisabled"
+const CACHE_READ_DISABLED_DEFAULT_VALUE = false
+
+/**
+ * Whether writing to this cache is disabled. Defaults to false.
+ */
+const CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_NEXUS_WRITE_DISABLED"
+const CACHE_WRITE_DISABLED_CONFIG_FIELD = "cacheWriteDisabled"
+const CACHE_WRITE_DISABLED_DEFAULT_VALUE = false
+
+/**
  * The host of the nexus instance to use as a cache. Note: If the host is not configured, this cache will be disabled.
  * Example: http://localhost:8081
  */
@@ -81,12 +102,16 @@ export class NexusCache implements Cache {
     }
 
     async saveCacheEntry(cacheEntry: CacheEntry) {
-        const host = this.readHost()
-        const repository = this.readRepository()
-        const username = this.readUsername()
-        const password = this.readPassword()
-        const maxRetries = this.readMaxRetries()
-        const verbose = this.readVerbose()
+        if (this.getCacheDisabled() || this.getCacheWriteDisabled()) {
+            return
+        }
+
+        const host = this.getHost()
+        const repository = this.getRepository()
+        const username = this.getUsername()
+        const password = this.getPassword()
+        const maxRetries = this.getMaxRetries()
+        const verbose = this.getVerbose()
 
         if (!host || !username || !password) {
             return
@@ -98,10 +123,14 @@ export class NexusCache implements Cache {
     }
 
     async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
-        const host = this.readHost()
-        const repository = this.readRepository()
-        const maxRetries = this.readMaxRetries()
-        const verbose = this.readVerbose()
+        if (this.getCacheDisabled() || this.getCacheReadDisabled()) {
+            return undefined
+        }
+
+        const host = this.getHost()
+        const repository = this.getRepository()
+        const maxRetries = this.getMaxRetries()
+        const verbose = this.getVerbose()
 
         if (!host) {
             if (verbose) {
@@ -128,27 +157,39 @@ export class NexusCache implements Cache {
         return cacheEntry
     }
 
-    private readHost() {
+    private getCacheDisabled() {
+        return readBooleanConfigValue(this.config, NAME, CACHE_DISABLED_ENVIRONMENT_VARIABLE, CACHE_DISABLED_CONFIG_FIELD, CACHE_DISABLED_DEFAULT_VALUE)
+    }
+
+    private getCacheReadDisabled() {
+        return readBooleanConfigValue(this.config, NAME, CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE, CACHE_READ_DISABLED_CONFIG_FIELD, CACHE_READ_DISABLED_DEFAULT_VALUE)
+    }
+
+    private getCacheWriteDisabled() {
+        return readBooleanConfigValue(this.config, NAME, CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE, CACHE_WRITE_DISABLED_CONFIG_FIELD, CACHE_WRITE_DISABLED_DEFAULT_VALUE)
+    }
+
+    private getHost() {
         return readStringConfigValue(this.config, NAME, HOST_ENVIRONMENT_VARIABLE, HOST_CONFIG_FIELD, undefined)
     }
 
-    private readRepository() {
+    private getRepository() {
         return readStringConfigValue(this.config, NAME, REPOSITORY_ENVIRONMENT_VARIABLE, REPOSITORY_CONFIG_FIELD, REPOSITORY_DEFAULT_VALUE)
     }
 
-    private readUsername() {
+    private getUsername() {
         return readStringConfigValue(this.config, NAME, USERNAME_ENVIRONMENT_VARIABLE, USERNAME_CONFIG_FIELD, undefined)
     }
 
-    private readPassword() {
+    private getPassword() {
         return readStringConfigValue(this.config, NAME, PASSWORD_ENVIRONMENT_VARIABLE, PASSWORD_CONFIG_FIELD, undefined)
     }
 
-    private readMaxRetries() {
+    private getMaxRetries() {
         return readIntConfigValue(this.config, NAME, MAX_RETRIES_ENVIRONMENT_VARIABLE, MAX_RETRIES_CONFIG_FIELD, MAX_RETRIES_DEFAULT_VALUE)
     }
 
-    private readVerbose() {
+    private getVerbose() {
         return readBooleanConfigValue(this.config, NAME, VERBOSE_ENVIRONMENT_VARIABLE, VERBOSE_RETRIES_CONFIG_FIELD, VERBOSE_RETRIES_DEFAULT_VALUE)
     }
 }

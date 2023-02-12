@@ -13,6 +13,30 @@ Downloading components should not allow authentication.
 
 The following configuration options are available:
 
+### Disable nexus cache
+
+Disables this cache entirely. No reads or writes are performed.
+
+* Environment variable: `YSC_NEXUS_DISABLED`
+* Config field: `cacheConfigs.nexus.cacheDisabled`
+* Default value: false
+
+### Disable reading from nexus cache
+
+Disables reading from the nexus cache.
+
+* Environment variable: `YSC_NEXUS_READ_DISABLED`
+* Config field: `cacheConfigs.nexus.cacheReadDisabled`
+* Default value: false
+
+### Disable writing to nexus cache
+
+Disables writing to the nexus cache.
+
+* Environment variable: `YSC_NEXUS_WRITE_DISABLED`
+* Config field: `cacheConfigs.nexus.cacheWriteDisabled`
+* Default value: false
+
 ### Host
 
 The host of the nexus instance to use as a cache.

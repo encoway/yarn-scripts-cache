@@ -5,7 +5,7 @@ import {WrapScriptExecution, WrapScriptExecutionExtra} from "@rgischk/yarn-scrip
 import {readConfig} from "./readConfig"
 import {buildCaches} from "./buildCaches"
 import {updateScriptExecutionResultFromCache, updateCacheFromScriptExecutionResult} from "./scriptResult"
-import {isCacheDisabled} from "./isCacheDisabled"
+import {isCacheDisabled, isCacheReadDisabled, isCacheWriteDisabled} from "./isCacheDisabled"
 
 async function buildReport(extra: WrapScriptExecutionExtra): Promise<StreamReport> {
     const configuration = Configuration.create(extra.cwd);
@@ -47,19 +47,21 @@ const wrapScriptExecution: WrapScriptExecution = async (
     }
 
     return async () => {
-        const cacheResult = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)
-        if (cacheResult) {
-            const [cacheEntry, cache] = cacheResult
-            const createdAt = new Date(cacheEntry.value.createdAt).toUTCString()
-            const createdBy = cacheEntry.value.createdBy
-            report.reportInfo(MessageName.UNNAMED,
-                `Script execution result was restored from ${cache.name} cache! Created ${createdAt} by ${createdBy}`)
-            return Promise.resolve(0)
+        if (!isCacheReadDisabled(config)) {
+            const cacheResult = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)
+            if (cacheResult) {
+                const [cacheEntry, cache] = cacheResult
+                const createdAt = new Date(cacheEntry.value.createdAt).toUTCString()
+                const createdBy = cacheEntry.value.createdBy
+                report.reportInfo(MessageName.UNNAMED,
+                    `Script execution result was restored from ${cache.name} cache! Created ${createdAt} by ${createdBy}`)
+                return Promise.resolve(0)
+            }
         }
 
         const result = await executor()
 
-        if (result === 0) {
+        if (result === 0 && !isCacheWriteDisabled(config)) {
             await report.startTimerPromise("Updating script execution result cache", async () => {
                 await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
             })

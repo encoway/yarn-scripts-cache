@@ -14,6 +14,18 @@ export type Config = {
     cacheDisabled?: boolean
 
     /**
+     * Whether reading from the cache should be disabled. Can be overwritten with the environment variable
+     * YSC_READ_DISABLED.
+     */
+    cacheReadDisabled?: boolean
+
+    /**
+     * Whether writing to the cache should be disabled. Can be overwritten with the environment variable
+     * YSC_WRITE_DISABLED.
+     */
+    cacheWriteDisabled?: boolean
+
+    /**
      * Configuration options for cache implementations.
      */
     cacheConfigs?: {
