@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache-nexus",
   "packageManager": "yarn@3.2.3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./src/index.ts",
   "scripts": {
     "check-types": "tsc --noEmit",
