@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache-file",
   "packageManager": "yarn@3.2.3",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Cache implementation for yarn-scripts-cache using the local file system.",
   "main": "./src/index.ts",
   "license": "MIT",
