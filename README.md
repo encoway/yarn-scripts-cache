@@ -2,7 +2,7 @@
 
 A Yarn Berry plugin to cache script execution results.
 Previous build results can be restored, even from a remote cache server.
-This allows for build result sharing with a team of developers, significantly increasing build times and eliminating downtime.
+This allows for build result sharing with a team of developers, significantly decreasing build times and eliminating downtime.
 
 ## Installation
 
