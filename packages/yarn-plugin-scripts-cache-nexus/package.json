@@ -24,10 +24,10 @@
   },
   "devDependencies": {
     "@rgischk/yarn-scripts-cache-api": "workspace:*",
-    "@types/node": "^18.13.0",
-    "@yarnpkg/builder": "^4.0.0-rc.18",
-    "@yarnpkg/core": "^4.0.0-rc.18",
-    "node-fetch": "^3.3.0",
-    "typescript": "^4.8.3"
+    "@types/node": "^18.16.18",
+    "@yarnpkg/builder": "^4.0.0-rc.46",
+    "@yarnpkg/core": "^4.0.0-rc.46",
+    "node-fetch": "^3.3.1",
+    "typescript": "^4.9.5"
   }
 }

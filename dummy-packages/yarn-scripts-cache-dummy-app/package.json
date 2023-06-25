@@ -6,22 +6,22 @@
     "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@testing-library/dom": "^8.5.0",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^18.13.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@types/testing-library__jest-dom": "^5.14.5",
-    "jest": "^27.4.3",
+    "@testing-library/dom": "^8.20.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^18.16.18",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@types/testing-library__jest-dom": "^5.14.6",
+    "jest": "^27.5.1",
     "react-scripts": "5.0.1",
-    "serve": "^14.0.1",
-    "typescript": "^4.4.2"
+    "serve": "^14.2.0",
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "dummy-start": "react-scripts start",
