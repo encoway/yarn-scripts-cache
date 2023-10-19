@@ -24,13 +24,15 @@
     "dummy-clean": "yarn workspaces foreach --verbose --all exec rimraf bin",
     "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
     "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
-    "publish": "yarn workspaces foreach --verbose --all run publish"
+    "publish": "yarn workspaces foreach --verbose --all run publish",
+    "test": "yarn jest"
   },
   "workspaces": [
     "packages/*",
     "dummy-packages/*"
   ],
   "devDependencies": {
+    "jest": "^29.7.0",
     "rimraf": "^3.0.2"
   }
 }
