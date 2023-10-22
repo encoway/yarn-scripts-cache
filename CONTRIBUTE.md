@@ -99,7 +99,7 @@ You simply have to enter the OTP once the command seems to hang.
 Go to the [Releases](https://github.com/rgischk/yarn-scripts-cache/releases) on the GitHub project.
 Press the "Draft a new release" button on the top.
 
-On this page, press the "Choose a tag" button and enter a tag matching the version of your release, e.g. `v.4.2.0`. Make sure to add the prepending `v`.
+On this page, press the "Choose a tag" button and enter a tag matching the version of your release, e.g. `v4.2.0`. Make sure to add the prepending `v`.
 
 Make the "Release title" the same as the tag and enter a short description of your release.
 
