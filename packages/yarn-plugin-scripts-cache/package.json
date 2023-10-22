@@ -1,7 +1,7 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache",
   "packageManager": "yarn@3.2.3",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "A Yarn Berry plugin to cache script execution results.",
   "main": "./src/index.ts",
   "license": "MIT",
