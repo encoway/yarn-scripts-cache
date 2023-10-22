@@ -25,7 +25,8 @@
     "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
     "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
     "publish": "yarn workspaces foreach --verbose --all run publish",
-    "test": "yarn jest"
+    "test": "yarn jest",
+    "set-version": "yarn workspaces foreach --verbose --all version ${0} && rimraf .yarn/versions"
   },
   "workspaces": [
     "packages/*",
