@@ -1,6 +1,6 @@
 {
   "name": "@rgischk/yarn-scripts-cache",
-  "packageManager": "yarn@3.6.0",
+  "packageManager": "yarn@3.6.4",
   "version": "1.6.1",
   "description": "Parent for the Yarn Scripts Cache.",
   "license": "MIT",
