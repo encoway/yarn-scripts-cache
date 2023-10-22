@@ -6,7 +6,8 @@ import {Config} from "@rgischk/yarn-scripts-cache-api"
 export const CONFIG_FILE_NAME = ".yarn-scripts-cache-rc.json"
 
 /**
- * Reads the yarn-scripts-cache config file from the workspace at the given location.
+ * Reads the yarn-scripts-cache config file from the workspace at the given
+ * location.
  *
  * @param cwd The location of the workspace to read the config file for
  * @param streamReport The report object to write error messages
@@ -16,7 +17,7 @@ export async function readConfig(cwd: PortablePath, streamReport: StreamReport):
     if (await xfs.existsPromise(configFile)) {
         const configContent = await xfs.readFilePromise(configFile, "utf-8")
         try {
-            const config = JSON.parse(configContent)
+            const config = JSON.parse(configContent.toString())
             if (isValidConfig(config, streamReport)) {
                 return config
             }

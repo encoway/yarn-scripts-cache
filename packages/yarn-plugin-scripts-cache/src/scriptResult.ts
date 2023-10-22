@@ -145,7 +145,8 @@ async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCach
             const file = ppath.resolve(cwd, relativeFile)
             const stat = await xfs.statPromise(file)
             if (stat.isFile()) {
-                fileContents[relativeFile] = await xfs.readFilePromise(file, "base64")
+                const fileContent = await xfs.readFilePromise(file, "base64")
+                fileContents[relativeFile] = fileContent.toString()
             }
         }
         globFileContents[outputInclude] = fileContents

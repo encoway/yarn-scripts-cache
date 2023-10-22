@@ -26,9 +26,9 @@
     "@rgischk/yarn-scripts-cache-api": "workspace:*",
     "@types/glob": "^8.1.0",
     "@types/node": "^18.16.18",
-    "@yarnpkg/builder": "^4.0.0-rc.46",
-    "@yarnpkg/core": "^4.0.0-rc.46",
-    "@yarnpkg/fslib": "^3.0.0-rc.46",
+    "@yarnpkg/builder": "^3.3.0",
+    "@yarnpkg/core": "^3.5.4",
+    "@yarnpkg/fslib": "^2.10.3",
     "glob": "^10.3.10",
     "typescript": "^5.2.2"
   }

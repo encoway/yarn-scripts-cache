@@ -21,7 +21,7 @@
   "homepage": "https://github.com/rgischk/yarn-scripts-cache#readme",
   "devDependencies": {
     "@types/node": "^18.16.18",
-    "@yarnpkg/core": "^4.0.0-rc.46",
+    "@yarnpkg/core": "^3.5.4",
     "typescript": "^5.2.2"
   },
   "scripts": {
