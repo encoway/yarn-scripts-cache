@@ -69,7 +69,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["jest", "virtual:10b1e6348afa31439b06808dc5a23f04187cf20d27ed9ffb41c84d31c5b88239a050a6d3488d9ee16bfa12a6e2b877e5200e01478ca088c91faddb2835ce6876#npm:29.7.0"],\
-            ["rimraf", "npm:3.0.2"]\
+            ["rimraf", "npm:5.0.5"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -5162,7 +5162,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@rgischk/yarn-scripts-cache", "workspace:."],\
             ["jest", "virtual:10b1e6348afa31439b06808dc5a23f04187cf20d27ed9ffb41c84d31c5b88239a050a6d3488d9ee16bfa12a6e2b877e5200e01478ca088c91faddb2835ce6876#npm:29.7.0"],\
-            ["rimraf", "npm:3.0.2"]\
+            ["rimraf", "npm:5.0.5"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -19559,6 +19559,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["rimraf", "npm:3.0.2"],\
             ["glob", "npm:7.2.3"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:5.0.5", {\
+          "packageLocation": "./.yarn/cache/rimraf-npm-5.0.5-19228633fd-d66eef829b.zip/node_modules/rimraf/",\
+          "packageDependencies": [\
+            ["rimraf", "npm:5.0.5"],\
+            ["glob", "npm:10.3.10"]\
           ],\
           "linkType": "HARD"\
         }]\
