@@ -5150,7 +5150,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.16.18"],\
             ["@yarnpkg/builder", "npm:4.0.0-rc.46"],\
             ["@yarnpkg/core", "npm:4.0.0-rc.46"],\
-            ["node-fetch", "npm:3.3.1"],\
+            ["node-fetch", "npm:3.3.2"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"]\
           ],\
           "linkType": "SOFT"\
@@ -16174,10 +16174,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["node-fetch", [\
-        ["npm:3.3.1", {\
-          "packageLocation": "./.yarn/cache/node-fetch-npm-3.3.1-576511fc5a-62145fd3ba.zip/node_modules/node-fetch/",\
+        ["npm:3.3.2", {\
+          "packageLocation": "./.yarn/cache/node-fetch-npm-3.3.2-5267e015f2-06a04095a2.zip/node_modules/node-fetch/",\
           "packageDependencies": [\
-            ["node-fetch", "npm:3.3.1"],\
+            ["node-fetch", "npm:3.3.2"],\
             ["data-uri-to-buffer", "npm:4.0.1"],\
             ["fetch-blob", "npm:3.2.0"],\
             ["formdata-polyfill", "npm:4.0.10"]\
