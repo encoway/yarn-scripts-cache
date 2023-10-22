@@ -5191,16 +5191,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:14.5.1"],\
             ["@types/jest", "npm:29.5.6"],\
             ["@types/node", "npm:18.16.18"],\
-            ["@types/react", "npm:18.2.14"],\
-            ["@types/react-dom", "npm:18.2.6"],\
+            ["@types/react", "npm:18.2.31"],\
+            ["@types/react-dom", "npm:18.2.14"],\
             ["@types/testing-library__jest-dom", "npm:6.0.0"],\
             ["jest", "virtual:10b1e6348afa31439b06808dc5a23f04187cf20d27ed9ffb41c84d31c5b88239a050a6d3488d9ee16bfa12a6e2b877e5200e01478ca088c91faddb2835ce6876#npm:29.7.0"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:18.2.0"],\
             ["react-scripts", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:5.0.1"],\
-            ["serve", "npm:14.2.0"],\
+            ["serve", "npm:14.2.1"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"],\
-            ["web-vitals", "npm:2.1.4"]\
+            ["web-vitals", "npm:3.5.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -5697,8 +5697,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:14.0.0"],\
             ["@babel/runtime", "npm:7.22.5"],\
             ["@testing-library/dom", "npm:9.3.3"],\
-            ["@types/react", "npm:18.2.14"],\
-            ["@types/react-dom", "npm:18.2.6"],\
+            ["@types/react", "npm:18.2.31"],\
+            ["@types/react-dom", "npm:18.2.14"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:18.2.0"]\
           ],\
@@ -6179,13 +6179,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["csstype", "npm:3.1.2"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:18.2.31", {\
+          "packageLocation": "./.yarn/cache/@types-react-npm-18.2.31-6e2d07ce27-b11be8e391.zip/node_modules/@types/react/",\
+          "packageDependencies": [\
+            ["@types/react", "npm:18.2.31"],\
+            ["@types/prop-types", "npm:15.7.5"],\
+            ["@types/scheduler", "npm:0.16.3"],\
+            ["csstype", "npm:3.1.2"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@types/react-dom", [\
-        ["npm:18.2.6", {\
-          "packageLocation": "./.yarn/cache/@types-react-dom-npm-18.2.6-7f191ee628-b56e42efab.zip/node_modules/@types/react-dom/",\
+        ["npm:18.2.14", {\
+          "packageLocation": "./.yarn/cache/@types-react-dom-npm-18.2.14-cdfaaeda19-890289c70d.zip/node_modules/@types/react-dom/",\
           "packageDependencies": [\
-            ["@types/react-dom", "npm:18.2.6"],\
+            ["@types/react-dom", "npm:18.2.14"],\
             ["@types/react", "npm:18.2.14"]\
           ],\
           "linkType": "HARD"\
@@ -18965,7 +18975,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/react-dom-virtual-7aa3e0cd24/0/cache/react-dom-npm-18.2.0-dd675bca1c-7d323310be.zip/node_modules/react-dom/",\
           "packageDependencies": [\
             ["react-dom", "virtual:7b36dfff2de61a5ad214a806b4eb1b15a45cc877b734fdd0be9f497b9c15d6c5ca4310922557586a746fd8673ccb877eed17ad7f742654b709722d2e80184a86#npm:18.2.0"],\
-            ["@types/react", "npm:18.2.14"],\
+            ["@types/react", "npm:18.2.31"],\
             ["loose-envify", "npm:1.4.0"],\
             ["react", "npm:18.2.0"],\
             ["scheduler", "npm:0.23.0"]\
@@ -19059,7 +19069,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@pmmmwh/react-refresh-webpack-plugin", "virtual:a755870ac910d596ebd1bac1b51e35e77acd9fc38193e4f0f334a76d079dff6286e47a0c43f9b26abe6b639a087b8722efe3cb4a0fe3191b812ff938fdf23eac#npm:0.5.10"],\
             ["@svgr/webpack", "npm:5.5.0"],\
             ["@types/eslint", null],\
-            ["@types/react", "npm:18.2.14"],\
+            ["@types/react", "npm:18.2.31"],\
             ["@types/typescript", null],\
             ["babel-jest", "virtual:a755870ac910d596ebd1bac1b51e35e77acd9fc38193e4f0f334a76d079dff6286e47a0c43f9b26abe6b639a087b8722efe3cb4a0fe3191b812ff938fdf23eac#npm:27.5.1"],\
             ["babel-loader", "virtual:a755870ac910d596ebd1bac1b51e35e77acd9fc38193e4f0f334a76d079dff6286e47a0c43f9b26abe6b639a087b8722efe3cb4a0fe3191b812ff938fdf23eac#npm:8.3.0"],\
@@ -19839,10 +19849,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["serve", [\
-        ["npm:14.2.0", {\
-          "packageLocation": "./.yarn/cache/serve-npm-14.2.0-52c615436d-a1c26e6c3d.zip/node_modules/serve/",\
+        ["npm:14.2.1", {\
+          "packageLocation": "./.yarn/cache/serve-npm-14.2.1-1a7c090515-c39a517b5d.zip/node_modules/serve/",\
           "packageDependencies": [\
-            ["serve", "npm:14.2.0"],\
+            ["serve", "npm:14.2.1"],\
             ["@zeit/schemas", "npm:2.29.0"],\
             ["ajv", "npm:8.11.0"],\
             ["arg", "npm:5.0.2"],\
@@ -21567,10 +21577,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["web-vitals", [\
-        ["npm:2.1.4", {\
-          "packageLocation": "./.yarn/cache/web-vitals-npm-2.1.4-68bdd9ecb2-03d3f47dbf.zip/node_modules/web-vitals/",\
+        ["npm:3.5.0", {\
+          "packageLocation": "./.yarn/cache/web-vitals-npm-3.5.0-3879b0ccf3-d8d760772a.zip/node_modules/web-vitals/",\
           "packageDependencies": [\
-            ["web-vitals", "npm:2.1.4"]\
+            ["web-vitals", "npm:3.5.0"]\
           ],\
           "linkType": "HARD"\
         }]\

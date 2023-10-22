@@ -6,7 +6,7 @@
     "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^3.5.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",
@@ -15,12 +15,12 @@
     "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.6",
     "@types/node": "^18.16.18",
-    "@types/react": "^18.2.14",
-    "@types/react-dom": "^18.2.6",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
     "@types/testing-library__jest-dom": "^6.0.0",
     "jest": "^29.7.0",
     "react-scripts": "5.0.1",
-    "serve": "^14.2.0",
+    "serve": "^14.2.1",
     "typescript": "^4.9.5"
   },
   "scripts": {
