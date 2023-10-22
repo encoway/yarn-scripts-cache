@@ -1,4 +1,4 @@
-import {Configuration, MessageName, Plugin, StreamReport} from "@yarnpkg/core"
+import {Configuration, MessageName, Plugin, StreamReport, formatUtils} from "@yarnpkg/core"
 
 import {WrapScriptExecution, WrapScriptExecutionExtra} from "@rgischk/yarn-scripts-cache-api"
 
@@ -7,7 +7,7 @@ import {buildCaches} from "./buildCaches"
 import {updateScriptExecutionResultFromCache, updateCacheFromScriptExecutionResult} from "./scriptResult"
 import {isCacheDisabled, isCacheReadDisabled, isCacheWriteDisabled} from "./isCacheDisabled"
 
-async function buildReport(extra: WrapScriptExecutionExtra): Promise<StreamReport> {
+async function buildReport(extra: WrapScriptExecutionExtra): Promise<[StreamReport, Configuration]> {
     const configuration = Configuration.create(extra.cwd);
     return StreamReport.start({
         configuration,
@@ -15,7 +15,7 @@ async function buildReport(extra: WrapScriptExecutionExtra): Promise<StreamRepor
         stdout: extra.stdout,
     }, async () => {
         /* no-op */
-    })
+    }).then(report => [report, configuration])
 }
 
 const wrapScriptExecution: WrapScriptExecution = async (
@@ -25,7 +25,7 @@ const wrapScriptExecution: WrapScriptExecution = async (
     scriptName,
     extra
 ) => {
-    const report = await buildReport(extra)
+    const [report, reportConfiguration] = await buildReport(extra)
     const config = await readConfig(extra.cwd, report)
     if (!config) {
         return executor
@@ -62,12 +62,27 @@ const wrapScriptExecution: WrapScriptExecution = async (
         const result = await executor()
 
         if (result === 0 && !isCacheWriteDisabled(config)) {
-            await report.startTimerPromise("Updating script execution result cache", async () => {
+            await reportDuration(report, reportConfiguration, "Updating script execution result cache", async () => {
                 await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
             })
         }
         return result
     }
+}
+
+/**
+ * Similar to report.startTimerPromise(...), but it does not use invisible
+ * escape characters to create expandable sections in the Gitlab log. This
+ * feature seems to be broken, is annoying and results in information not
+ * being properly formatted and sometimes overlooked.
+ */
+async function reportDuration(report: StreamReport, reportConfiguration: Configuration, what: string, callback: () => Promise<void>): Promise<void> {
+    const start = new Date().getMilliseconds()
+    report.reportInfo(null, `┌ ${what}`)
+    await callback()
+    const end = new Date().getMilliseconds()
+    const duration = end - start
+    report.reportInfo(null, `└ Completed in ${formatUtils.pretty(reportConfiguration, duration, formatUtils.Type.DURATION)}`)
 }
 
 const plugin: Plugin = {
