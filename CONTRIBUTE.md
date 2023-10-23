@@ -96,7 +96,7 @@ You simply have to enter the OTP once the command seems to hang.
 
 ### Step 5: Create the release on GitHub
 
-Go to the [Releases](https://github.com/rgischk/yarn-scripts-cache/releases) on the GitHub project.
+Go to the [Releases](https://github.com/encoway/yarn-scripts-cache/releases) on the GitHub project.
 Press the "Draft a new release" button on the top.
 
 On this page, press the "Choose a tag" button and enter a tag matching the version of your release, e.g. `v4.2.0`. Make sure to add the prepending `v`.

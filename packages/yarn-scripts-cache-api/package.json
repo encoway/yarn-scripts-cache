@@ -7,7 +7,7 @@
   "module": "bin/index.js",
   "types": "bin/index.d.ts",
   "license": "MIT",
-  "author": "Roman Gischkowski <dev@rgischk.de",
+  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
   "keywords": [
     "yarn",
     "berry",
@@ -15,10 +15,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rgischk/yarn-scripts-cache.git",
+    "url": "https://github.com/encoway/yarn-scripts-cache.git",
     "directory": "packages/yarn-scripts-cache-api"
   },
-  "homepage": "https://github.com/rgischk/yarn-scripts-cache#readme",
+  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
   "devDependencies": {
     "@types/node": "^18.18.6",
     "@yarnpkg/core": "^3.5.4",

@@ -5,7 +5,7 @@
   "description": "A Yarn Berry plugin to cache script execution results.",
   "main": "./src/index.ts",
   "license": "MIT",
-  "author": "Roman Gischkowski <dev@rgischk.de",
+  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
   "keywords": [
     "yarn",
     "berry",
@@ -13,10 +13,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rgischk/yarn-scripts-cache.git",
+    "url": "https://github.com/encoway/yarn-scripts-cache.git",
     "directory": "packages/yarn-plugin-scripts-cache"
   },
-  "homepage": "https://github.com/rgischk/yarn-scripts-cache#readme",
+  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
   "scripts": {
     "check-types": "tsc --noEmit",
     "build-only": "builder build plugin",

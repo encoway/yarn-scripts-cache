@@ -4,7 +4,7 @@
   "version": "1.7.0",
   "description": "Parent for the Yarn Scripts Cache.",
   "license": "MIT",
-  "author": "Roman Gischkowski <dev@rgischk.de",
+  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
   "keywords": [
     "yarn",
     "berry",
@@ -12,9 +12,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rgischk/yarn-scripts-cache.git"
+    "url": "https://github.com/encoway/yarn-scripts-cache.git"
   },
-  "homepage": "https://github.com/rgischk/yarn-scripts-cache#readme",
+  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
   "scripts": {
     "check-types": "yarn workspaces foreach --verbose --topological-dev --all run check-types",
     "build-only": "yarn workspaces foreach --verbose --topological-dev --all run build-only",
