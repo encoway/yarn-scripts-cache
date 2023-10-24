@@ -1,13 +1,12 @@
 # Yarn Scripts Cache: Nexus
 
-A Yarn Scripts Cache implementation using a remote sonatype nexus repository.
+A Yarn Scripts Cache implementation using a Sonatype Nexus Repository Manager 2 as a remote cache.
 
 ## Nexus setup
 
-The nexus repository must be of type "raw (hosted)".
-It is recommended to not allow redeployment of assets.
+The nexus repository must be of type "site (hosted)".
 A user needs to be available to upload components.
-Downloading components should not allow authentication.
+Downloading components should not require authentication.
 
 ## Configuration
 
@@ -51,7 +50,7 @@ The host of the nexus instance to use as a cache.
 ### Repository
 
 The name of the nexus repository to store the cache entries in.
-The repository should be of type "raw (hosted)".
+The repository should be of type "site (hosted)".
 
 * Environment variable: `YSC_NEXUS_REPOSITORY`
 * Config field: `cacheConfigs.nexus.repository`

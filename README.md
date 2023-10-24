@@ -79,9 +79,9 @@ It works great together with remote caches.
 
 ### Nexus cache
 
-The [nexus cache](./packages/yarn-plugin-scripts-cache-nexus/README.md) stores the cache entries in a sonatype nexus repository.
+The [nexus cache](./packages/yarn-plugin-scripts-cache-nexus/README.md) stores the cache entries in a Sonatype Nexus Repository Manager 2.
 Since this is a remote cache, it can be shared between multiple developers, even including a CI/CD system.
-This can significantly increase build times in big teams working on complex monorepos.
+This can significantly decrease build times in big teams working on complex monorepos.
 
 ### Create a new cache implementation
 

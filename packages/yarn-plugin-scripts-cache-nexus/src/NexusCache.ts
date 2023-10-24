@@ -1,5 +1,5 @@
 import {MessageName, StreamReport} from "@yarnpkg/core"
-import fetch, {Blob, FormData, Headers, Response} from "node-fetch"
+import fetch, {Headers, Response} from "node-fetch"
 import crypto from "crypto"
 
 import {
@@ -14,14 +14,6 @@ import {
 
 const NAME = "nexus"
 const ORDER = 100
-
-const DOWNLOAD_PATH = "/repository"
-const UPLOAD_PATH = "/service/rest/v1/components"
-const UPLOAD_URL_PARAM_REPOSITORY = "repository"
-const UPLOAD_FORM_PARAM_GROUP = "raw.directory"
-const UPLOAD_FORM_PARAM_FILENAME = "raw.asset1.filename"
-const UPLOAD_FORM_PARAM_FILE = "raw.asset1"
-const NO_REDEPLOY_MESSAGE = "Repository does not allow updating assets"
 
 /**
  * Whether this cache is disabled. Defaults to false.
@@ -118,7 +110,8 @@ export class NexusCache implements Cache {
         }
 
         const filename = buildFilename(cacheEntry.key)
-        const uploader = () => uploadJsonAsset(host, repository, cacheEntry.key.workspaceLocator, filename, username, password, cacheEntry, verbose, this.report)
+        const url = buildUrl(host, repository, filename)
+        const uploader = () => uploadJsonAsset(url, username, password, cacheEntry, verbose, this.report)
         await retry(uploader, maxRetries, r => r === "FAILED", verbose, this.report)
     }
 
@@ -140,7 +133,8 @@ export class NexusCache implements Cache {
         }
 
         const filename = buildFilename(cacheEntryKey)
-        const downloader = () => downloadJsonAsset<CacheEntry>(host, repository, cacheEntryKey.workspaceLocator, filename, verbose, this.report)
+        const url = buildUrl(host, repository, filename)
+        const downloader = () => downloadJsonAsset<CacheEntry>(url, verbose, this.report)
         const cacheEntry = await retry(downloader, maxRetries, r => r === "FAILED", verbose, this.report)
 
         if (cacheEntry === "CACHE_MISS" || cacheEntry === "FAILED") {
@@ -194,10 +188,20 @@ export class NexusCache implements Cache {
     }
 }
 
+function buildUrl(host: string, repository: string, filename: string): string {
+    return `${host}/content/sites/${repository}/${filename}`
+}
+
 function buildFilename(cacheEntryKey: CacheEntryKey): string {
     const hash = crypto.createHash("sha512")
     hash.update(JSON.stringify(cacheEntryKey))
-    return `${hash.digest("base64url")}.json`
+    return `YSC_${hash.digest("base64url")}`
+}
+
+function buildHeaders(username: string, password: string): Headers {
+    const headers = new Headers()
+    headers.append("Authorization", `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`)
+    return headers
 }
 
 async function retry<T>(work: () => Promise<T>, retries: number, retryFilter: (result: T) => boolean, verbose: boolean, report: StreamReport): Promise<T> {
@@ -219,59 +223,25 @@ async function retry<T>(work: () => Promise<T>, retries: number, retryFilter: (r
     return result!
 }
 
-async function uploadJsonAsset(host: string, repository: string, group: string, filename: string, username: string, password: string, json: unknown, verbose: boolean, report: StreamReport): Promise<"SUCCESS" | "NO_REDEPLOY" | "FAILED"> {
-    group = ensurePathStartsWithSlash(group)
-    const url = `${host}${UPLOAD_PATH}?${UPLOAD_URL_PARAM_REPOSITORY}=${repository}`
-
-    const headers = new Headers()
-    headers.append("Accept", "application/json")
-    headers.append("Authorization", `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`)
-
-    const body = new FormData()
-    body.append(UPLOAD_FORM_PARAM_GROUP, group)
-    body.append(UPLOAD_FORM_PARAM_FILENAME, filename)
-    body.append(UPLOAD_FORM_PARAM_FILE, new Blob([JSON.stringify(json)]))
-
-    let response
+async function exists(url: string, username: string, password: string, verbose: boolean, report: StreamReport): Promise<boolean> {
     try {
-        response = await fetch(url, {
-            method: "POST",
-            headers,
-            body,
-            redirect: "follow"
+        const response = await fetch(url, {
+            method: "HEAD",
+            headers: buildHeaders(username, password)
         })
+        if (verbose) {
+            report.reportInfo(MessageName.UNNAMED,
+                `HEAD request was performed. URL: ${url} status: ${response.status}`)
+        }
+        return response.status === 200
     } catch (error) {
         if (verbose) {
             report.reportErrorOnce(MessageName.UNNAMED,
-                `Error while uploading asset. URL: ${url} group: ${group} filename: ${filename}`)
+                `Error while checking existence of asset. URL: ${url}`)
             report.reportExceptionOnce(error as Error)
         }
-        return "FAILED"
+        return false
     }
-
-    const text = await tryReadText(response)
-
-    if (response.status === 400 && text?.includes(NO_REDEPLOY_MESSAGE)) {
-        if (verbose) {
-            report.reportInfo(MessageName.UNNAMED,
-                `Cache entry was created by another client while this one was executing the script. No update necessary. URL: ${url} group: ${group} filename: ${filename}`)
-        }
-        return "NO_REDEPLOY"
-    }
-
-    if (!response.ok) {
-        if (verbose) {
-            report.reportErrorOnce(MessageName.UNNAMED,
-                `Failed to upload asset, non-200-ok-status received. URL: ${url} group: ${group} filename: ${filename} status: ${response.status} text: ${text}`)
-        }
-        return "FAILED"
-    }
-
-    if (verbose) {
-        report.reportInfo(MessageName.UNNAMED,
-            `Uploaded successfully. URL: ${url} group: ${group} filename: ${filename}`)
-    }
-    return "SUCCESS"
 }
 
 async function tryReadText(response: Response): Promise<string | undefined> {
@@ -283,10 +253,54 @@ async function tryReadText(response: Response): Promise<string | undefined> {
     }
 }
 
-async function downloadJsonAsset<T>(host: string, repository: string, group: string, filename: string, verbose: boolean, report: StreamReport): Promise<T | "CACHE_MISS" | "FAILED"> {
-    group = ensurePathStartsWithSlash(group)
-    const url = `${host}${DOWNLOAD_PATH}/${repository}/${group}/${filename}`
+async function uploadJsonAsset(url: string, username: string, password: string, json: unknown, verbose: boolean, report: StreamReport): Promise<"SUCCESS" | "NO_REDEPLOY" | "FAILED"> {
+    if (await exists(url, username, password, verbose, report)) {
+        if (verbose) {
+            report.reportInfo(MessageName.UNNAMED,
+                `Cache entry was created by another client while this one was executing the script. No update necessary. URL: ${url}`)
+        }
+        return "NO_REDEPLOY"
+    }
 
+    let response
+    try {
+        response = await fetch(url, {
+            method: "PUT",
+            headers: buildHeaders(username, password),
+            body: JSON.stringify(json)
+        })
+    } catch (error) {
+        if (verbose) {
+            report.reportErrorOnce(MessageName.UNNAMED,
+                `Error while uploading asset. URL: ${url}`)
+            report.reportExceptionOnce(error as Error)
+        }
+        return "FAILED"
+    }
+
+    const text = await tryReadText(response)
+
+    if (response.status !== 201 /* Created */) {
+        if (verbose) {
+            report.reportErrorOnce(MessageName.UNNAMED,
+                `Failed to upload asset, non-201-Created-status received. URL: ${url} status: ${response.status} text: ${text}`)
+        }
+        return "FAILED"
+    }
+
+    if (verbose) {
+        report.reportInfo(MessageName.UNNAMED,
+            `Uploaded successfully. URL: ${url}`)
+    }
+
+    // Touch the new entry. This enables the LRU eviction script to simply sort by last_downloaded, otherwise
+    // a special handling would be needed for artifacts that have never been downloaded so far.
+    await exists(url, username, password, verbose, report)
+
+    return "SUCCESS"
+}
+
+async function downloadJsonAsset<T>(url: string, verbose: boolean, report: StreamReport): Promise<T | "CACHE_MISS" | "FAILED"> {
     let response
     try {
         response = await fetch(url)
@@ -332,12 +346,4 @@ async function downloadJsonAsset<T>(host: string, repository: string, group: str
             `Downloaded successfully. URL: ${url}`)
     }
     return json
-}
-
-function ensurePathStartsWithSlash(path: string): string {
-    if (!path.startsWith("/")) {
-        return "/" + path
-    } else {
-        return path
-    }
 }
