@@ -82,7 +82,11 @@ async function reportDuration(report: StreamReport, reportConfiguration: Configu
     await callback()
     const end = new Date().getMilliseconds()
     const duration = end - start
-    report.reportInfo(null, `└ Completed in ${formatUtils.pretty(reportConfiguration, duration, formatUtils.Type.DURATION)}`)
+    if (duration > 200) {
+        report.reportInfo(null, `└ Completed in ${formatUtils.pretty(reportConfiguration, duration, formatUtils.Type.DURATION)}`)
+    } else {
+        report.reportInfo(null, "└ Completed")
+    }
 }
 
 const plugin: Plugin = {
