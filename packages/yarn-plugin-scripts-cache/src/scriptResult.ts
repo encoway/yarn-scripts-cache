@@ -113,6 +113,8 @@ async function buildGlobFileHashes(path: PortablePath, includes?: string | strin
     for (const inputInclude of toStringArray(includes)) {
         const nativeCwd = npath.fromPortablePath(path)
         const nativeRelativeFiles = glob.sync(inputInclude, {cwd: nativeCwd, ignore: toStringArray(excludes)})
+        // Make sure order is normalized across different operating systems:
+        nativeRelativeFiles.sort()
         const fileHashes: FileHashes = {}
         for (const nativeRelativeFile of nativeRelativeFiles) {
             const relativeFile = npath.toPortablePath(nativeRelativeFile)
@@ -139,6 +141,8 @@ async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCach
     for (const outputInclude of toStringArray(scriptToCache.outputIncludes)) {
         const nativeCwd = npath.fromPortablePath(cwd)
         const nativeRelativeFiles = glob.sync(outputInclude, {cwd: nativeCwd, ignore: toStringArray(scriptToCache.outputExcludes)})
+        // Make sure order is normalized across different operating systems:
+        nativeRelativeFiles.sort()
         const fileContents: FileContents = {}
         for (const nativeRelativeFile of nativeRelativeFiles) {
             const relativeFile = npath.toPortablePath(nativeRelativeFile)
