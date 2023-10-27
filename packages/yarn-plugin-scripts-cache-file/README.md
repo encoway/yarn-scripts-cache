@@ -1,6 +1,7 @@
 # Yarn Scripts Cache: File
 
 A Yarn Scripts Cache implementation using the local file system.
+By default, the cache folder will be located in yarns [global folder](https://yarnpkg.com/configuration/yarnrc#globalFolder).
 
 ## Configuration
 
@@ -49,14 +50,16 @@ The maximum amount of script execution results to store.
 ### Cache folder name
 
 The name of the folder to store the cache in.
+The folder will be located in yarns [global folder](https://yarnpkg.com/configuration/yarnrc#globalFolder).
 
 * Environment variable: `YSC_FILE_CACHE_FOLDER_NAME`
 * Config field: `cacheConfigs.file.cacheFolderName`
-* Default value: `.yarn-scripts-cache`
+* Default value: `yarn-scripts-cache`
 
 ### Cache folder location
 
 The location of the folder to store the cache in.
+If a relative path is provided, it will be resolved against the current working directory.
 If this option is provided, the cache folder name option is ignored.
 
 > Note: You can use the same cache folder location for multiple projects or workspaces.
@@ -66,5 +69,5 @@ If this option is provided, the cache folder name option is ignored.
 * Config field: `cacheConfigs.file.cacheFolderLocation`
 * Default value: Current working directory.
 * Examples:
-  * `C:\path\to\cache`
-  * `path\to\cache\within\current\working\directory`
+  * `C:\path\to\cache` (absolute path)
+  * `path\to\cache\within\current\working\directory` (relative path)

@@ -1,4 +1,5 @@
 import {npath, PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
+import {Project} from "@yarnpkg/core"
 import crypto from "crypto"
 
 import {
@@ -52,32 +53,36 @@ const MAX_AMOUNT_DEFAULT_VALUE = 1000
 
 /**
  * The name of the folder to store the cache in.
+ * The folder will be located in yarns global folder.
  */
 const CACHE_FOLDER_NAME_ENVIRONMENT_VARIABLE = "YSC_FILE_CACHE_FOLDER_NAME"
 const CACHE_FOLDER_NAME_CONFIG_FIELD = "cacheFolderName"
-const CACHE_FOLDER_NAME_DEFAULT_VALUE = ".yarn-scripts-cache"
+const CACHE_FOLDER_NAME_DEFAULT_VALUE = "yarn-scripts-cache"
 
 /**
- * The location of the folder to store the cache in. If this option is provided, the cache folder name option is
- * ignored.
+ * The location of the folder to store the cache in. If a relative path is
+ * provided, it will be resolved against the current working directory. If
+ * this option is provided, the cache folder name option is ignored.
  *
  * Examples:
- * - C:\path\to\cache
- * - path\to\cache\within\current\working\directory
+ * - C:\path\to\cache (absolute path)
+ * - path\to\cache\within\current\working\directory (relative path)
  */
 const CACHE_FOLDER_LOCATION_ENVIRONMENT_VARIABLE = "YSC_FILE_CACHE_FOLDER_LOCATION"
 const CACHE_FOLDER_LOCATION_CONFIG_FIELD = "cacheFolderLocation"
 
 export class FileCache implements Cache {
     cwd: PortablePath
+    project: Project
     config: Config
     name: string
     order: number
 
-    constructor(cwd: PortablePath, config: Config) {
+    constructor(cwd: PortablePath, project: Project, config: Config) {
         this.name = NAME
         this.order = ORDER
         this.cwd = cwd
+        this.project = project
         this.config = config
     }
 
@@ -150,7 +155,8 @@ export class FileCache implements Cache {
             const portablePath = npath.toPortablePath(path)
             return npath.isAbsolute(path) ? portablePath : ppath.join(this.cwd, portablePath)
         }
-        return ppath.join(this.cwd, toFilename(this.getCacheFolderName()))
+        const globalFolder = this.project.configuration.get("globalFolder")
+        return ppath.join(globalFolder, toFilename(this.getCacheFolderName()))
     }
 
     private getCacheDisabled() {

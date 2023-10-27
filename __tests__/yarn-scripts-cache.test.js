@@ -21,6 +21,8 @@ describe("yarn-scripts-cache", () => {
         expect(await isFileModified(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB)).toBeFalsy()
         // Ensure cache is clean
         await executeCommand("yarn clean-cache")
+        // NOTE: This test uses YSC_FILE_CACHE_FOLDER_LOCATION: ".yarn-scripts-cache" to ensure a dedicated cache folder is used for every package. This
+        // makes it easier to count the cache entries for each package. See /utils/commandUtils.js:DEFAULT_ENVIRONMENT for details.
     }
 
     beforeAll(async () => {

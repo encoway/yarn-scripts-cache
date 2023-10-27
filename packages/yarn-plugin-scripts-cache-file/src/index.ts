@@ -15,7 +15,7 @@ const beforeYarnScriptsCacheUsage: BeforeYarnScriptsCacheUsage = async (
     config: Config,
     wrapScriptExecutionArgs: InitiatingScriptExecutionParameters
 ) => {
-    cacheRegistry.push(new FileCache(wrapScriptExecutionArgs.extra.cwd, config))
+    cacheRegistry.push(new FileCache(wrapScriptExecutionArgs.extra.cwd, wrapScriptExecutionArgs.project, config))
 }
 
 const hooks: YarnScriptsCacheHooks = {

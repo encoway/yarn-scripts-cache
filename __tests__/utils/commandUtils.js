@@ -1,5 +1,8 @@
 const { exec } = require("child_process")
 
+const DEFAULT_ENVIRONMENT = {
+    YSC_FILE_CACHE_FOLDER_LOCATION: ".yarn-scripts-cache"
+}
 const REGEX_COLOR_CODE = /\x1b\[[\d;]*m/g
 
 function removeColorCodes(string) {
@@ -8,7 +11,7 @@ function removeColorCodes(string) {
 
 async function executeCommand(command, environment) {
     return new Promise((resolve, reject) => {
-        exec(command, {env: environment}, (error, stdout, stderr) => {
+        exec(command, {env: {...DEFAULT_ENVIRONMENT, ...environment}}, (error, stdout, stderr) => {
             if (error) {
                 reject(error)
             } else {
