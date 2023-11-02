@@ -1,4 +1,4 @@
-import {npath, PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
+import {Filename, npath, PortablePath, ppath, xfs} from "@yarnpkg/fslib"
 import {Project} from "@yarnpkg/core"
 import crypto from "crypto"
 
@@ -146,7 +146,7 @@ export class FileCache implements Cache {
     private buildCacheFile(cacheDir: PortablePath, cacheEntryKey: CacheEntryKey): PortablePath {
         const hash = crypto.createHash("sha512")
         hash.update(JSON.stringify(cacheEntryKey))
-        return ppath.join(cacheDir, toFilename(`${hash.digest("base64url")}.json`))
+        return ppath.join(cacheDir, `${hash.digest("base64url")}.json`)
     }
 
     private buildCacheDir(): PortablePath {
@@ -156,7 +156,7 @@ export class FileCache implements Cache {
             return npath.isAbsolute(path) ? portablePath : ppath.join(this.cwd, portablePath)
         }
         const globalFolder = this.project.configuration.get("globalFolder")
-        return ppath.join(globalFolder, toFilename(this.getCacheFolderName()))
+        return ppath.join(globalFolder, this.getCacheFolderName() as Filename)
     }
 
     private getCacheDisabled() {

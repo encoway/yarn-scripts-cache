@@ -1,5 +1,5 @@
 import {MessageName, StreamReport} from "@yarnpkg/core"
-import {PortablePath, ppath, toFilename, xfs} from "@yarnpkg/fslib"
+import {PortablePath, ppath, xfs} from "@yarnpkg/fslib"
 
 import {Config} from "@rgischk/yarn-scripts-cache-api"
 
@@ -13,7 +13,7 @@ export const CONFIG_FILE_NAME = ".yarn-scripts-cache-rc.json"
  * @param streamReport The report object to write error messages
  */
 export async function readConfig(cwd: PortablePath, streamReport: StreamReport): Promise<Config | undefined> {
-    const configFile = ppath.join(cwd, toFilename(CONFIG_FILE_NAME))
+    const configFile = ppath.join(cwd, CONFIG_FILE_NAME)
     if (await xfs.existsPromise(configFile)) {
         const configContent = await xfs.readFilePromise(configFile, "utf-8")
         try {

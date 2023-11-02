@@ -51,7 +51,7 @@ async function buildCacheEntryKey(project: Project, locator: Locator, extra: Wra
     const script = extra.script
     const args = extra.args
     const lockFileChecksum = project.lockFileChecksum
-    const topLevelWorkspaceLocator = locatorToString(project.topLevelWorkspace.locator)
+    const topLevelWorkspaceLocator = locatorToString(project.topLevelWorkspace.anchoredLocator)
     const workspaceLocator = locatorToString(locator)
     const globFileHashes = await buildGlobFileHashes(extra.cwd, scriptToCache.inputIncludes, scriptToCache.inputExcludes)
     const dependencyWorkspacesGlobFileHashes = await buildDependencyWorkspacesGlobFileHashes(project, locator, streamReport)
@@ -92,7 +92,7 @@ async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator
     const dependencyWorkspacesGlobFileHashes: WorkspaceGlobFileHashes = {}
     const currentWorkspace = project.getWorkspaceByLocator(locator)
     for (const dependencyWorkspace of currentWorkspace.getRecursiveWorkspaceDependencies()) {
-        const locatorString = locatorToString(dependencyWorkspace.locator)
+        const locatorString = locatorToString(dependencyWorkspace.anchoredLocator)
         const config = await readConfig(dependencyWorkspace.cwd, streamReport)
         if (!config) {
             streamReport.reportError(MessageName.UNNAMED, `Did not find a valid ${CONFIG_FILE_NAME} in workspace ${locatorString}. All workspaces you depend on also need to be cachable!`)

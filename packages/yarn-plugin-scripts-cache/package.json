@@ -1,6 +1,5 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache",
-  "packageManager": "yarn@3.2.3",
   "version": "3.0.0",
   "description": "A Yarn Berry plugin to cache script execution results.",
   "main": "./src/index.ts",
@@ -26,9 +25,9 @@
     "@rgischk/yarn-scripts-cache-api": "workspace:*",
     "@types/glob": "^8.1.0",
     "@types/node": "^18.18.6",
-    "@yarnpkg/builder": "^3.3.0",
-    "@yarnpkg/core": "^3.5.4",
-    "@yarnpkg/fslib": "^2.10.3",
+    "@yarnpkg/builder": "^4.0.0",
+    "@yarnpkg/core": "^4.0.1",
+    "@yarnpkg/fslib": "^3.0.1",
     "glob": "^10.3.10",
     "typescript": "^5.2.2"
   }

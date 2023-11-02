@@ -1,6 +1,5 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache-file",
-  "packageManager": "yarn@3.2.3",
   "version": "3.0.0",
   "description": "Cache implementation for yarn-scripts-cache using the local file system.",
   "main": "./src/index.ts",
@@ -25,9 +24,9 @@
   "devDependencies": {
     "@rgischk/yarn-scripts-cache-api": "workspace:*",
     "@types/node": "^18.18.6",
-    "@yarnpkg/builder": "^3.3.0",
-    "@yarnpkg/core": "^3.5.4",
-    "@yarnpkg/fslib": "^2.10.3",
+    "@yarnpkg/builder": "^4.0.0",
+    "@yarnpkg/core": "^4.0.1",
+    "@yarnpkg/fslib": "^3.0.1",
     "typescript": "^5.2.2"
   }
 }
