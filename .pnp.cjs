@@ -4531,9 +4531,10 @@ const RAW_RUNTIME_STATE =
           ["@rgischk/yarn-plugin-scripts-cache-nexus", "workspace:packages/yarn-plugin-scripts-cache-nexus"],\
           ["@rgischk/yarn-scripts-cache-api", "workspace:packages/yarn-scripts-cache-api"],\
           ["@types/node", "npm:18.18.6"],\
+          ["@types/node-fetch", "npm:2.6.11"],\
           ["@yarnpkg/builder", "npm:4.0.0"],\
           ["@yarnpkg/core", "npm:4.0.3"],\
-          ["node-fetch", "npm:3.3.2"],\
+          ["node-fetch", "virtual:ffcc0fe037ceb9646a999eb73705eaecdf7aa6ab6907e5c69785e46bd6c57f5b0836bb30170903a861fbae18144cb0827f6e4798e30fe69b071667df469ac1a8#npm:2.7.0"],\
           ["typescript", "patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"]\
         ],\
         "linkType": "SOFT"\
@@ -5487,6 +5488,17 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/@types-node-npm-20.3.1-86012346c0-10.zip/node_modules/@types/node/",\
         "packageDependencies": [\
           ["@types/node", "npm:20.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/node-fetch", [\
+      ["npm:2.6.11", {\
+        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/@types-node-fetch-npm-2.6.11-55289bb1a8-10.zip/node_modules/@types/node-fetch/",\
+        "packageDependencies": [\
+          ["@types/node-fetch", "npm:2.6.11"],\
+          ["@types/node", "npm:20.3.1"],\
+          ["form-data", "npm:4.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9792,15 +9804,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["data-uri-to-buffer", [\
-      ["npm:4.0.1", {\
-        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/data-uri-to-buffer-npm-4.0.1-5c66a78beb-10.zip/node_modules/data-uri-to-buffer/",\
-        "packageDependencies": [\
-          ["data-uri-to-buffer", "npm:4.0.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["data-urls", [\
       ["npm:2.0.0", {\
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/data-urls-npm-2.0.0-2b80c32b82-10.zip/node_modules/data-urls/",\
@@ -11405,17 +11408,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["fetch-blob", [\
-      ["npm:3.2.0", {\
-        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/fetch-blob-npm-3.2.0-28e01becfc-10.zip/node_modules/fetch-blob/",\
-        "packageDependencies": [\
-          ["fetch-blob", "npm:3.2.0"],\
-          ["node-domexception", "npm:1.0.0"],\
-          ["web-streams-polyfill", "npm:3.2.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["figgy-pudding", [\
       ["npm:3.5.2", {\
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/figgy-pudding-npm-3.5.2-2f4e3e1305-10.zip/node_modules/figgy-pudding/",\
@@ -11664,14 +11656,14 @@ const RAW_RUNTIME_STATE =
           ["mime-types", "npm:2.1.35"]\
         ],\
         "linkType": "HARD"\
-      }]\
-    ]],\
-    ["formdata-polyfill", [\
-      ["npm:4.0.10", {\
-        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/formdata-polyfill-npm-4.0.10-e03013c013-10.zip/node_modules/formdata-polyfill/",\
+      }],\
+      ["npm:4.0.0", {\
+        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/form-data-npm-4.0.0-916facec2d-10.zip/node_modules/form-data/",\
         "packageDependencies": [\
-          ["formdata-polyfill", "npm:4.0.10"],\
-          ["fetch-blob", "npm:3.2.0"]\
+          ["form-data", "npm:4.0.0"],\
+          ["asynckit", "npm:0.4.0"],\
+          ["combined-stream", "npm:1.0.8"],\
+          ["mime-types", "npm:2.1.35"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15413,23 +15405,25 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["node-domexception", [\
-      ["npm:1.0.0", {\
-        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/node-domexception-npm-1.0.0-e1e813b76f-10.zip/node_modules/node-domexception/",\
-        "packageDependencies": [\
-          ["node-domexception", "npm:1.0.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["node-fetch", [\
-      ["npm:3.3.2", {\
-        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/node-fetch-npm-3.3.2-5267e015f2-10.zip/node_modules/node-fetch/",\
+      ["npm:2.7.0", {\
+        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/node-fetch-npm-2.7.0-587d57004e-10.zip/node_modules/node-fetch/",\
         "packageDependencies": [\
-          ["node-fetch", "npm:3.3.2"],\
-          ["data-uri-to-buffer", "npm:4.0.1"],\
-          ["fetch-blob", "npm:3.2.0"],\
-          ["formdata-polyfill", "npm:4.0.10"]\
+          ["node-fetch", "npm:2.7.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:ffcc0fe037ceb9646a999eb73705eaecdf7aa6ab6907e5c69785e46bd6c57f5b0836bb30170903a861fbae18144cb0827f6e4798e30fe69b071667df469ac1a8#npm:2.7.0", {\
+        "packageLocation": "./.yarn/__virtual__/node-fetch-virtual-1320950026/3/Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/node-fetch-npm-2.7.0-587d57004e-10.zip/node_modules/node-fetch/",\
+        "packageDependencies": [\
+          ["node-fetch", "virtual:ffcc0fe037ceb9646a999eb73705eaecdf7aa6ab6907e5c69785e46bd6c57f5b0836bb30170903a861fbae18144cb0827f6e4798e30fe69b071667df469ac1a8#npm:2.7.0"],\
+          ["@types/encoding", null],\
+          ["encoding", null],\
+          ["whatwg-url", "npm:5.0.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/encoding",\
+          "encoding"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -20239,6 +20233,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["tr46", [\
+      ["npm:0.0.3", {\
+        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/tr46-npm-0.0.3-de53018915-10.zip/node_modules/tr46/",\
+        "packageDependencies": [\
+          ["tr46", "npm:0.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:1.0.1", {\
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/tr46-npm-1.0.1-9547f343a4-10.zip/node_modules/tr46/",\
         "packageDependencies": [\
@@ -20816,15 +20817,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["web-streams-polyfill", [\
-      ["npm:3.2.1", {\
-        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/web-streams-polyfill-npm-3.2.1-835bd3857e-10.zip/node_modules/web-streams-polyfill/",\
-        "packageDependencies": [\
-          ["web-streams-polyfill", "npm:3.2.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["web-vitals", [\
       ["npm:3.5.0", {\
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/web-vitals-npm-3.5.0-3879b0ccf3-10.zip/node_modules/web-vitals/",\
@@ -20835,6 +20827,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["webidl-conversions", [\
+      ["npm:3.0.1", {\
+        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/webidl-conversions-npm-3.0.1-60310f6a2b-10.zip/node_modules/webidl-conversions/",\
+        "packageDependencies": [\
+          ["webidl-conversions", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:4.0.2", {\
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/webidl-conversions-npm-4.0.2-1d159e6409-10.zip/node_modules/webidl-conversions/",\
         "packageDependencies": [\
@@ -21087,6 +21086,15 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["whatwg-url", [\
+      ["npm:5.0.0", {\
+        "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/whatwg-url-npm-5.0.0-374fb45e60-10.zip/node_modules/whatwg-url/",\
+        "packageDependencies": [\
+          ["whatwg-url", "npm:5.0.0"],\
+          ["tr46", "npm:0.0.3"],\
+          ["webidl-conversions", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:7.1.0", {\
         "packageLocation": "../../Users/gischkowski.ENCOWAYHB/AppData/Local/Yarn/Berry/cache/whatwg-url-npm-7.1.0-d6cae01571-10.zip/node_modules/whatwg-url/",\
         "packageDependencies": [\
