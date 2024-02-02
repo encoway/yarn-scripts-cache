@@ -3,7 +3,7 @@
   "main": "bin/index.js",
   "module": "bin/index.js",
   "types": "bin/index.d.ts",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "devDependencies": {
     "@types/node": "^18.18.6",
     "typescript": "^5.2.2"
