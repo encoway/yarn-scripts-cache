@@ -41,10 +41,19 @@ export async function updateScriptExecutionResultFromCache(project: Project, loc
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
             await restoreCacheValue(extra.cwd, scriptToCache, cacheEntry.value)
+            await updateLowerOrderCaches(cacheEntry, cache, caches)
             return [cacheEntry, cache]
         }
     }
     return undefined
+}
+
+async function updateLowerOrderCaches(cacheEntry: CacheEntry, cacheLoadedFrom: Cache, caches: Cache[]) {
+    for (const cache of caches) {
+        if (cache.order < cacheLoadedFrom.order) {
+            await cache.saveCacheEntry(cacheEntry)
+        }
+    }
 }
 
 async function buildCacheEntryKey(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport): Promise<CacheEntryKey | undefined> {
