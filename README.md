@@ -31,7 +31,8 @@ Finally, add a configuration file called `.yarn-scripts-cache-rc.json` to your p
       "scriptName": "build",
       "inputIncludes": "**",
       "inputExcludes": "dist/**",
-      "outputIncludes": "dist/**"
+      "outputIncludes": "dist/**",
+      "clearBeforeRestore": "dist"
     }
   ]
 }
@@ -146,7 +147,8 @@ Add a configuration file called `.yarn-scripts-cache-rc.json` to your projects r
       "scriptName": "build",        <- Wrap around the script called "build"
       "inputIncludes": "**",        <- Consider all files when checking for changes
       "inputExcludes": "dist/**",   <- Except for those files located in the "dist" directory
-      "outputIncludes": "dist/**"   <- Copy and restore all files in the "dist" directory
+      "outputIncludes": "dist/**",   <- Copy and restore all files in the "dist" directory
+      "clearBeforeRestore": "dist"  <- Clear the "dist" directory before restoring from the cache
     }
   ]
 }
@@ -222,7 +224,8 @@ This will include everything in the input, except for the `dist` directory, whic
       "scriptName": "build",
       "inputIncludes": "**",
       "inputExcludes": "dist/**",
-      "outputIncludes": "dist/**"
+      "outputIncludes": "dist/**",
+      "clearBeforeRestore": "dist"
     }
   ]
 }
@@ -238,13 +241,15 @@ This will cache both the `build` and the `validate` scripts with different outpu
       "scriptName": "build",
       "inputIncludes": "**",
       "inputExcludes": ["dist/**", "validation-results/**"],
-      "outputIncludes": "dist/**"
+      "outputIncludes": "dist/**",
+      "clearBeforeRestore": "dist"
     },
     {
       "scriptName": "validate",
       "inputIncludes": "**",
       "inputExcludes": ["dist/**", "validation-results/**"],
-      "outputIncludes": "validation-results/**"
+      "outputIncludes": "validation-results/**",
+      "clearBeforeRestore": "validation-results"
     }
   ]
 }
@@ -261,6 +266,7 @@ This will consider changes in the values of any environment variables starting w
       "inputIncludes": "**",
       "inputExcludes": "dist/**",
       "outputIncludes": "dist/**",
+      "clearBeforeRestore": "dist",
       "environmentVariableIncludes": "REACT_APP.*"
     }
   ]

@@ -21,7 +21,7 @@
     "build": "yarn workspaces foreach --verbose --topological-dev --all run build",
     "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .yarn-scripts-cache",
     "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
-    "dummy-clean": "yarn workspaces foreach --verbose --all exec rimraf bin",
+    "dummy-clean": "yarn workspaces foreach --verbose --all --include 'dummy-packages/*' exec rimraf bin build",
     "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
     "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
     "publish": "yarn workspaces foreach --verbose --all run publish",

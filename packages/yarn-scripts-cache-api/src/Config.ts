@@ -65,6 +65,11 @@ export type ScriptToCache = {
      * One or multiple regular expressions to match against environment variable names that should be checked for changes on consecutive script executions.
      */
     environmentVariableIncludes?: string[] | string
+    /**
+     * One or multiple directory paths to recursively clear before restoring a cache result. Ensures that no previously existing files remain in the
+     * directory a cache result is being restored in.
+     */
+    clearBeforeRestore?: string[] | string
 }
 
 export function readIntConfigValue<T>(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: T): number | T {

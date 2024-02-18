@@ -122,5 +122,16 @@ function isValidScriptToCache(scriptToCache: any, streamReport: StreamReport): b
         }
     }
 
+    if (scriptToCache.clearBeforeRestore !== undefined && typeof scriptToCache.clearBeforeRestore !== "string") {
+        if (!Array.isArray(scriptToCache.clearBeforeRestore)) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.clearBeforeRestore for ${scriptToCache.scriptName} is not an array!`)
+            return false
+        }
+        if (scriptToCache.clearBeforeRestore.find((item: any) => typeof item !== "string") !== undefined) {
+            streamReport.reportError(MessageName.UNNAMED, `${CONFIG_FILE_NAME} is not valid: config.scriptsToCache.clearBeforeRestore for ${scriptToCache.scriptName} should only contain strings!`)
+            return false
+        }
+    }
+
     return true
 }

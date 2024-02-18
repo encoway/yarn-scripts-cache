@@ -40,7 +40,7 @@ export async function updateScriptExecutionResultFromCache(project: Project, loc
     for (const cache of caches) {
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
-            await restoreCacheValue(extra.cwd, cacheEntry.value)
+            await restoreCacheValue(extra.cwd, scriptToCache, cacheEntry.value)
             return [cacheEntry, cache]
         }
     }
@@ -166,7 +166,11 @@ async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCach
     }
 }
 
-async function restoreCacheValue(cwd: PortablePath, value: CacheEntryValue) {
+async function restoreCacheValue(cwd: PortablePath, scriptToCache: ScriptToCache, value: CacheEntryValue) {
+    for (const clearBeforeRestore of toStringArray(scriptToCache.clearBeforeRestore)) {
+        const dir = ppath.join(cwd, clearBeforeRestore as PortablePath)
+        await xfs.removePromise(dir, {recursive: true})
+    }
     for (const fileContents of Object.values(value.globFileContents)) {
         for (const [relativeFile, content] of Object.entries(fileContents)) {
             const file = ppath.join(cwd, relativeFile as PortablePath)

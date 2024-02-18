@@ -5,6 +5,7 @@
       "inputIncludes": "**",
       "inputExcludes": "build/**",
       "outputIncludes": "build/**",
+      "clearBeforeRestore": "build",
       "environmentVariableIncludes": "REACT_APP.*"
     }
   ],

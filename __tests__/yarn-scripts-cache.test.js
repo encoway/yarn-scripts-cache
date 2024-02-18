@@ -1,7 +1,7 @@
 const {executeCommand} = require("./utils/commandUtils")
 const {buildCacheUpdateMessage, buildCacheReadMessage, buildGreetingMessage} = require("./utils/messageUtils")
 const {getCacheDirectoryFileCount} = require("./utils/cacheDirectoryUtils")
-const {replaceInFile} = require("./utils/fileContentUtils")
+const {replaceInFile, createFileWithContent, fileExists} = require("./utils/fileContentUtils")
 const {isFileModified} = require("./utils/gitUtils")
 const {
     PACKAGE_NAME_LIB, PACKAGE_NAME_LIB2, PACKAGE_NAME_APP, PACKAGE_NAME_PROJECT
@@ -9,6 +9,7 @@ const {
 
 const CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_PROJECT = "./dummy-packages/yarn-scripts-cache-dummy-project/src/util/constants.ts"
 const CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB = "./dummy-packages/yarn-scripts-cache-dummy-lib/src/index.ts"
+const ADDITIONAL_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_PROJECT = "./dummy-packages/yarn-scripts-cache-dummy-project/bin/foo.txt"
 
 describe("yarn-scripts-cache", () => {
 
@@ -19,6 +20,8 @@ describe("yarn-scripts-cache", () => {
         // Ensure file is not modified
         expect(await isFileModified(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_PROJECT)).toBeFalsy()
         expect(await isFileModified(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB)).toBeFalsy()
+        // Ensure dummy build directories are clean
+        await executeCommand("yarn dummy-clean")
         // Ensure cache is clean
         await executeCommand("yarn clean-cache")
         // NOTE: This test uses YSC_FILE_CACHE_FOLDER_LOCATION: ".yarn-scripts-cache" to ensure a dedicated cache folder is used for every package. This
@@ -139,7 +142,25 @@ describe("yarn-scripts-cache", () => {
         expect(await getCacheDirectoryFileCount(PACKAGE_NAME_PROJECT)).toEqual(2)
     })
 
-    test("Test Step 06: Modify package with dependencies", async () => {
+    test("Test Step 06: Existing files are delete before restore", async () => {
+        // Undo the modification to the file
+        await createFileWithContent(ADDITIONAL_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_PROJECT, "bar")
+        expect(await fileExists(ADDITIONAL_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_PROJECT)).toBeTruthy()
+
+        // Build dummy packages again, without the modified environment variable
+        const buildOutput = await executeCommand("yarn dummy-build")
+
+        // All build results should be read from cache, as no relevant changes have been done
+        expect(buildOutput).toMatch(buildCacheReadMessage(PACKAGE_NAME_LIB))
+        expect(buildOutput).toMatch(buildCacheReadMessage(PACKAGE_NAME_LIB2))
+        expect(buildOutput).toMatch(buildCacheReadMessage(PACKAGE_NAME_APP))
+        expect(buildOutput).toMatch(buildCacheReadMessage(PACKAGE_NAME_PROJECT))
+
+        // File should no longer exist
+        expect(await fileExists(ADDITIONAL_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_PROJECT)).toBeFalsy()
+    })
+
+    test("Test Step 07: Modify package with dependencies", async () => {
         // Modify a file in a package with dependencies
         await replaceInFile(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB, "Hello", "Howdy")
 
@@ -167,7 +188,7 @@ describe("yarn-scripts-cache", () => {
         expect(await isFileModified(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB)).toBeFalsy()
     })
 
-    test("Test Step 07: Disable plugin", async () => {
+    test("Test Step 08: Disable plugin", async () => {
         const buildOutput = await executeCommand("yarn dummy-build", {YSC_DISABLED: true})
 
         // No package cache was updated
