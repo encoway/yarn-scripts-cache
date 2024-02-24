@@ -47,9 +47,11 @@ Finally, for more examples, have a look at [Examples](#examples).
 
 ### Config file
 
-The plugin requires a file called `.yarn-scripts-cache-rc.json` to be placed in the root directory of your project (next to the package.json).
+The plugin requires a file called `.yarn-scripts-cache-rc.json` (or `.json5`) to be placed in the root directory of your project (next to the package.json).
 This file can be checked into version control and contains all your project related configuration.
 See [the type declaration](packages/yarn-scripts-cache-api/src/Config.ts) for the possible configuration options.
+
+The file supports [JSON5](https://json5.org/) features like comments and trailing commas. Both the `.json` and `.json5` file extension can be used.
 
 ### Environment variables
 
@@ -139,16 +141,15 @@ You could of course also use a different compiler, e.g. use babel or webpack to 
 But what these have in common, is that they will work on some set of files as an input, and produce another set of files as their output.
 
 Add a configuration file called `.yarn-scripts-cache-rc.json` to your projects root-directory with the following content.
-(Note: The comments are only added for readability, remove them to get a valid JSON file!)
 ```
 {
   "scriptsToCache": [
     {
-      "scriptName": "build",        <- Wrap around the script called "build"
-      "inputIncludes": "**",        <- Consider all files when checking for changes
-      "inputExcludes": "dist/**",   <- Except for those files located in the "dist" directory
-      "outputIncludes": "dist/**",   <- Copy and restore all files in the "dist" directory
-      "clearBeforeRestore": "dist"  <- Clear the "dist" directory before restoring from the cache
+      "scriptName": "build",        // Wrap around the script called "build"
+      "inputIncludes": "**",        // Consider all files when checking for changes
+      "inputExcludes": "dist/**",   // Except for those files located in the "dist" directory
+      "outputIncludes": "dist/**",  // Copy and restore all files in the "dist" directory
+      "clearBeforeRestore": "dist"  // Clear the "dist" directory before restoring from the cache
     }
   ]
 }

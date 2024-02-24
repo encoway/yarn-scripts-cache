@@ -2748,6 +2748,7 @@ __metadata:
     "@yarnpkg/core": "npm:^4.0.3"
     "@yarnpkg/fslib": "npm:^3.0.2"
     glob: "npm:^10.3.10"
+    json5: "npm:^2.2.3"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft

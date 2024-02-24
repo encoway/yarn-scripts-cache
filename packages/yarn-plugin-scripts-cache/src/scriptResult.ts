@@ -15,7 +15,7 @@ import {
     GlobFileHashes, RegexEnvVars, ScriptFileHashes, ScriptToCache, WorkspaceGlobFileHashes, WrapScriptExecutionExtra
 } from "@rgischk/yarn-scripts-cache-api"
 
-import {CONFIG_FILE_NAME, readConfig, } from "./readConfig"
+import { readConfig, } from "./readConfig"
 
 export async function updateCacheFromScriptExecutionResult(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]) {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
@@ -104,7 +104,7 @@ async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator
         const locatorString = locatorToString(dependencyWorkspace.anchoredLocator)
         const config = await readConfig(dependencyWorkspace.cwd, streamReport)
         if (!config) {
-            streamReport.reportError(MessageName.UNNAMED, `Did not find a valid ${CONFIG_FILE_NAME} in workspace ${locatorString}. All workspaces you depend on also need to be cachable!`)
+            streamReport.reportError(MessageName.UNNAMED, `Did not find a valid yarn-scripts-cache configuration file in workspace ${locatorString}. All workspaces you depend on also need to be cachable!`)
             return undefined
         }
         const scriptFileHashes: ScriptFileHashes = {}

@@ -1,0 +1,17 @@
+{
+  "scriptsToCache": [
+    {
+      "scriptName": "dummy-build",                 // Wrap around the script called "dummy-build"
+      "inputIncludes": "**",                       // Consider all files when checking for changes
+      "inputExcludes": "build/**",                 // Except for those files located in the "build" directory
+      "outputIncludes": "build/**",                // Copy and restore all files in the "build" directory
+      "clearBeforeRestore": "build",               // Clear the "build" directory before restoring from the cache
+      "environmentVariableIncludes": "REACT_APP.*" // Rebuild when any environment variable with the prefix "REACT_APP" changes
+    }
+  ],
+  "cacheConfigs": {
+    "nexus": {
+      "host": "http://localhost:8081"
+    }
+  }
+}
