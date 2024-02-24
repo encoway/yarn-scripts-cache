@@ -53,6 +53,12 @@ See [the type declaration](packages/yarn-scripts-cache-api/src/Config.ts) for th
 
 The file supports [JSON5](https://json5.org/) features like comments and trailing commas. Both the `.json` and `.json5` file extension can be used.
 
+There is also a [JSON Schema](https://json-schema.org/) available for the configuration file, which can be used by your IDE to improve code completion and validation of the configuration file:
+```
+https://raw.githubusercontent.com/encoway/yarn-scripts-cache/master/packages/yarn-scripts-cache-api/src/yarn-scripts-cache-rc-schema.json
+```
+Note: The schema has not yet been added to the [JSON Schema Store](https://www.schemastore.org/), therefore you will need to manually configure it in your IDE.
+
 ### Environment variables
 
 The following environment variables can be used to overwrite the according option in the config file:
