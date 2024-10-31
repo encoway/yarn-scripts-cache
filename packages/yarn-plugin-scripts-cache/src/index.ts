@@ -1,6 +1,6 @@
 import {Configuration, MessageName, Plugin, StreamReport, formatUtils} from "@yarnpkg/core"
 
-import {WrapScriptExecution, WrapScriptExecutionExtra} from "@rgischk/yarn-scripts-cache-api"
+import {CacheEntryKey, WrapScriptExecution, WrapScriptExecutionExtra} from "@rgischk/yarn-scripts-cache-api"
 
 import {readConfig} from "./readConfig"
 import {buildCaches} from "./buildCaches"
@@ -47,15 +47,17 @@ const wrapScriptExecution: WrapScriptExecution = async (
     }
 
     return async () => {
+        let originalCacheKey: CacheEntryKey | undefined = undefined
         if (!isCacheReadDisabled(config)) {
             const cacheResult = await updateScriptExecutionResultFromCache(project, locator, extra, scriptToCache, report, caches)
-            if (cacheResult) {
-                const [cacheEntry, cache] = cacheResult
-                const createdAt = new Date(cacheEntry.value.createdAt).toUTCString()
-                const createdBy = cacheEntry.value.createdBy
+            if (cacheResult.type === "SUCCESS") {
+                const createdAt = new Date(cacheResult.cacheEntry.value.createdAt).toUTCString()
+                const createdBy = cacheResult.cacheEntry.value.createdBy
                 report.reportInfo(MessageName.UNNAMED,
-                    `Script execution result was restored from ${cache.name} cache! Created ${createdAt} by ${createdBy}`)
+                    `Script execution result was restored from ${cacheResult.cache.name} cache! Created ${createdAt} by ${createdBy}`)
                 return Promise.resolve(0)
+            } else if (cacheResult.type === "CACHE_MISS") {
+                originalCacheKey = cacheResult.key
             }
         }
 
@@ -63,7 +65,7 @@ const wrapScriptExecution: WrapScriptExecution = async (
 
         if (result === 0 && !isCacheWriteDisabled(config)) {
             await reportDuration(report, reportConfiguration, "Updating script execution result cache", async () => {
-                await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, report, caches)
+                await updateCacheFromScriptExecutionResult(project, locator, extra, scriptToCache, originalCacheKey, report, caches)
             })
         }
         return result

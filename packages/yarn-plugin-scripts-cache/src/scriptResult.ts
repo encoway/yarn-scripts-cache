@@ -24,9 +24,13 @@ import {
 
 import { readConfig, } from "./readConfig"
 
-export async function updateCacheFromScriptExecutionResult(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]) {
+export async function updateCacheFromScriptExecutionResult(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, originalCacheKey: CacheEntryKey | undefined, streamReport: StreamReport, caches: Cache[]) {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
     if (!key) {
+        return
+    }
+    if (originalCacheKey && !isSameKey(originalCacheKey, key)) {
+        streamReport.reportError(MessageName.UNNAMED, `Detected concurrent modification of cached files during script execution. The script execution result is uncertain. Abort update of cache to avoid faulty cache entries.`)
         return
     }
     const value = await createCacheContent(extra.cwd, scriptToCache)
@@ -39,20 +43,40 @@ export async function updateCacheFromScriptExecutionResult(project: Project, loc
     }
 }
 
-export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<[CacheEntry, Cache] | undefined> {
+export type UpdateScriptExecutionResultFromCacheResult = {
+    type: "CACHE_MISS",
+    key: CacheEntryKey
+} | {
+    type: "FAILURE"
+} | {
+    type: "SUCCESS",
+    cacheEntry: CacheEntry,
+    cache: Cache
+}
+
+export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<UpdateScriptExecutionResultFromCacheResult> {
     const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
     if (!key) {
-        return undefined
+        return {
+            type: "FAILURE"
+        }
     }
     for (const cache of caches) {
         const cacheEntry = await cache.loadCacheEntry(key)
         if (cacheEntry) {
             await restoreCacheValue(extra.cwd, scriptToCache, cacheEntry.value)
             await updateLowerOrderCaches(cacheEntry, cache, caches)
-            return [cacheEntry, cache]
+            return {
+                type: "SUCCESS",
+                cacheEntry,
+                cache
+            }
         }
     }
-    return undefined
+    return {
+        type: "CACHE_MISS",
+        key
+    }
 }
 
 async function updateLowerOrderCaches(cacheEntry: CacheEntry, cacheLoadedFrom: Cache, caches: Cache[]) {
@@ -232,6 +256,10 @@ async function restoreCacheValue(cwd: PortablePath, scriptToCache: ScriptToCache
             await xfs.writeFilePromise(file, content, {encoding: "base64"})
         }
     }
+}
+
+function isSameKey(key1: CacheEntryKey, key2: CacheEntryKey): boolean {
+    return JSON.stringify(key1) === JSON.stringify(key2)
 }
 
 function locatorToString(locator: Locator): string {
