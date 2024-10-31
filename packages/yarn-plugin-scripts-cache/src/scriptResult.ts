@@ -147,7 +147,7 @@ async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator
         }
         const scriptFileHashes: ScriptFileHashes = {}
         for (const scriptToCache of config.scriptsToCache) {
-            if (isRelevantWorkspaceDependencyScript(scriptToCache.scriptName, singleWorkspaceDependencyConfig)) {
+            if (isRelevantWorkspaceDependencyScript(scriptToCache, singleWorkspaceDependencyConfig)) {
                 scriptFileHashes[scriptToCache.scriptName] = await buildGlobFileHashes(dependencyWorkspace.cwd, scriptToCache.outputIncludes, scriptToCache.outputExcludes)
             }
         }
@@ -169,7 +169,13 @@ function findWorkspaceDependencyConfig(workspaceLocatorString: string, workspace
     return undefined
 }
 
-function isRelevantWorkspaceDependencyScript(scriptName: string, singleWorkspaceDependencyConfig: Exclude<SingleWorkspaceDependencyConfig, "ignore-this-workspace-dependency"> | undefined): boolean {
+function isRelevantWorkspaceDependencyScript(workspaceDependencyScriptToCache: ScriptToCache, singleWorkspaceDependencyConfig: Exclude<SingleWorkspaceDependencyConfig, "ignore-this-workspace-dependency"> | undefined): boolean {
+    const scriptName = workspaceDependencyScriptToCache.scriptName
+    if (workspaceDependencyScriptToCache.ignoreForDependentWorkspaces) {
+        return toStringArray(singleWorkspaceDependencyConfig?.includedScripts).includes(scriptName)
+            && !toStringArray(singleWorkspaceDependencyConfig?.excludedScripts).includes(scriptName)
+    }
+
     if (!singleWorkspaceDependencyConfig) {
         return true
     }
@@ -264,7 +270,7 @@ function isSameKey(key1: CacheEntryKey, key2: CacheEntryKey): boolean {
 
 function locatorToString(locator: Locator): string {
     if (locator.scope) {
-        return `${locator.scope}/${locator.name}@${locator.reference}`
+        return `@${locator.scope}/${locator.name}@${locator.reference}`
     }
     return `${locator.name}@${locator.reference}`
 }

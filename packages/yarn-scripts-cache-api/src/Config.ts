@@ -71,6 +71,11 @@ export type ScriptToCache = {
      */
     clearBeforeRestore?: string[] | string
     /**
+     * Whether this scripts results should be ignored for dependent workspace being cached. Can be overwritten with the
+     * `workspaceDependencyConfig.[workspace].includedScripts` option.
+     */
+    ignoreForDependentWorkspaces?: boolean
+    /**
      * Configures whether workspaces the current workspace is depending on are considered when caching.
      */
     workspaceDependencyConfig?: WorkspaceDependencyConfig
