@@ -102,7 +102,7 @@ describe("yarn-scripts-cache", () => {
 
     test("Test Step 04: Change environment variable", async () => {
         // Build dummy packages again, but with custom environment variable that will change the build result
-        const buildOutput = await executeCommand("yarn dummy-build", {REACT_APP_COLOR: "red"})
+        const buildOutput = await executeCommand("yarn dummy-build", {VITE_COLOR: "red"})
 
         // The app package should not be read from cache, as it is impacted by the environment variable
         expect(buildOutput).toMatch(buildCacheUpdateMessage(PACKAGE_NAME_APP))

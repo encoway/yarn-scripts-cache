@@ -1,6 +1,7 @@
 {
   "name": "@rgischk/yarn-scripts-cache-dummy-project",
-  "main": "src/index.ts",
+  "type": "module",
+  "exports": "./bin/index.js",
   "version": "4.4.0",
   "devDependencies": {
     "@types/node": "^18.19.62",

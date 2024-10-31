@@ -264,7 +264,7 @@ This will cache both the `build` and the `validate` scripts with different outpu
 
 **Consider environment variable changes**
 
-This will consider changes in the values of any environment variables starting with `REACT_APP` (for example when using create-react-app):
+This will consider changes in the values of any environment variables starting with `VITE` (for example when using create-react-app):
 ```
 {
   "scriptsToCache": [
@@ -274,7 +274,7 @@ This will consider changes in the values of any environment variables starting w
       "inputExcludes": "dist/**",
       "outputIncludes": "dist/**",
       "clearBeforeRestore": "dist",
-      "environmentVariableIncludes": "REACT_APP.*"
+      "environmentVariableIncludes": "VITE.*"
     }
   ]
 }

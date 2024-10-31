@@ -1,11 +1,13 @@
-import React from 'react';
 import {randomGreeting} from "@rgischk/yarn-scripts-cache-dummy-lib";
 
+import './App.css'
+
 function App() {
+
   return (
-    <div style={{color: process.env.REACT_APP_COLOR}}>
-      {randomGreeting()} World!
-    </div>
+      <div style={{color: import.meta.env.VITE_COLOR}}>
+          {randomGreeting()} World!
+      </div>
   )
 }
 
