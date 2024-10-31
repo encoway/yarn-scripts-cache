@@ -1,6 +1,6 @@
 {
   "name": "@rgischk/yarn-plugin-scripts-cache-file",
-  "version": "4.6.0",
+  "version": "4.7.0",
   "description": "Cache implementation for yarn-scripts-cache using the local file system.",
   "main": "./src/index.ts",
   "license": "MIT",
