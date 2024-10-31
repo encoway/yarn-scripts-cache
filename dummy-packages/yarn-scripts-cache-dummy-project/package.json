@@ -2,7 +2,7 @@
   "name": "@rgischk/yarn-scripts-cache-dummy-project",
   "type": "module",
   "exports": "./bin/index.js",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "devDependencies": {
     "@types/node": "^18.19.62",
     "copyfiles": "^2.4.1",
