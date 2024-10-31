@@ -7,7 +7,11 @@
       "outputIncludes": "build/**",                // Copy and restore all files in the "build" directory
       "clearBeforeRestore": "build",               // Clear the "build" directory before restoring from the cache
       "environmentVariableIncludes": "REACT_APP.*" // Rebuild when any environment variable with the prefix "REACT_APP" changes
-    }
+    },
+    {
+      "scriptName": "dummy-echo",
+      "workspaceDependencyConfig": "ignore-all-workspace-dependencies"
+    },
   ],
   "cacheConfigs": {
     "nexus": {

@@ -70,6 +70,31 @@ export type ScriptToCache = {
      * directory a cache result is being restored in.
      */
     clearBeforeRestore?: string[] | string
+    /**
+     * Configures whether workspaces the current workspace is depending on are considered when caching.
+     */
+    workspaceDependencyConfig?: WorkspaceDependencyConfig
+}
+
+/**
+ * Configures whether workspaces the current workspace is depending on are considered when caching.
+ */
+export type WorkspaceDependencyConfig = "ignore-all-workspace-dependencies" | {
+    [workspace: string]: SingleWorkspaceDependencyConfig
+}
+
+/**
+ * Configures whether a specific workspace the current workspace is depending on is considered when caching.
+ */
+export type SingleWorkspaceDependencyConfig = "ignore-this-workspace-dependency" | {
+    /**
+     * Script names of the dependent workspace to exclude.
+     */
+    excludedScripts?: string[] | string
+    /**
+     * Script names of the dependent workspace to include.
+     */
+    includedScripts?: string[] | string
 }
 
 export function readIntConfigValue<T>(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: T): number | T {

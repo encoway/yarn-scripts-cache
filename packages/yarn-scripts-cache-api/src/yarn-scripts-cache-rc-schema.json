@@ -122,6 +122,14 @@
                             }
                         ],
                         "description": "One or multiple directory paths to recursively clear before restoring a cache result. Ensures that no previously existing files remain in the directory a cache result is being restored in."
+                    },
+                    "workspaceDependencyConfig": {
+                        "description": "Configures whether workspaces the current workspace is depending on are considered when caching.",
+                        "type": "object",
+                        "additionalProperties": {
+                            "description": "Configures whether a specific workspace the current workspace is depending on is considered when caching.",
+                            "type": "object"
+                        }
                     }
                 }
             }

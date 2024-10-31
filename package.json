@@ -23,6 +23,7 @@
     "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
     "dummy-clean": "yarn workspaces foreach --verbose --all --include 'dummy-packages/*' exec rimraf bin build",
     "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
+    "dummy-echo": "yarn workspaces foreach --verbose --all run dummy-echo",
     "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
     "publish": "yarn workspaces foreach --verbose --all run publish",
     "test": "yarn jest",

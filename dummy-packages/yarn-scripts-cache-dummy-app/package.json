@@ -27,7 +27,8 @@
     "dummy-start": "react-scripts start",
     "dummy-build": "react-scripts build",
     "dummy-test": "react-scripts test",
-    "dummy-serve": "serve -s build"
+    "dummy-serve": "serve -s build",
+    "dummy-echo": "echo Hello World!"
   },
   "browserslist": {
     "production": [

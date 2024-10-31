@@ -188,7 +188,24 @@ describe("yarn-scripts-cache", () => {
         expect(await isFileModified(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB)).toBeFalsy()
     })
 
-    test("Test Step 08: Disable plugin", async () => {
+    test("Test Step 08: Ignore workspace dependencies", async () => {
+        // Run command once to fill cache
+        const buildOutput1 = await executeCommand("yarn dummy-echo")
+        expect(buildOutput1).toMatch(buildCacheUpdateMessage(PACKAGE_NAME_APP))
+
+        // Run command again, should be a cache hit
+        const buildOutput2 = await executeCommand("yarn dummy-echo")
+        expect(buildOutput2).toMatch(buildCacheReadMessage(PACKAGE_NAME_APP))
+
+        // Modify a file in a workspace dependency
+        await replaceInFile(CONSTANTS_FILE_IN_YARN_SCRIPTS_CACHE_DUMMY_LIB, "Hello", "Howdy")
+
+        // Due to the "workspaceDependencyConfig": "ignore-all-workspace-dependencies" setting, the command should still be a cache hit
+        const buildOutput3 = await executeCommand("yarn dummy-echo")
+        expect(buildOutput3).toMatch(buildCacheReadMessage(PACKAGE_NAME_APP))
+    })
+
+    test("Test Step 09: Disable plugin", async () => {
         const buildOutput = await executeCommand("yarn dummy-build", {YSC_DISABLED: true})
 
         // No package cache was updated

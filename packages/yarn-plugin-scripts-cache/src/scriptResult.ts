@@ -12,7 +12,14 @@ import {
     FileContents,
     FileHashes,
     GlobFileContents,
-    GlobFileHashes, RegexEnvVars, ScriptFileHashes, ScriptToCache, WorkspaceGlobFileHashes, WrapScriptExecutionExtra
+    GlobFileHashes,
+    RegexEnvVars,
+    ScriptFileHashes,
+    ScriptToCache,
+    SingleWorkspaceDependencyConfig,
+    WorkspaceDependencyConfig,
+    WorkspaceGlobFileHashes,
+    WrapScriptExecutionExtra
 } from "@rgischk/yarn-scripts-cache-api"
 
 import { readConfig, } from "./readConfig"
@@ -63,7 +70,7 @@ async function buildCacheEntryKey(project: Project, locator: Locator, extra: Wra
     const topLevelWorkspaceLocator = locatorToString(project.topLevelWorkspace.anchoredLocator)
     const workspaceLocator = locatorToString(locator)
     const globFileHashes = await buildGlobFileHashes(extra.cwd, scriptToCache.inputIncludes, scriptToCache.inputExcludes)
-    const dependencyWorkspacesGlobFileHashes = await buildDependencyWorkspacesGlobFileHashes(project, locator, streamReport)
+    const dependencyWorkspacesGlobFileHashes = await buildDependencyWorkspacesGlobFileHashes(project, locator, scriptToCache.workspaceDependencyConfig, streamReport)
     const environmentVariables = buildEnvironmentVariables(extra, scriptToCache)
 
     if (!dependencyWorkspacesGlobFileHashes) {
@@ -97,11 +104,18 @@ function buildEnvironmentVariables(extra: WrapScriptExecutionExtra, scriptToCach
     return regexEnvVars
 }
 
-async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator: Locator, streamReport: StreamReport): Promise<WorkspaceGlobFileHashes | undefined> {
+async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator: Locator, workspaceDependencyConfig: WorkspaceDependencyConfig | undefined, streamReport: StreamReport): Promise<WorkspaceGlobFileHashes | undefined> {
     const dependencyWorkspacesGlobFileHashes: WorkspaceGlobFileHashes = {}
+    if (workspaceDependencyConfig === "ignore-all-workspace-dependencies") {
+        return dependencyWorkspacesGlobFileHashes
+    }
     const currentWorkspace = project.getWorkspaceByLocator(locator)
     for (const dependencyWorkspace of currentWorkspace.getRecursiveWorkspaceDependencies()) {
         const locatorString = locatorToString(dependencyWorkspace.anchoredLocator)
+        const singleWorkspaceDependencyConfig = findWorkspaceDependencyConfig(locatorString, workspaceDependencyConfig)
+        if (singleWorkspaceDependencyConfig === "ignore-this-workspace-dependency") {
+            continue
+        }
         const config = await readConfig(dependencyWorkspace.cwd, streamReport)
         if (!config) {
             streamReport.reportError(MessageName.UNNAMED, `Did not find a valid yarn-scripts-cache configuration file in workspace ${locatorString}. All workspaces you depend on also need to be cachable!`)
@@ -109,12 +123,42 @@ async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator
         }
         const scriptFileHashes: ScriptFileHashes = {}
         for (const scriptToCache of config.scriptsToCache) {
-            scriptFileHashes[scriptToCache.scriptName] = await buildGlobFileHashes(dependencyWorkspace.cwd, scriptToCache.outputIncludes, scriptToCache.outputExcludes)
+            if (isRelevantWorkspaceDependencyScript(scriptToCache.scriptName, singleWorkspaceDependencyConfig)) {
+                scriptFileHashes[scriptToCache.scriptName] = await buildGlobFileHashes(dependencyWorkspace.cwd, scriptToCache.outputIncludes, scriptToCache.outputExcludes)
+            }
         }
 
         dependencyWorkspacesGlobFileHashes[locatorString] = scriptFileHashes
     }
     return dependencyWorkspacesGlobFileHashes
+}
+
+function findWorkspaceDependencyConfig(workspaceLocatorString: string, workspaceDependencyConfig: WorkspaceDependencyConfig | undefined): SingleWorkspaceDependencyConfig | undefined {
+    if (!workspaceDependencyConfig) {
+        return undefined
+    }
+    for (const [key, value] of Object.entries(workspaceDependencyConfig)) {
+        if (workspaceLocatorString.startsWith(key)) {
+            return value
+        }
+    }
+    return undefined
+}
+
+function isRelevantWorkspaceDependencyScript(scriptName: string, singleWorkspaceDependencyConfig: Exclude<SingleWorkspaceDependencyConfig, "ignore-this-workspace-dependency"> | undefined): boolean {
+    if (!singleWorkspaceDependencyConfig) {
+        return true
+    }
+
+    if (singleWorkspaceDependencyConfig.includedScripts !== undefined) {
+        const includedScripts = toStringArray(singleWorkspaceDependencyConfig.includedScripts)
+        if (!includedScripts.includes(scriptName)) {
+            return false
+        }
+    }
+
+    const excludedScripts = toStringArray(singleWorkspaceDependencyConfig.excludedScripts)
+    return !excludedScripts.includes(scriptName);
 }
 
 async function buildGlobFileHashes(path: PortablePath, includes?: string | string[], excludes?: string | string[]): Promise<GlobFileHashes> {
