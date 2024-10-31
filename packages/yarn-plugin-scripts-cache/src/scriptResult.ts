@@ -95,7 +95,7 @@ function buildEnvironmentVariables(extra: WrapScriptExecutionExtra, scriptToCach
         const envVars: EnvVars = {}
         const regex = new RegExp(envVarRegex)
         for (const [name, value] of Object.entries(extra.env)) {
-            if (regex.test(name)) {
+            if (regex.test(name) && value !== undefined) {
                 envVars[name] = value
             }
         }
