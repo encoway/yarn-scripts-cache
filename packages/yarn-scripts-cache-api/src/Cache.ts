@@ -1,10 +1,8 @@
-
 /**
  * A cache stores and restores script results. Multiple caches can be used to store the same result. When restoring a
  * result, the first cache that was able to provide the result will be used.
  */
 export interface Cache {
-
     /**
      * The name of this cache implementation.
      */
@@ -29,7 +27,9 @@ export interface Cache {
      *
      * @param cacheEntryKey The key to search by
      */
-    loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined>
+    loadCacheEntry(
+        cacheEntryKey: CacheEntryKey,
+    ): Promise<CacheEntry | undefined>
 }
 
 /**
@@ -47,8 +47,8 @@ export type CacheEntry = {
  * cache entry keys are the same.
  */
 export type CacheEntryKey = {
-    script: string,
-    args: string[],
+    script: string
+    args: string[]
     environmentVariables: RegexEnvVars
     lockFileChecksum: string | null
     topLevelWorkspaceLocator: string

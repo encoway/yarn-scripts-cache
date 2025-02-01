@@ -1,41 +1,46 @@
 {
-  "name": "@rgischk/yarn-scripts-cache",
-  "packageManager": "yarn@4.6.0",
-  "version": "4.7.0",
-  "description": "Parent for the Yarn Scripts Cache.",
-  "license": "MIT",
-  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
-  "keywords": [
-    "yarn",
-    "berry",
-    "cache"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/encoway/yarn-scripts-cache.git"
-  },
-  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
-  "scripts": {
-    "check-types": "yarn workspaces foreach --verbose --topological-dev --all run check-types",
-    "build-only": "yarn workspaces foreach --verbose --topological-dev --all run build-only",
-    "build": "yarn workspaces foreach --verbose --topological-dev --all run build",
-    "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .yarn-scripts-cache",
-    "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
-    "dummy-clean": "yarn workspaces foreach --verbose --all --include 'dummy-packages/*' exec rimraf bin dist",
-    "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
-    "dummy-echo": "yarn workspaces foreach --verbose --all run dummy-echo",
-    "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
-    "publish": "yarn workspaces foreach --verbose --all run publish",
-    "test": "yarn jest",
-    "set-version": "yarn workspaces foreach --verbose --all version ${0} && rimraf .yarn/versions"
-  },
-  "workspaces": [
-    "packages/*",
-    "dummy-packages/*"
-  ],
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "rimraf": "^6.0.1",
-    "typescript": "~5.7.3"
-  }
+    "name": "@rgischk/yarn-scripts-cache",
+    "packageManager": "yarn@4.6.0",
+    "version": "4.7.0",
+    "description": "Parent for the Yarn Scripts Cache.",
+    "license": "MIT",
+    "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
+    "keywords": [
+        "yarn",
+        "berry",
+        "cache"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/encoway/yarn-scripts-cache.git"
+    },
+    "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
+    "scripts": {
+        "check-types": "yarn workspaces foreach --verbose --topological-dev --all run check-types",
+        "build-only": "yarn workspaces foreach --verbose --topological-dev --all run build-only",
+        "build": "yarn workspaces foreach --verbose --topological-dev --all run build",
+        "lint": "yarn workspaces foreach --verbose --all --parallel run lint",
+        "format": "yarn workspaces foreach --verbose --all --parallel run format",
+        "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .yarn-scripts-cache",
+        "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
+        "dummy-clean": "yarn workspaces foreach --verbose --all --include 'dummy-packages/*' exec rimraf bin dist",
+        "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
+        "dummy-echo": "yarn workspaces foreach --verbose --all run dummy-echo",
+        "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
+        "dummy-lint": "yarn workspaces foreach --verbose --all --parallel run dummy-lint",
+        "dummy-format": "yarn workspaces foreach --verbose --all --parallel run dummy-format",
+        "publish": "yarn workspaces foreach --verbose --all run publish",
+        "test": "yarn jest",
+        "set-version": "yarn workspaces foreach --verbose --all version ${0} && rimraf .yarn/versions"
+    },
+    "workspaces": [
+        "packages/*",
+        "dummy-packages/*"
+    ],
+    "devDependencies": {
+        "jest": "^29.7.0",
+        "prettier": "^3.4.2",
+        "rimraf": "^6.0.1",
+        "typescript": "~5.7.3"
+    }
 }

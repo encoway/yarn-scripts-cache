@@ -1,4 +1,4 @@
-import {Cache} from "./Cache"
+import { Cache } from "./Cache"
 
 /**
  * A registry containing all available caches. Cache implementations can register themselves to make them available.

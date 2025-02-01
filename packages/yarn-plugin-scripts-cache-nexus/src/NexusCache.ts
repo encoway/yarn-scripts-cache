@@ -1,5 +1,5 @@
-import {MessageName, StreamReport} from "@yarnpkg/core"
-import fetch, {Headers, Response} from "node-fetch"
+import { MessageName, StreamReport } from "@yarnpkg/core"
+import fetch, { Headers, Response } from "node-fetch"
 import crypto from "crypto"
 
 import {
@@ -9,7 +9,7 @@ import {
     Config,
     readBooleanConfigValue,
     readIntConfigValue,
-    readStringConfigValue
+    readStringConfigValue,
 } from "@rgischk/yarn-scripts-cache-api"
 
 const NAME = "nexus"
@@ -111,11 +111,27 @@ export class NexusCache implements Cache {
 
         const filename = buildFilename(cacheEntry.key)
         const url = buildUrl(host, repository, filename)
-        const uploader = () => uploadJsonAsset(url, username, password, cacheEntry, verbose, this.report)
-        await retry(uploader, maxRetries, r => r === "FAILED", verbose, this.report)
+        const uploader = () =>
+            uploadJsonAsset(
+                url,
+                username,
+                password,
+                cacheEntry,
+                verbose,
+                this.report,
+            )
+        await retry(
+            uploader,
+            maxRetries,
+            (r) => r === "FAILED",
+            verbose,
+            this.report,
+        )
     }
 
-    async loadCacheEntry(cacheEntryKey: CacheEntryKey): Promise<CacheEntry | undefined> {
+    async loadCacheEntry(
+        cacheEntryKey: CacheEntryKey,
+    ): Promise<CacheEntry | undefined> {
         if (this.getCacheDisabled() || this.getCacheReadDisabled()) {
             return undefined
         }
@@ -127,23 +143,39 @@ export class NexusCache implements Cache {
 
         if (!host) {
             if (verbose) {
-                this.report.reportWarning(MessageName.UNNAMED, "Nexus cache is disabled because no host was configured!")
+                this.report.reportWarning(
+                    MessageName.UNNAMED,
+                    "Nexus cache is disabled because no host was configured!",
+                )
             }
             return
         }
 
         const filename = buildFilename(cacheEntryKey)
         const url = buildUrl(host, repository, filename)
-        const downloader = () => downloadJsonAsset<CacheEntry>(url, verbose, this.report)
-        const cacheEntry = await retry(downloader, maxRetries, r => r === "FAILED", verbose, this.report)
+        const downloader = () =>
+            downloadJsonAsset<CacheEntry>(url, verbose, this.report)
+        const cacheEntry = await retry(
+            downloader,
+            maxRetries,
+            (r) => r === "FAILED",
+            verbose,
+            this.report,
+        )
 
         if (cacheEntry === "CACHE_MISS" || cacheEntry === "FAILED") {
             return undefined
         }
 
-        if (!cacheEntry.hasOwnProperty("key") || JSON.stringify(cacheEntry.key) !== JSON.stringify(cacheEntryKey)) {
+        if (
+            !cacheEntry.hasOwnProperty("key") ||
+            JSON.stringify(cacheEntry.key) !== JSON.stringify(cacheEntryKey)
+        ) {
             if (verbose) {
-                this.report.reportError(MessageName.UNNAMED, `Remote cache returned invalid cache entry. Key: ${JSON.stringify(cacheEntryKey)} entry: ${JSON.stringify(cacheEntry)}`)
+                this.report.reportError(
+                    MessageName.UNNAMED,
+                    `Remote cache returned invalid cache entry. Key: ${JSON.stringify(cacheEntryKey)} entry: ${JSON.stringify(cacheEntry)}`,
+                )
             }
             return undefined
         }
@@ -152,39 +184,93 @@ export class NexusCache implements Cache {
     }
 
     private getCacheDisabled() {
-        return readBooleanConfigValue(this.config, NAME, CACHE_DISABLED_ENVIRONMENT_VARIABLE, CACHE_DISABLED_CONFIG_FIELD, CACHE_DISABLED_DEFAULT_VALUE)
+        return readBooleanConfigValue(
+            this.config,
+            NAME,
+            CACHE_DISABLED_ENVIRONMENT_VARIABLE,
+            CACHE_DISABLED_CONFIG_FIELD,
+            CACHE_DISABLED_DEFAULT_VALUE,
+        )
     }
 
     private getCacheReadDisabled() {
-        return readBooleanConfigValue(this.config, NAME, CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE, CACHE_READ_DISABLED_CONFIG_FIELD, CACHE_READ_DISABLED_DEFAULT_VALUE)
+        return readBooleanConfigValue(
+            this.config,
+            NAME,
+            CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE,
+            CACHE_READ_DISABLED_CONFIG_FIELD,
+            CACHE_READ_DISABLED_DEFAULT_VALUE,
+        )
     }
 
     private getCacheWriteDisabled() {
-        return readBooleanConfigValue(this.config, NAME, CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE, CACHE_WRITE_DISABLED_CONFIG_FIELD, CACHE_WRITE_DISABLED_DEFAULT_VALUE)
+        return readBooleanConfigValue(
+            this.config,
+            NAME,
+            CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE,
+            CACHE_WRITE_DISABLED_CONFIG_FIELD,
+            CACHE_WRITE_DISABLED_DEFAULT_VALUE,
+        )
     }
 
     private getHost() {
-        return readStringConfigValue(this.config, NAME, HOST_ENVIRONMENT_VARIABLE, HOST_CONFIG_FIELD, undefined)
+        return readStringConfigValue(
+            this.config,
+            NAME,
+            HOST_ENVIRONMENT_VARIABLE,
+            HOST_CONFIG_FIELD,
+            undefined,
+        )
     }
 
     private getRepository() {
-        return readStringConfigValue(this.config, NAME, REPOSITORY_ENVIRONMENT_VARIABLE, REPOSITORY_CONFIG_FIELD, REPOSITORY_DEFAULT_VALUE)
+        return readStringConfigValue(
+            this.config,
+            NAME,
+            REPOSITORY_ENVIRONMENT_VARIABLE,
+            REPOSITORY_CONFIG_FIELD,
+            REPOSITORY_DEFAULT_VALUE,
+        )
     }
 
     private getUsername() {
-        return readStringConfigValue(this.config, NAME, USERNAME_ENVIRONMENT_VARIABLE, USERNAME_CONFIG_FIELD, undefined)
+        return readStringConfigValue(
+            this.config,
+            NAME,
+            USERNAME_ENVIRONMENT_VARIABLE,
+            USERNAME_CONFIG_FIELD,
+            undefined,
+        )
     }
 
     private getPassword() {
-        return readStringConfigValue(this.config, NAME, PASSWORD_ENVIRONMENT_VARIABLE, PASSWORD_CONFIG_FIELD, undefined)
+        return readStringConfigValue(
+            this.config,
+            NAME,
+            PASSWORD_ENVIRONMENT_VARIABLE,
+            PASSWORD_CONFIG_FIELD,
+            undefined,
+        )
     }
 
     private getMaxRetries() {
-        return readIntConfigValue(this.config, NAME, MAX_RETRIES_ENVIRONMENT_VARIABLE, MAX_RETRIES_CONFIG_FIELD, MAX_RETRIES_DEFAULT_VALUE)
+        return readIntConfigValue(
+            this.config,
+            NAME,
+            MAX_RETRIES_ENVIRONMENT_VARIABLE,
+            MAX_RETRIES_CONFIG_FIELD,
+            MAX_RETRIES_DEFAULT_VALUE,
+        )
     }
 
     private getVerbose() {
-        return readBooleanConfigValue(this.config, NAME, VERBOSE_ENVIRONMENT_VARIABLE, VERBOSE_RETRIES_CONFIG_FIELD, VERBOSE_RETRIES_DEFAULT_VALUE)
+        return readBooleanConfigValue(
+            this.config,
+            NAME,
+            VERBOSE_ENVIRONMENT_VARIABLE,
+            VERBOSE_RETRIES_CONFIG_FIELD,
+            VERBOSE_RETRIES_DEFAULT_VALUE,
+        )
     }
 }
 
@@ -200,15 +286,27 @@ function buildFilename(cacheEntryKey: CacheEntryKey): string {
 
 function buildHeaders(username: string, password: string): Headers {
     const headers = new Headers()
-    headers.append("Authorization", `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`)
+    headers.append(
+        "Authorization",
+        `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`,
+    )
     return headers
 }
 
-async function retry<T>(work: () => Promise<T>, retries: number, retryFilter: (result: T) => boolean, verbose: boolean, report: StreamReport): Promise<T> {
+async function retry<T>(
+    work: () => Promise<T>,
+    retries: number,
+    retryFilter: (result: T) => boolean,
+    verbose: boolean,
+    report: StreamReport,
+): Promise<T> {
     let result: T
     for (let i = 0; i < retries; i++) {
         if (i > 0 && verbose) {
-            report.reportInfo(MessageName.UNNAMED, `Attempt ${i} failed, retrying...`)
+            report.reportInfo(
+                MessageName.UNNAMED,
+                `Attempt ${i} failed, retrying...`,
+            )
         }
         result = await work()
         if (!retryFilter(result)) {
@@ -217,27 +315,40 @@ async function retry<T>(work: () => Promise<T>, retries: number, retryFilter: (r
     }
 
     if (verbose) {
-        report.reportWarning(MessageName.UNNAMED, `All ${retries} retry attempts failed.`)
+        report.reportWarning(
+            MessageName.UNNAMED,
+            `All ${retries} retry attempts failed.`,
+        )
     }
 
     return result!
 }
 
-async function exists(url: string, username: string, password: string, verbose: boolean, report: StreamReport): Promise<boolean> {
+async function exists(
+    url: string,
+    username: string,
+    password: string,
+    verbose: boolean,
+    report: StreamReport,
+): Promise<boolean> {
     try {
         const response = await fetch(url, {
             method: "HEAD",
-            headers: buildHeaders(username, password)
+            headers: buildHeaders(username, password),
         })
         if (verbose) {
-            report.reportInfo(MessageName.UNNAMED,
-                `HEAD request was performed. URL: ${url} status: ${response.status}`)
+            report.reportInfo(
+                MessageName.UNNAMED,
+                `HEAD request was performed. URL: ${url} status: ${response.status}`,
+            )
         }
         return response.status === 200
     } catch (error) {
         if (verbose) {
-            report.reportErrorOnce(MessageName.UNNAMED,
-                `Error while checking existence of asset. URL: ${url}`)
+            report.reportErrorOnce(
+                MessageName.UNNAMED,
+                `Error while checking existence of asset. URL: ${url}`,
+            )
             report.reportExceptionOnce(error as Error)
         }
         return false
@@ -253,11 +364,20 @@ async function tryReadText(response: Response): Promise<string | undefined> {
     }
 }
 
-async function uploadJsonAsset(url: string, username: string, password: string, json: unknown, verbose: boolean, report: StreamReport): Promise<"SUCCESS" | "NO_REDEPLOY" | "FAILED"> {
+async function uploadJsonAsset(
+    url: string,
+    username: string,
+    password: string,
+    json: unknown,
+    verbose: boolean,
+    report: StreamReport,
+): Promise<"SUCCESS" | "NO_REDEPLOY" | "FAILED"> {
     if (await exists(url, username, password, verbose, report)) {
         if (verbose) {
-            report.reportInfo(MessageName.UNNAMED,
-                `Cache entry was created by another client while this one was executing the script. No update necessary. URL: ${url}`)
+            report.reportInfo(
+                MessageName.UNNAMED,
+                `Cache entry was created by another client while this one was executing the script. No update necessary. URL: ${url}`,
+            )
         }
         return "NO_REDEPLOY"
     }
@@ -267,12 +387,14 @@ async function uploadJsonAsset(url: string, username: string, password: string, 
         response = await fetch(url, {
             method: "PUT",
             headers: buildHeaders(username, password),
-            body: JSON.stringify(json)
+            body: JSON.stringify(json),
         })
     } catch (error) {
         if (verbose) {
-            report.reportErrorOnce(MessageName.UNNAMED,
-                `Error while uploading asset. URL: ${url}`)
+            report.reportErrorOnce(
+                MessageName.UNNAMED,
+                `Error while uploading asset. URL: ${url}`,
+            )
             report.reportExceptionOnce(error as Error)
         }
         return "FAILED"
@@ -282,15 +404,19 @@ async function uploadJsonAsset(url: string, username: string, password: string, 
 
     if (response.status !== 201 /* Created */) {
         if (verbose) {
-            report.reportErrorOnce(MessageName.UNNAMED,
-                `Failed to upload asset, non-201-Created-status received. URL: ${url} status: ${response.status} text: ${text}`)
+            report.reportErrorOnce(
+                MessageName.UNNAMED,
+                `Failed to upload asset, non-201-Created-status received. URL: ${url} status: ${response.status} text: ${text}`,
+            )
         }
         return "FAILED"
     }
 
     if (verbose) {
-        report.reportInfo(MessageName.UNNAMED,
-            `Uploaded successfully. URL: ${url}`)
+        report.reportInfo(
+            MessageName.UNNAMED,
+            `Uploaded successfully. URL: ${url}`,
+        )
     }
 
     // Touch the new entry. This enables the LRU eviction script to simply sort by last_downloaded, otherwise
@@ -300,14 +426,20 @@ async function uploadJsonAsset(url: string, username: string, password: string, 
     return "SUCCESS"
 }
 
-async function downloadJsonAsset<T>(url: string, verbose: boolean, report: StreamReport): Promise<T | "CACHE_MISS" | "FAILED"> {
+async function downloadJsonAsset<T>(
+    url: string,
+    verbose: boolean,
+    report: StreamReport,
+): Promise<T | "CACHE_MISS" | "FAILED"> {
     let response
     try {
         response = await fetch(url)
     } catch (error) {
         if (verbose) {
-            report.reportErrorOnce(MessageName.UNNAMED,
-                `Error while downloading asset. URL: ${url}`)
+            report.reportErrorOnce(
+                MessageName.UNNAMED,
+                `Error while downloading asset. URL: ${url}`,
+            )
             report.reportExceptionOnce(error as Error)
         }
         return "FAILED"
@@ -315,35 +447,43 @@ async function downloadJsonAsset<T>(url: string, verbose: boolean, report: Strea
 
     if (response.status === 404) {
         if (verbose) {
-            report.reportInfo(MessageName.UNNAMED,
-                `Cache entry does not exist (cache miss). URL: ${url}`)
+            report.reportInfo(
+                MessageName.UNNAMED,
+                `Cache entry does not exist (cache miss). URL: ${url}`,
+            )
         }
         return "CACHE_MISS"
     }
 
     if (!response.ok) {
         if (verbose) {
-            report.reportInfo(MessageName.UNNAMED,
-                `Failed to download asset, non-200-ok-status received. URL: ${url} status: ${response.status}`)
+            report.reportInfo(
+                MessageName.UNNAMED,
+                `Failed to download asset, non-200-ok-status received. URL: ${url} status: ${response.status}`,
+            )
         }
         return "FAILED"
     }
 
     let json
     try {
-        json = await response.json() as T
+        json = (await response.json()) as T
     } catch (error) {
         if (verbose) {
-            report.reportErrorOnce(MessageName.UNNAMED,
-                `Error while parsing asset. URL: ${url}`)
+            report.reportErrorOnce(
+                MessageName.UNNAMED,
+                `Error while parsing asset. URL: ${url}`,
+            )
             report.reportExceptionOnce(error as Error)
         }
         return "FAILED"
     }
 
     if (verbose) {
-        report.reportInfo(MessageName.UNNAMED,
-            `Downloaded successfully. URL: ${url}`)
+        report.reportInfo(
+            MessageName.UNNAMED,
+            `Downloaded successfully. URL: ${url}`,
+        )
     }
     return json
 }

@@ -84,52 +84,86 @@ export type ScriptToCache = {
 /**
  * Configures whether workspaces the current workspace is depending on are considered when caching.
  */
-export type WorkspaceDependencyConfig = "ignore-all-workspace-dependencies" | {
-    [workspace: string]: SingleWorkspaceDependencyConfig
-}
+export type WorkspaceDependencyConfig =
+    | "ignore-all-workspace-dependencies"
+    | {
+          [workspace: string]: SingleWorkspaceDependencyConfig
+      }
 
 /**
  * Configures whether a specific workspace the current workspace is depending on is considered when caching.
  */
-export type SingleWorkspaceDependencyConfig = "ignore-this-workspace-dependency" | {
-    /**
-     * Script names of the dependent workspace to exclude.
-     */
-    excludedScripts?: string[] | string
-    /**
-     * Script names of the dependent workspace to include.
-     */
-    includedScripts?: string[] | string
-}
+export type SingleWorkspaceDependencyConfig =
+    | "ignore-this-workspace-dependency"
+    | {
+          /**
+           * Script names of the dependent workspace to exclude.
+           */
+          excludedScripts?: string[] | string
+          /**
+           * Script names of the dependent workspace to include.
+           */
+          includedScripts?: string[] | string
+      }
 
-export function readIntConfigValue<T>(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: T): number | T {
+export function readIntConfigValue<T>(
+    config: Config,
+    pluginName: string,
+    environmentVariableName: string,
+    configFieldName: string,
+    defaultValue: T,
+): number | T {
     const maxAgeEnvironmentValue = process.env[environmentVariableName]
     if (maxAgeEnvironmentValue && !isNaN(parseInt(maxAgeEnvironmentValue))) {
         return parseInt(maxAgeEnvironmentValue)
     }
-    if (config.cacheConfigs && config.cacheConfigs[pluginName] && typeof config.cacheConfigs[pluginName][configFieldName] === "number") {
+    if (
+        config.cacheConfigs &&
+        config.cacheConfigs[pluginName] &&
+        typeof config.cacheConfigs[pluginName][configFieldName] === "number"
+    ) {
         return config.cacheConfigs[pluginName][configFieldName]
     }
     return defaultValue
 }
 
-export function readStringConfigValue<T>(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: T): string | T {
+export function readStringConfigValue<T>(
+    config: Config,
+    pluginName: string,
+    environmentVariableName: string,
+    configFieldName: string,
+    defaultValue: T,
+): string | T {
     const maxAgeEnvironmentValue = process.env[environmentVariableName]
     if (maxAgeEnvironmentValue) {
         return maxAgeEnvironmentValue
     }
-    if (config.cacheConfigs && config.cacheConfigs[pluginName] && typeof config.cacheConfigs[pluginName][configFieldName] === "string") {
+    if (
+        config.cacheConfigs &&
+        config.cacheConfigs[pluginName] &&
+        typeof config.cacheConfigs[pluginName][configFieldName] === "string"
+    ) {
         return config.cacheConfigs[pluginName][configFieldName]
     }
     return defaultValue
 }
 
-export function readBooleanConfigValue(config: Config, pluginName: string, environmentVariableName: string, configFieldName: string, defaultValue: boolean): boolean {
+export function readBooleanConfigValue(
+    config: Config,
+    pluginName: string,
+    environmentVariableName: string,
+    configFieldName: string,
+    defaultValue: boolean,
+): boolean {
     const maxAgeEnvironmentValue = process.env[environmentVariableName]
     if (maxAgeEnvironmentValue) {
         return maxAgeEnvironmentValue === "true"
     }
-    if (config.cacheConfigs && config.cacheConfigs[pluginName] && typeof config.cacheConfigs[pluginName][configFieldName] === "boolean") {
+    if (
+        config.cacheConfigs &&
+        config.cacheConfigs[pluginName] &&
+        typeof config.cacheConfigs[pluginName][configFieldName] === "boolean"
+    ) {
         return config.cacheConfigs[pluginName][configFieldName]
     }
     return defaultValue

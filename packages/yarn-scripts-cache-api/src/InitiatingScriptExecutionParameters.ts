@@ -1,4 +1,4 @@
-import {Hooks} from "@yarnpkg/core"
+import { Hooks } from "@yarnpkg/core"
 
 /**
  * Type of the @yarnpkg/core's wrapScriptExecution hook.
@@ -19,4 +19,5 @@ export type InitiatingScriptExecutionParameters = {
 /**
  * Type of the @yarnpkg/core's wrapScriptExecution hook's extra parameter.
  */
-export type WrapScriptExecutionExtra = InitiatingScriptExecutionParameters["extra"]
+export type WrapScriptExecutionExtra =
+    InitiatingScriptExecutionParameters["extra"]

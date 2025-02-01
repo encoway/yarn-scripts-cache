@@ -1,19 +1,21 @@
 {
-  "name": "@rgischk/yarn-scripts-cache-dummy-project",
-  "type": "module",
-  "exports": "./bin/index.js",
-  "version": "4.7.0",
-  "devDependencies": {
-    "@types/node": "^22.13.0",
-    "copyfiles": "^2.4.1",
-    "typescript": "~5.7.3"
-  },
-  "scripts": {
-    "dummy-build": "tsc && yarn dummy-copy-non-ts-files",
-    "dummy-copy-non-ts-files": "copyfiles -u 1 src/**/*.png bin/",
-    "dummy-hello": "yarn node ./bin/index.js"
-  },
-  "dependencies": {
-    "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*"
-  }
+    "name": "@rgischk/yarn-scripts-cache-dummy-project",
+    "type": "module",
+    "exports": "./bin/index.js",
+    "version": "4.7.0",
+    "devDependencies": {
+        "@types/node": "^22.13.0",
+        "copyfiles": "^2.4.1",
+        "typescript": "~5.7.3"
+    },
+    "scripts": {
+        "dummy-build": "tsc && yarn dummy-copy-non-ts-files",
+        "dummy-copy-non-ts-files": "copyfiles -u 1 src/**/*.png bin/",
+        "dummy-hello": "yarn node ./bin/index.js",
+        "dummy-lint": "prettier . --check",
+        "dummy-format": "prettier . --write"
+    },
+    "dependencies": {
+        "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*"
+    }
 }

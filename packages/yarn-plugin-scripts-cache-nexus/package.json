@@ -1,33 +1,36 @@
 {
-  "name": "@rgischk/yarn-plugin-scripts-cache-nexus",
-  "version": "4.7.0",
-  "description": "Cache implementation for yarn-scripts-cache using a remote sonatype nexus repository.",
-  "main": "./src/index.ts",
-  "license": "MIT",
-  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
-  "keywords": [
-    "yarn",
-    "berry",
-    "cache"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/encoway/yarn-scripts-cache.git",
-    "directory": "packages/yarn-plugin-scripts-cache-nexus"
-  },
-  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
-  "scripts": {
-    "check-types": "tsc --noEmit",
-    "build-only": "builder build plugin",
-    "build": "yarn run check-types && yarn run build-only"
-  },
-  "devDependencies": {
-    "@rgischk/yarn-scripts-cache-api": "workspace:*",
-    "@types/node": "^22.13.0",
-    "@types/node-fetch": "^2.6.12",
-    "@yarnpkg/builder": "^4.2.0",
-    "@yarnpkg/core": "^4.2.0",
-    "node-fetch": "^3.3.2",
-    "typescript": "~5.7.3"
-  }
+    "name": "@rgischk/yarn-plugin-scripts-cache-nexus",
+    "version": "4.7.0",
+    "description": "Cache implementation for yarn-scripts-cache using a remote sonatype nexus repository.",
+    "main": "./src/index.ts",
+    "license": "MIT",
+    "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
+    "keywords": [
+        "yarn",
+        "berry",
+        "cache"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/encoway/yarn-scripts-cache.git",
+        "directory": "packages/yarn-plugin-scripts-cache-nexus"
+    },
+    "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
+    "scripts": {
+        "check-types": "tsc --noEmit",
+        "build-only": "builder build plugin",
+        "build": "yarn run check-types && yarn run build-only",
+        "lint": "prettier . --check",
+        "format": "prettier . --write"
+    },
+    "devDependencies": {
+        "@rgischk/yarn-scripts-cache-api": "workspace:*",
+        "@types/node": "^22.13.0",
+        "@types/node-fetch": "^2.6.12",
+        "@yarnpkg/builder": "^4.2.0",
+        "@yarnpkg/core": "^4.2.0",
+        "node-fetch": "^3.3.2",
+        "prettier": "^3.4.2",
+        "typescript": "~5.7.3"
+    }
 }

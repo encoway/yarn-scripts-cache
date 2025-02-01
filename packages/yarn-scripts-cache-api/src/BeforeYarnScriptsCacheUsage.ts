@@ -1,6 +1,6 @@
-import {CacheRegistry} from "./CacheRegistry"
-import {InitiatingScriptExecutionParameters} from "./InitiatingScriptExecutionParameters"
-import {Config} from "./Config"
+import { CacheRegistry } from "./CacheRegistry"
+import { InitiatingScriptExecutionParameters } from "./InitiatingScriptExecutionParameters"
+import { Config } from "./Config"
 
 /**
  * Custom hook by the yarn-scripts-cache plugin. Will be called before caches are used to allow cache implementations
@@ -14,5 +14,5 @@ import {Config} from "./Config"
 export type BeforeYarnScriptsCacheUsage = (
     cacheRegistry: CacheRegistry,
     config: Config,
-    wrapScriptExecutionArgs: InitiatingScriptExecutionParameters
+    wrapScriptExecutionArgs: InitiatingScriptExecutionParameters,
 ) => Promise<void>

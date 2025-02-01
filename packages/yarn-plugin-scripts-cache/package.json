@@ -1,35 +1,38 @@
 {
-  "name": "@rgischk/yarn-plugin-scripts-cache",
-  "version": "4.7.0",
-  "description": "A Yarn Berry plugin to cache script execution results.",
-  "main": "./src/index.ts",
-  "license": "MIT",
-  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
-  "keywords": [
-    "yarn",
-    "berry",
-    "cache"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/encoway/yarn-scripts-cache.git",
-    "directory": "packages/yarn-plugin-scripts-cache"
-  },
-  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
-  "scripts": {
-    "check-types": "tsc --noEmit",
-    "build-only": "builder build plugin",
-    "build": "yarn run check-types && yarn run build-only"
-  },
-  "devDependencies": {
-    "@rgischk/yarn-scripts-cache-api": "workspace:*",
-    "@types/glob": "^8.1.0",
-    "@types/node": "^22.13.0",
-    "@yarnpkg/builder": "^4.2.0",
-    "@yarnpkg/core": "^4.2.0",
-    "@yarnpkg/fslib": "^3.1.1",
-    "glob": "^11.0.1",
-    "json5": "^2.2.3",
-    "typescript": "~5.7.3"
-  }
+    "name": "@rgischk/yarn-plugin-scripts-cache",
+    "version": "4.7.0",
+    "description": "A Yarn Berry plugin to cache script execution results.",
+    "main": "./src/index.ts",
+    "license": "MIT",
+    "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
+    "keywords": [
+        "yarn",
+        "berry",
+        "cache"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/encoway/yarn-scripts-cache.git",
+        "directory": "packages/yarn-plugin-scripts-cache"
+    },
+    "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
+    "scripts": {
+        "check-types": "tsc --noEmit",
+        "build-only": "builder build plugin",
+        "build": "yarn run check-types && yarn run build-only",
+        "lint": "prettier . --check",
+        "format": "prettier . --write"
+    },
+    "devDependencies": {
+        "@rgischk/yarn-scripts-cache-api": "workspace:*",
+        "@types/glob": "^8.1.0",
+        "@types/node": "^22.13.0",
+        "@yarnpkg/builder": "^4.2.0",
+        "@yarnpkg/core": "^4.2.0",
+        "@yarnpkg/fslib": "^3.1.1",
+        "glob": "^11.0.1",
+        "json5": "^2.2.3",
+        "prettier": "^3.4.2",
+        "typescript": "~5.7.3"
+    }
 }

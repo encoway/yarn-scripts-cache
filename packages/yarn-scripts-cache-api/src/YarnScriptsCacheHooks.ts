@@ -1,5 +1,5 @@
-import {Hooks} from "@yarnpkg/core"
-import {BeforeYarnScriptsCacheUsage} from "./BeforeYarnScriptsCacheUsage"
+import { Hooks } from "@yarnpkg/core"
+import { BeforeYarnScriptsCacheUsage } from "./BeforeYarnScriptsCacheUsage"
 
 /**
  * Custom hook definition for the yarn-scripts-cache.

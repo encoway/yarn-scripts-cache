@@ -1,30 +1,33 @@
 {
-  "name": "@rgischk/yarn-scripts-cache-api",
-  "version": "4.7.0",
-  "description": "API for yarn-scripts-cache.",
-  "main": "bin/index.js",
-  "module": "bin/index.js",
-  "types": "bin/index.d.ts",
-  "license": "MIT",
-  "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
-  "keywords": [
-    "yarn",
-    "berry",
-    "cache"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/encoway/yarn-scripts-cache.git",
-    "directory": "packages/yarn-scripts-cache-api"
-  },
-  "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
-  "devDependencies": {
-    "@types/node": "^22.13.0",
-    "@yarnpkg/core": "^4.2.0",
-    "typescript": "~5.7.3"
-  },
-  "scripts": {
-    "build": "tsc",
-    "publish": "yarn npm publish --access public"
-  }
+    "name": "@rgischk/yarn-scripts-cache-api",
+    "version": "4.7.0",
+    "description": "API for yarn-scripts-cache.",
+    "main": "bin/index.js",
+    "module": "bin/index.js",
+    "types": "bin/index.d.ts",
+    "license": "MIT",
+    "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
+    "keywords": [
+        "yarn",
+        "berry",
+        "cache"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/encoway/yarn-scripts-cache.git",
+        "directory": "packages/yarn-scripts-cache-api"
+    },
+    "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
+    "devDependencies": {
+        "@types/node": "^22.13.0",
+        "@yarnpkg/core": "^4.2.0",
+        "prettier": "^3.4.2",
+        "typescript": "~5.7.3"
+    },
+    "scripts": {
+        "build": "tsc",
+        "publish": "yarn npm publish --access public",
+        "lint": "prettier . --check",
+        "format": "prettier . --write"
+    }
 }

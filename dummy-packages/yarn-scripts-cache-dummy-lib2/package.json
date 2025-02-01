@@ -1,13 +1,15 @@
 {
-  "name": "@rgischk/yarn-scripts-cache-dummy-lib2",
-  "type": "module",
-  "exports": "./bin/index.js",
-  "version": "4.7.0",
-  "devDependencies": {
-    "@types/node": "^22.13.0",
-    "typescript": "~5.7.3"
-  },
-  "scripts": {
-    "dummy-build": "tsc"
-  }
+    "name": "@rgischk/yarn-scripts-cache-dummy-lib2",
+    "type": "module",
+    "exports": "./bin/index.js",
+    "version": "4.7.0",
+    "devDependencies": {
+        "@types/node": "^22.13.0",
+        "typescript": "~5.7.3"
+    },
+    "scripts": {
+        "dummy-build": "tsc",
+        "dummy-lint": "prettier . --check",
+        "dummy-format": "prettier . --write"
+    }
 }

@@ -1,16 +1,16 @@
 {
-  "scriptsToCache": [
-    {
-      "scriptName": "dummy-build",
-      "inputIncludes": "**",
-      "inputExcludes": "bin/**",
-      "outputIncludes": "bin/**",
-      "clearBeforeRestore": "bin"
-    }
-  ],
-  "cacheConfigs": {
-    "nexus": {
-      "host": "http://localhost:8081"
-    }
-  }
+    scriptsToCache: [
+        {
+            scriptName: "dummy-build",
+            inputIncludes: "**",
+            inputExcludes: "bin/**",
+            outputIncludes: "bin/**",
+            clearBeforeRestore: "bin",
+        },
+    ],
+    cacheConfigs: {
+        nexus: {
+            host: "http://localhost:8081",
+        },
+    },
 }

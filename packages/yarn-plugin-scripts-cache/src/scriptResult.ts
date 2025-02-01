@@ -1,14 +1,15 @@
-import {Locator, MessageName, Project, StreamReport} from "@yarnpkg/core"
-import {npath, PortablePath, ppath, xfs} from "@yarnpkg/fslib"
+import { Locator, MessageName, Project, StreamReport } from "@yarnpkg/core"
+import { npath, PortablePath, ppath, xfs } from "@yarnpkg/fslib"
 import crypto from "crypto"
-import {glob} from "glob"
+import { glob } from "glob"
 import os from "os"
 
 import {
     Cache,
     CacheEntry,
     CacheEntryKey,
-    CacheEntryValue, EnvVars,
+    CacheEntryValue,
+    EnvVars,
     FileContents,
     FileHashes,
     GlobFileContents,
@@ -19,46 +20,79 @@ import {
     SingleWorkspaceDependencyConfig,
     WorkspaceDependencyConfig,
     WorkspaceGlobFileHashes,
-    WrapScriptExecutionExtra
+    WrapScriptExecutionExtra,
 } from "@rgischk/yarn-scripts-cache-api"
 
-import { readConfig, } from "./readConfig"
+import { readConfig } from "./readConfig"
 
-export async function updateCacheFromScriptExecutionResult(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, originalCacheKey: CacheEntryKey | undefined, streamReport: StreamReport, caches: Cache[]) {
-    const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
+export async function updateCacheFromScriptExecutionResult(
+    project: Project,
+    locator: Locator,
+    extra: WrapScriptExecutionExtra,
+    scriptToCache: ScriptToCache,
+    originalCacheKey: CacheEntryKey | undefined,
+    streamReport: StreamReport,
+    caches: Cache[],
+) {
+    const key = await buildCacheEntryKey(
+        project,
+        locator,
+        extra,
+        scriptToCache,
+        streamReport,
+    )
     if (!key) {
         return
     }
     if (originalCacheKey && !isSameKey(originalCacheKey, key)) {
-        streamReport.reportError(MessageName.UNNAMED, `Detected concurrent modification of cached files during script execution. The script execution result is uncertain. Abort update of cache to avoid faulty cache entries.`)
+        streamReport.reportError(
+            MessageName.UNNAMED,
+            `Detected concurrent modification of cached files during script execution. The script execution result is uncertain. Abort update of cache to avoid faulty cache entries.`,
+        )
         return
     }
     const value = await createCacheContent(extra.cwd, scriptToCache)
     const cacheEntry: CacheEntry = {
         key,
-        value
+        value,
     }
     for (const cache of caches) {
         await cache.saveCacheEntry(cacheEntry)
     }
 }
 
-export type UpdateScriptExecutionResultFromCacheResult = {
-    type: "CACHE_MISS",
-    key: CacheEntryKey
-} | {
-    type: "FAILURE"
-} | {
-    type: "SUCCESS",
-    cacheEntry: CacheEntry,
-    cache: Cache
-}
+export type UpdateScriptExecutionResultFromCacheResult =
+    | {
+          type: "CACHE_MISS"
+          key: CacheEntryKey
+      }
+    | {
+          type: "FAILURE"
+      }
+    | {
+          type: "SUCCESS"
+          cacheEntry: CacheEntry
+          cache: Cache
+      }
 
-export async function updateScriptExecutionResultFromCache(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport, caches: Cache[]): Promise<UpdateScriptExecutionResultFromCacheResult> {
-    const key = await buildCacheEntryKey(project, locator, extra, scriptToCache, streamReport)
+export async function updateScriptExecutionResultFromCache(
+    project: Project,
+    locator: Locator,
+    extra: WrapScriptExecutionExtra,
+    scriptToCache: ScriptToCache,
+    streamReport: StreamReport,
+    caches: Cache[],
+): Promise<UpdateScriptExecutionResultFromCacheResult> {
+    const key = await buildCacheEntryKey(
+        project,
+        locator,
+        extra,
+        scriptToCache,
+        streamReport,
+    )
     if (!key) {
         return {
-            type: "FAILURE"
+            type: "FAILURE",
         }
     }
     for (const cache of caches) {
@@ -69,17 +103,21 @@ export async function updateScriptExecutionResultFromCache(project: Project, loc
             return {
                 type: "SUCCESS",
                 cacheEntry,
-                cache
+                cache,
             }
         }
     }
     return {
         type: "CACHE_MISS",
-        key
+        key,
     }
 }
 
-async function updateLowerOrderCaches(cacheEntry: CacheEntry, cacheLoadedFrom: Cache, caches: Cache[]) {
+async function updateLowerOrderCaches(
+    cacheEntry: CacheEntry,
+    cacheLoadedFrom: Cache,
+    caches: Cache[],
+) {
     for (const cache of caches) {
         if (cache.order < cacheLoadedFrom.order) {
             await cache.saveCacheEntry(cacheEntry)
@@ -87,14 +125,32 @@ async function updateLowerOrderCaches(cacheEntry: CacheEntry, cacheLoadedFrom: C
     }
 }
 
-async function buildCacheEntryKey(project: Project, locator: Locator, extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache, streamReport: StreamReport): Promise<CacheEntryKey | undefined> {
+async function buildCacheEntryKey(
+    project: Project,
+    locator: Locator,
+    extra: WrapScriptExecutionExtra,
+    scriptToCache: ScriptToCache,
+    streamReport: StreamReport,
+): Promise<CacheEntryKey | undefined> {
     const script = extra.script
     const args = extra.args
     const lockFileChecksum = project.lockFileChecksum
-    const topLevelWorkspaceLocator = locatorToString(project.topLevelWorkspace.anchoredLocator)
+    const topLevelWorkspaceLocator = locatorToString(
+        project.topLevelWorkspace.anchoredLocator,
+    )
     const workspaceLocator = locatorToString(locator)
-    const globFileHashes = await buildGlobFileHashes(extra.cwd, scriptToCache.inputIncludes, scriptToCache.inputExcludes)
-    const dependencyWorkspacesGlobFileHashes = await buildDependencyWorkspacesGlobFileHashes(project, locator, scriptToCache.workspaceDependencyConfig, streamReport)
+    const globFileHashes = await buildGlobFileHashes(
+        extra.cwd,
+        scriptToCache.inputIncludes,
+        scriptToCache.inputExcludes,
+    )
+    const dependencyWorkspacesGlobFileHashes =
+        await buildDependencyWorkspacesGlobFileHashes(
+            project,
+            locator,
+            scriptToCache.workspaceDependencyConfig,
+            streamReport,
+        )
     const environmentVariables = buildEnvironmentVariables(extra, scriptToCache)
 
     if (!dependencyWorkspacesGlobFileHashes) {
@@ -109,13 +165,18 @@ async function buildCacheEntryKey(project: Project, locator: Locator, extra: Wra
         workspaceLocator,
         globFileHashes,
         dependencyWorkspacesGlobFileHashes,
-        environmentVariables
+        environmentVariables,
     }
 }
 
-function buildEnvironmentVariables(extra: WrapScriptExecutionExtra, scriptToCache: ScriptToCache): RegexEnvVars {
+function buildEnvironmentVariables(
+    extra: WrapScriptExecutionExtra,
+    scriptToCache: ScriptToCache,
+): RegexEnvVars {
     const regexEnvVars: RegexEnvVars = {}
-    for (const envVarRegex of toStringArray(scriptToCache.environmentVariableIncludes)) {
+    for (const envVarRegex of toStringArray(
+        scriptToCache.environmentVariableIncludes,
+    )) {
         const envVars: EnvVars = {}
         const regex = new RegExp(envVarRegex)
         for (const [name, value] of Object.entries(extra.env)) {
@@ -128,27 +189,53 @@ function buildEnvironmentVariables(extra: WrapScriptExecutionExtra, scriptToCach
     return regexEnvVars
 }
 
-async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator: Locator, workspaceDependencyConfig: WorkspaceDependencyConfig | undefined, streamReport: StreamReport): Promise<WorkspaceGlobFileHashes | undefined> {
+async function buildDependencyWorkspacesGlobFileHashes(
+    project: Project,
+    locator: Locator,
+    workspaceDependencyConfig: WorkspaceDependencyConfig | undefined,
+    streamReport: StreamReport,
+): Promise<WorkspaceGlobFileHashes | undefined> {
     const dependencyWorkspacesGlobFileHashes: WorkspaceGlobFileHashes = {}
     if (workspaceDependencyConfig === "ignore-all-workspace-dependencies") {
         return dependencyWorkspacesGlobFileHashes
     }
     const currentWorkspace = project.getWorkspaceByLocator(locator)
     for (const dependencyWorkspace of currentWorkspace.getRecursiveWorkspaceDependencies()) {
-        const locatorString = locatorToString(dependencyWorkspace.anchoredLocator)
-        const singleWorkspaceDependencyConfig = findWorkspaceDependencyConfig(locatorString, workspaceDependencyConfig)
-        if (singleWorkspaceDependencyConfig === "ignore-this-workspace-dependency") {
+        const locatorString = locatorToString(
+            dependencyWorkspace.anchoredLocator,
+        )
+        const singleWorkspaceDependencyConfig = findWorkspaceDependencyConfig(
+            locatorString,
+            workspaceDependencyConfig,
+        )
+        if (
+            singleWorkspaceDependencyConfig ===
+            "ignore-this-workspace-dependency"
+        ) {
             continue
         }
         const config = await readConfig(dependencyWorkspace.cwd, streamReport)
         if (!config) {
-            streamReport.reportError(MessageName.UNNAMED, `Did not find a valid yarn-scripts-cache configuration file in workspace ${locatorString}. All workspaces you depend on also need to be cachable!`)
+            streamReport.reportError(
+                MessageName.UNNAMED,
+                `Did not find a valid yarn-scripts-cache configuration file in workspace ${locatorString}. All workspaces you depend on also need to be cachable!`,
+            )
             return undefined
         }
         const scriptFileHashes: ScriptFileHashes = {}
         for (const scriptToCache of config.scriptsToCache) {
-            if (isRelevantWorkspaceDependencyScript(scriptToCache, singleWorkspaceDependencyConfig)) {
-                scriptFileHashes[scriptToCache.scriptName] = await buildGlobFileHashes(dependencyWorkspace.cwd, scriptToCache.outputIncludes, scriptToCache.outputExcludes)
+            if (
+                isRelevantWorkspaceDependencyScript(
+                    scriptToCache,
+                    singleWorkspaceDependencyConfig,
+                )
+            ) {
+                scriptFileHashes[scriptToCache.scriptName] =
+                    await buildGlobFileHashes(
+                        dependencyWorkspace.cwd,
+                        scriptToCache.outputIncludes,
+                        scriptToCache.outputExcludes,
+                    )
             }
         }
 
@@ -157,7 +244,10 @@ async function buildDependencyWorkspacesGlobFileHashes(project: Project, locator
     return dependencyWorkspacesGlobFileHashes
 }
 
-function findWorkspaceDependencyConfig(workspaceLocatorString: string, workspaceDependencyConfig: WorkspaceDependencyConfig | undefined): SingleWorkspaceDependencyConfig | undefined {
+function findWorkspaceDependencyConfig(
+    workspaceLocatorString: string,
+    workspaceDependencyConfig: WorkspaceDependencyConfig | undefined,
+): SingleWorkspaceDependencyConfig | undefined {
     if (!workspaceDependencyConfig) {
         return undefined
     }
@@ -169,11 +259,25 @@ function findWorkspaceDependencyConfig(workspaceLocatorString: string, workspace
     return undefined
 }
 
-function isRelevantWorkspaceDependencyScript(workspaceDependencyScriptToCache: ScriptToCache, singleWorkspaceDependencyConfig: Exclude<SingleWorkspaceDependencyConfig, "ignore-this-workspace-dependency"> | undefined): boolean {
+function isRelevantWorkspaceDependencyScript(
+    workspaceDependencyScriptToCache: ScriptToCache,
+    singleWorkspaceDependencyConfig:
+        | Exclude<
+              SingleWorkspaceDependencyConfig,
+              "ignore-this-workspace-dependency"
+          >
+        | undefined,
+): boolean {
     const scriptName = workspaceDependencyScriptToCache.scriptName
     if (workspaceDependencyScriptToCache.ignoreForDependentWorkspaces) {
-        return toStringArray(singleWorkspaceDependencyConfig?.includedScripts).includes(scriptName)
-            && !toStringArray(singleWorkspaceDependencyConfig?.excludedScripts).includes(scriptName)
+        return (
+            toStringArray(
+                singleWorkspaceDependencyConfig?.includedScripts,
+            ).includes(scriptName) &&
+            !toStringArray(
+                singleWorkspaceDependencyConfig?.excludedScripts,
+            ).includes(scriptName)
+        )
     }
 
     if (!singleWorkspaceDependencyConfig) {
@@ -181,21 +285,32 @@ function isRelevantWorkspaceDependencyScript(workspaceDependencyScriptToCache: S
     }
 
     if (singleWorkspaceDependencyConfig.includedScripts !== undefined) {
-        const includedScripts = toStringArray(singleWorkspaceDependencyConfig.includedScripts)
+        const includedScripts = toStringArray(
+            singleWorkspaceDependencyConfig.includedScripts,
+        )
         if (!includedScripts.includes(scriptName)) {
             return false
         }
     }
 
-    const excludedScripts = toStringArray(singleWorkspaceDependencyConfig.excludedScripts)
-    return !excludedScripts.includes(scriptName);
+    const excludedScripts = toStringArray(
+        singleWorkspaceDependencyConfig.excludedScripts,
+    )
+    return !excludedScripts.includes(scriptName)
 }
 
-async function buildGlobFileHashes(path: PortablePath, includes?: string | string[], excludes?: string | string[]): Promise<GlobFileHashes> {
+async function buildGlobFileHashes(
+    path: PortablePath,
+    includes?: string | string[],
+    excludes?: string | string[],
+): Promise<GlobFileHashes> {
     const globFileHashes: GlobFileHashes = {}
     for (const inputInclude of toStringArray(includes)) {
         const nativeCwd = npath.fromPortablePath(path)
-        const nativeRelativeFiles = glob.sync(inputInclude, {cwd: nativeCwd, ignore: toStringArray(excludes)})
+        const nativeRelativeFiles = glob.sync(inputInclude, {
+            cwd: nativeCwd,
+            ignore: toStringArray(excludes),
+        })
         // Make sure order is normalized across different operating systems:
         nativeRelativeFiles.sort()
         const fileHashes: FileHashes = {}
@@ -219,11 +334,17 @@ async function hashFileContents(file: PortablePath): Promise<string> {
     return hash.digest("base64")
 }
 
-async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCache): Promise<CacheEntryValue> {
+async function createCacheContent(
+    cwd: PortablePath,
+    scriptToCache: ScriptToCache,
+): Promise<CacheEntryValue> {
     const globFileContents: GlobFileContents = {}
     for (const outputInclude of toStringArray(scriptToCache.outputIncludes)) {
         const nativeCwd = npath.fromPortablePath(cwd)
-        const nativeRelativeFiles = glob.sync(outputInclude, {cwd: nativeCwd, ignore: toStringArray(scriptToCache.outputExcludes)})
+        const nativeRelativeFiles = glob.sync(outputInclude, {
+            cwd: nativeCwd,
+            ignore: toStringArray(scriptToCache.outputExcludes),
+        })
         // Make sure order is normalized across different operating systems:
         nativeRelativeFiles.sort()
         const fileContents: FileContents = {}
@@ -245,21 +366,27 @@ async function createCacheContent(cwd: PortablePath, scriptToCache: ScriptToCach
     return {
         globFileContents,
         createdAt,
-        createdBy
+        createdBy,
     }
 }
 
-async function restoreCacheValue(cwd: PortablePath, scriptToCache: ScriptToCache, value: CacheEntryValue) {
-    for (const clearBeforeRestore of toStringArray(scriptToCache.clearBeforeRestore)) {
+async function restoreCacheValue(
+    cwd: PortablePath,
+    scriptToCache: ScriptToCache,
+    value: CacheEntryValue,
+) {
+    for (const clearBeforeRestore of toStringArray(
+        scriptToCache.clearBeforeRestore,
+    )) {
         const dir = ppath.join(cwd, clearBeforeRestore as PortablePath)
-        await xfs.removePromise(dir, {recursive: true})
+        await xfs.removePromise(dir, { recursive: true })
     }
     for (const fileContents of Object.values(value.globFileContents)) {
         for (const [relativeFile, content] of Object.entries(fileContents)) {
             const file = ppath.join(cwd, relativeFile as PortablePath)
             const dir = ppath.dirname(file)
-            await xfs.mkdirPromise(dir, {recursive: true})
-            await xfs.writeFilePromise(file, content, {encoding: "base64"})
+            await xfs.mkdirPromise(dir, { recursive: true })
+            await xfs.writeFilePromise(file, content, { encoding: "base64" })
         }
     }
 }
@@ -278,7 +405,8 @@ function locatorToString(locator: Locator): string {
 function toStringArray(entries?: string[] | string): string[] {
     if (entries === undefined) {
         return []
-    } if (typeof entries === "string") {
+    }
+    if (typeof entries === "string") {
         return [entries]
     } else {
         return entries

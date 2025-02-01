@@ -1,29 +1,35 @@
-import {Plugin} from "@yarnpkg/core"
+import { Plugin } from "@yarnpkg/core"
 
 import {
     BeforeYarnScriptsCacheUsage,
     CacheRegistry,
     Config,
     InitiatingScriptExecutionParameters,
-    YarnScriptsCacheHooks
+    YarnScriptsCacheHooks,
 } from "@rgischk/yarn-scripts-cache-api"
 
-import {FileCache} from "./FileCache"
+import { FileCache } from "./FileCache"
 
 const beforeYarnScriptsCacheUsage: BeforeYarnScriptsCacheUsage = async (
     cacheRegistry: CacheRegistry,
     config: Config,
-    wrapScriptExecutionArgs: InitiatingScriptExecutionParameters
+    wrapScriptExecutionArgs: InitiatingScriptExecutionParameters,
 ) => {
-    cacheRegistry.push(new FileCache(wrapScriptExecutionArgs.extra.cwd, wrapScriptExecutionArgs.project, config))
+    cacheRegistry.push(
+        new FileCache(
+            wrapScriptExecutionArgs.extra.cwd,
+            wrapScriptExecutionArgs.project,
+            config,
+        ),
+    )
 }
 
 const hooks: YarnScriptsCacheHooks = {
-    beforeYarnScriptsCacheUsage
+    beforeYarnScriptsCacheUsage,
 }
 
 const plugin: Plugin = {
-    hooks
+    hooks,
 }
 
 export default plugin
