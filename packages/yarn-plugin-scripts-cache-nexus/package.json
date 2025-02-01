@@ -28,6 +28,6 @@
     "@yarnpkg/builder": "^4.2.0",
     "@yarnpkg/core": "^4.1.4",
     "node-fetch": "^3.3.2",
-    "typescript": "^5.6.3"
+    "typescript": "~5.7.3"
   }
 }
