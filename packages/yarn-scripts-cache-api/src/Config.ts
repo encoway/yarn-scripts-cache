@@ -71,6 +71,13 @@ export type ScriptToCache = {
      */
     clearBeforeRestore?: string[] | string
     /**
+     * Whether concurrent modifications can be ignored. Normally, the plugin will detect when source files are modified while a script is being executed. In
+     * this case, the cache will not be filled, because of the uncertainty which state was being used. This should usually avoid bugs, where a cache entry is
+     * created with an unmatched cache key. But for certain scripts (e.g. formatting where output is empty) it might be intended to cache anyway. This option
+     * allows to do that.
+     */
+    ignoreConcurrentModifications?: boolean
+    /**
      * Whether this scripts results should be ignored for dependent workspace being cached. Can be overwritten with the
      * `workspaceDependencyConfig.[workspace].includedScripts` option.
      */

@@ -7,6 +7,19 @@
             outputIncludes: "bin/**",
             clearBeforeRestore: "bin",
         },
+        {
+            scriptName: "dummy-format",
+            inputIncludes: "**",
+            inputExcludes: ["dist/**", "node_modules/**"],
+            workspaceDependencyConfig: "ignore-all-workspace-dependencies",
+            ignoreConcurrentModifications: true,
+        },
+        {
+            scriptName: "dummy-lint",
+            inputIncludes: "**",
+            inputExcludes: ["dist/**", "node_modules/**"],
+            workspaceDependencyConfig: "ignore-all-workspace-dependencies",
+        },
     ],
     cacheConfigs: {
         nexus: {

@@ -12,6 +12,19 @@
             scriptName: "dummy-echo",
             workspaceDependencyConfig: "ignore-all-workspace-dependencies",
         },
+        {
+            scriptName: "dummy-format",
+            inputIncludes: "**",
+            inputExcludes: ["dist/**", "node_modules/**"],
+            workspaceDependencyConfig: "ignore-all-workspace-dependencies",
+            ignoreConcurrentModifications: true,
+        },
+        {
+            scriptName: "dummy-lint",
+            inputIncludes: "**",
+            inputExcludes: ["dist/**", "node_modules/**"],
+            workspaceDependencyConfig: "ignore-all-workspace-dependencies",
+        },
     ],
     cacheConfigs: {
         nexus: {

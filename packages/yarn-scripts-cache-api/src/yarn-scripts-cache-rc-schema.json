@@ -125,11 +125,23 @@
                     },
                     "workspaceDependencyConfig": {
                         "description": "Configures whether workspaces the current workspace is depending on are considered when caching.",
-                        "type": "object",
-                        "additionalProperties": {
-                            "description": "Configures whether a specific workspace the current workspace is depending on is considered when caching.",
-                            "type": "object"
-                        }
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "description": "Configures whether a specific workspace the current workspace is depending on is considered when caching.",
+                                    "type": "object"
+                                }
+                            },
+                            {
+                                "type": "string",
+                                "enum": ["ignore-all-workspace-dependencies"]
+                            }
+                        ]
+                    },
+                    "ignoreConcurrentModifications": {
+                        "description": "Whether concurrent modifications can be ignored.",
+                        "type": "boolean"
                     }
                 }
             }

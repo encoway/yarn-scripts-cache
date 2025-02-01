@@ -44,7 +44,11 @@ export async function updateCacheFromScriptExecutionResult(
     if (!key) {
         return
     }
-    if (originalCacheKey && !isSameKey(originalCacheKey, key)) {
+    if (
+        originalCacheKey &&
+        !scriptToCache.ignoreConcurrentModifications &&
+        !isSameKey(originalCacheKey, key)
+    ) {
         streamReport.reportError(
             MessageName.UNNAMED,
             `Detected concurrent modification of cached files during script execution. The script execution result is uncertain. Abort update of cache to avoid faulty cache entries.`,
