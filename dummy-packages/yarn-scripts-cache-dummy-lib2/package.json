@@ -4,7 +4,7 @@
   "exports": "./bin/index.js",
   "version": "4.7.0",
   "devDependencies": {
-    "@types/node": "^18.19.62",
+    "@types/node": "^22.13.0",
     "typescript": "^5.6.3"
   },
   "scripts": {

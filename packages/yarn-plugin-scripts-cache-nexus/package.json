@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@rgischk/yarn-scripts-cache-api": "workspace:*",
-    "@types/node": "^18.19.62",
+    "@types/node": "^22.13.0",
     "@types/node-fetch": "^2.6.11",
     "@yarnpkg/builder": "^4.2.0",
     "@yarnpkg/core": "^4.1.4",

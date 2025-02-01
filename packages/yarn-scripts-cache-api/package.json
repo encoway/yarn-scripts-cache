@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
   "devDependencies": {
-    "@types/node": "^18.19.62",
+    "@types/node": "^22.13.0",
     "@yarnpkg/core": "^4.1.4",
     "typescript": "^5.6.3"
   },

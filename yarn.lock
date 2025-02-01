@@ -1215,7 +1215,7 @@ __metadata:
   resolution: "@rgischk/yarn-plugin-scripts-cache-file@workspace:packages/yarn-plugin-scripts-cache-file"
   dependencies:
     "@rgischk/yarn-scripts-cache-api": "workspace:*"
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     "@yarnpkg/builder": "npm:^4.2.0"
     "@yarnpkg/core": "npm:^4.1.4"
     "@yarnpkg/fslib": "npm:^3.1.0"
@@ -1228,7 +1228,7 @@ __metadata:
   resolution: "@rgischk/yarn-plugin-scripts-cache-nexus@workspace:packages/yarn-plugin-scripts-cache-nexus"
   dependencies:
     "@rgischk/yarn-scripts-cache-api": "workspace:*"
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     "@types/node-fetch": "npm:^2.6.11"
     "@yarnpkg/builder": "npm:^4.2.0"
     "@yarnpkg/core": "npm:^4.1.4"
@@ -1243,7 +1243,7 @@ __metadata:
   dependencies:
     "@rgischk/yarn-scripts-cache-api": "workspace:*"
     "@types/glob": "npm:^8.1.0"
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     "@yarnpkg/builder": "npm:^4.2.0"
     "@yarnpkg/core": "npm:^4.1.4"
     "@yarnpkg/fslib": "npm:^3.1.0"
@@ -1257,7 +1257,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rgischk/yarn-scripts-cache-api@workspace:packages/yarn-scripts-cache-api"
   dependencies:
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     "@yarnpkg/core": "npm:^4.1.4"
     typescript: "npm:^5.6.3"
   languageName: unknown
@@ -1288,7 +1288,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rgischk/yarn-scripts-cache-dummy-lib2@workspace:dummy-packages/yarn-scripts-cache-dummy-lib2"
   dependencies:
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     typescript: "npm:^5.6.3"
   languageName: unknown
   linkType: soft
@@ -1298,7 +1298,7 @@ __metadata:
   resolution: "@rgischk/yarn-scripts-cache-dummy-lib@workspace:dummy-packages/yarn-scripts-cache-dummy-lib"
   dependencies:
     "@rgischk/yarn-scripts-cache-dummy-lib2": "workspace:*"
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     typescript: "npm:^5.6.3"
   languageName: unknown
   linkType: soft
@@ -1308,7 +1308,7 @@ __metadata:
   resolution: "@rgischk/yarn-scripts-cache-dummy-project@workspace:dummy-packages/yarn-scripts-cache-dummy-project"
   dependencies:
     "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*"
-    "@types/node": "npm:^18.19.62"
+    "@types/node": "npm:^22.13.0"
     copyfiles: "npm:^2.4.1"
     typescript: "npm:^5.6.3"
   languageName: unknown
@@ -1641,16 +1641,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 22.8.5
-  resolution: "@types/node@npm:22.8.5"
+"@types/node@npm:*, @types/node@npm:^22.13.0":
+  version: 22.13.0
+  resolution: "@types/node@npm:22.13.0"
   dependencies:
-    undici-types: "npm:~6.19.8"
-  checksum: 10/60f51f980fa3949a4f698e6aee28e943c5fbbf8af56568c4ab50d30afa94fc652053fdb9cd91818256fb253a8ae55ed2f78437295339c8c1a949451d14dda136
+    undici-types: "npm:~6.20.0"
+  checksum: 10/a7563e57df48cb7e28f936dbabe228316dcdb4c7c3a88a6c1659fae898ffde2647a7193a9e29e0cbcb7dacc05a91fb3bc30c1a1d6fc9294694a734ff71a5f12e
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.17.15, @types/node@npm:^18.19.62":
+"@types/node@npm:^18.17.15":
   version: 18.19.62
   resolution: "@types/node@npm:18.19.62"
   dependencies:
@@ -6575,10 +6575,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.19.8":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10/cf0b48ed4fc99baf56584afa91aaffa5010c268b8842f62e02f752df209e3dea138b372a60a963b3b2576ed932f32329ce7ddb9cb5f27a6c83040d8cd74b7a70
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 10/583ac7bbf4ff69931d3985f4762cde2690bb607844c16a5e2fbb92ed312fe4fa1b365e953032d469fa28ba8b224e88a595f0b10a449332f83fa77c695e567dbe
   languageName: node
   linkType: hard
 
