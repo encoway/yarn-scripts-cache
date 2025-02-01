@@ -20,7 +20,7 @@
   "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
   "devDependencies": {
     "@types/node": "^22.13.0",
-    "@yarnpkg/core": "^4.1.4",
+    "@yarnpkg/core": "^4.2.0",
     "typescript": "~5.7.3"
   },
   "scripts": {
