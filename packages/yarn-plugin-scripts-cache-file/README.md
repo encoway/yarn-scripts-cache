@@ -47,6 +47,16 @@ The maximum amount of script execution results to store.
 - Config field: `cacheConfigs.file.maxAmount`
 - Default value: `1000`
 
+### Cleanup cooldown
+
+The amount of time for the file cleanup to cool down.
+This means, after a cleanup attempt, the next attempt will not be performed until the "cooldown" amount of time has passed.
+By default, the cleanup will be triggered once per day.
+
+- Environment variable: `YSC_FILE_CLEANUP_COOLDOWN`
+- Config field: `cacheConfigs.file.cleanupCooldown`
+- Default value: `86400000` (1 day in milliseconds)
+
 ### Cache folder name
 
 The name of the folder to store the cache in.

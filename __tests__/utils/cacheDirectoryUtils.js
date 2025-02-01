@@ -12,7 +12,8 @@ async function getCacheDirectoryFileCount(packageName) {
         throw new Error("Path to cache directory is not a directory!")
     }
 
-    return (await fs.readdir(path)).length
+    const files = await fs.readdir(path)
+    return files.filter((filename) => filename !== "last-cleanup.txt").length
 }
 
 exports.getCacheDirectoryFileCount = getCacheDirectoryFileCount

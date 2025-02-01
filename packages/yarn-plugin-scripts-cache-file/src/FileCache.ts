@@ -1,5 +1,5 @@
 import { Filename, npath, PortablePath, ppath, xfs } from "@yarnpkg/fslib"
-import { Project } from "@yarnpkg/core"
+import { MessageName, Project, StreamReport } from "@yarnpkg/core"
 import crypto from "crypto"
 
 import {
@@ -11,9 +11,11 @@ import {
     readIntConfigValue,
     readStringConfigValue,
 } from "@rgischk/yarn-scripts-cache-api"
+import { ensureCooldown } from "./lockfileUtil"
 
 const NAME = "file"
 const ORDER = 10
+const LOCKFILE_NAME = "last-cleanup.txt" as Filename
 
 /**
  * Whether this cache is disabled. Defaults to false.
@@ -52,6 +54,13 @@ const MAX_AMOUNT_CONFIG_FIELD = "maxAmount"
 const MAX_AMOUNT_DEFAULT_VALUE = 1000
 
 /**
+ * The amount of time for the file cleanup to cool down. This means, after a cooldown attempt, the next attempt will not be performed until the cooldown amount of time has passed. Defaults to 86400000, which means the file cache is cleaned up once per day.
+ */
+const CLEANUP_COOLDOWN_ENVIRONMENT_VARIABLE = "YSC_FILE_CLEANUP_COOLDOWN"
+const CLEANUP_COOLDOWN_CONFIG_FIELD = "cleanupCooldown"
+const CLEANUP_COOLDOWN_DEFAULT_VALUE = 86400000 // 1 day in milliseconds
+
+/**
  * The name of the folder to store the cache in.
  * The folder will be located in yarns global folder.
  */
@@ -78,13 +87,20 @@ export class FileCache implements Cache {
     config: Config
     name: string
     order: number
+    streamReport: StreamReport
 
-    constructor(cwd: PortablePath, project: Project, config: Config) {
+    constructor(
+        cwd: PortablePath,
+        project: Project,
+        config: Config,
+        streamReport: StreamReport,
+    ) {
         this.name = NAME
         this.order = ORDER
         this.cwd = cwd
         this.project = project
         this.config = config
+        this.streamReport = streamReport
     }
 
     async saveCacheEntry(cacheEntry: CacheEntry) {
@@ -114,38 +130,67 @@ export class FileCache implements Cache {
         }
 
         let cacheFile = this.buildCacheFile(cacheDir, cacheEntryKey)
-        if (await xfs.existsPromise(cacheFile)) {
-            const content = await xfs.readFilePromise(cacheFile, "utf8")
-            const cacheEntry = JSON.parse(content) as CacheEntry
-            if (isSameKey(cacheEntryKey, cacheEntry.key)) {
-                // Double-check the cache key
-                return cacheEntry
-            }
+        const content = await readFileIfExists(cacheFile, "utf8")
+        if (!content) {
+            return undefined
         }
-        return undefined
+
+        const cacheEntry = JSON.parse(content) as CacheEntry
+        if (isSameKey(cacheEntryKey, cacheEntry.key)) {
+            // Double-check the cache key
+            return cacheEntry
+        }
     }
 
     private async cleanup() {
         const maxAge = this.getMaxAge()
         const maxAmount = this.getMaxAmount()
+        const cleanupCooldown = this.getCleanupCooldown()
         const deleteBefore = Date.now() - maxAge
         const cacheDir = this.buildCacheDir()
-        const files = (await xfs.readdirPromise(cacheDir)).map((file) =>
-            ppath.join(cacheDir, file),
+        const cleanupLockfile = ppath.join(cacheDir, LOCKFILE_NAME)
+        const shouldCleanup = await ensureCooldown(
+            cleanupLockfile,
+            cleanupCooldown,
+            this.streamReport,
         )
-        const filesWithCreationDate = files.map(buildFileWithAge)
+
+        if (!shouldCleanup) {
+            return
+        }
+
+        const filesWithCreationDate = (await xfs.readdirPromise(cacheDir))
+            .filter((file) => file !== LOCKFILE_NAME)
+            .map((file) => ppath.join(cacheDir, file))
+            .map(buildFileWithAge)
+
         filesWithCreationDate.sort((a, b) => b.creationDate - a.creationDate)
 
         let amountFiles = 0
+        let amountDeletedFiles = 0
         for (const fileWithCreationDate of filesWithCreationDate) {
             if (fileWithCreationDate.creationDate < deleteBefore) {
                 await xfs.unlinkPromise(fileWithCreationDate.file)
+                amountDeletedFiles += 1
             } else {
                 amountFiles += 1
             }
             if (amountFiles > maxAmount) {
                 await xfs.unlinkPromise(fileWithCreationDate.file)
+                amountDeletedFiles += 1
             }
+        }
+
+        if (amountDeletedFiles > 0) {
+            this.streamReport.reportInfo(
+                MessageName.UNNAMED,
+                `File cache cleanup executed successfully. Deleted ${amountDeletedFiles} file(s).`,
+            )
+        } else {
+            this.streamReport.reportInfo(
+                MessageName.UNNAMED,
+                `File cache cleanup executed successfully. No files need to be cleaned up.`,
+            )
         }
     }
 
@@ -220,6 +265,16 @@ export class FileCache implements Cache {
         )
     }
 
+    private getCleanupCooldown() {
+        return readIntConfigValue(
+            this.config,
+            NAME,
+            CLEANUP_COOLDOWN_ENVIRONMENT_VARIABLE,
+            CLEANUP_COOLDOWN_CONFIG_FIELD,
+            CLEANUP_COOLDOWN_DEFAULT_VALUE,
+        )
+    }
+
     private getCacheFolderName() {
         return readStringConfigValue(
             this.config,
@@ -250,6 +305,20 @@ function buildFileWithAge(file: PortablePath): FileWithCreationDate {
     return {
         file,
         creationDate: stat.mtime.getTime(),
+    }
+}
+
+async function readFileIfExists(
+    file: PortablePath,
+    encoding: BufferEncoding,
+): Promise<string | undefined> {
+    try {
+        return await xfs.readFilePromise(file, encoding)
+    } catch (error) {
+        if ((error as any).code === "ENOENT") {
+            return undefined
+        }
+        throw error
     }
 }
 

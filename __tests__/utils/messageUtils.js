@@ -1,6 +1,6 @@
 
 function buildCacheUpdateMessage(packageName) {
-    return new RegExp(`\\[@rgischk\\/${packageName}\\]: ➤ YN0000: ┌ Updating script execution result cache\n\\[@rgischk\\/${packageName}\\]: ➤ YN0000: └ Completed`)
+    return new RegExp(`\\[@rgischk\\/${packageName}\\]: ➤ YN0000: ┌ Updating script execution result cache\n(?:\\[@rgischk\\/${packageName}\\]: ➤ YN0000: File cache cleanup executed successfully. No files need to be cleaned up.\n)?\\[@rgischk\\/${packageName}\\]: ➤ YN0000: └ Completed`)
 }
 
 function buildCacheReadMessage(packageName) {
