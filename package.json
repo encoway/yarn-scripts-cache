@@ -21,7 +21,7 @@
     "build": "yarn workspaces foreach --verbose --topological-dev --all run build",
     "clean-cache": "yarn workspaces foreach --verbose --all exec rimraf .yarn-scripts-cache",
     "dummy-build": "yarn workspaces foreach --verbose --topological --all run dummy-build",
-    "dummy-clean": "yarn workspaces foreach --verbose --all --include 'dummy-packages/*' exec rimraf bin build",
+    "dummy-clean": "yarn workspaces foreach --verbose --all --include 'dummy-packages/*' exec rimraf bin dist",
     "dummy-hello": "yarn workspaces foreach --verbose --all run dummy-hello",
     "dummy-echo": "yarn workspaces foreach --verbose --all run dummy-echo",
     "dummy-serve": "yarn workspaces foreach --verbose --all run dummy-serve",
@@ -35,7 +35,7 @@
   ],
   "devDependencies": {
     "jest": "^29.7.0",
-    "rimraf": "^5.0.10",
+    "rimraf": "^6.0.1",
     "typescript": "~5.7.3"
   }
 }
