@@ -1,6 +1,6 @@
 {
     "name": "@rgischk/yarn-scripts-cache-dummy-app",
-    "version": "4.8.0",
+    "version": "4.8.1",
     "type": "module",
     "dependencies": {
         "@rgischk/yarn-scripts-cache-dummy-lib": "workspace:*",
