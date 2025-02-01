@@ -28,7 +28,7 @@
     "@yarnpkg/builder": "^4.2.0",
     "@yarnpkg/core": "^4.2.0",
     "@yarnpkg/fslib": "^3.1.1",
-    "glob": "^10.4.5",
+    "glob": "^11.0.1",
     "json5": "^2.2.3",
     "typescript": "~5.7.3"
   }

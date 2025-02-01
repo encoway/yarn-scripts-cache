@@ -1271,7 +1271,7 @@ __metadata:
     "@yarnpkg/builder": "npm:^4.2.0"
     "@yarnpkg/core": "npm:^4.2.0"
     "@yarnpkg/fslib": "npm:^3.1.1"
-    glob: "npm:^10.4.5"
+    glob: "npm:^11.0.1"
     json5: "npm:^2.2.3"
     typescript: "npm:~5.7.3"
   languageName: unknown
@@ -3929,7 +3929,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.4.5":
+"glob@npm:^10.2.2, glob@npm:^10.3.10":
   version: 10.4.5
   resolution: "glob@npm:10.4.5"
   dependencies:
@@ -3945,7 +3945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^11.0.0":
+"glob@npm:^11.0.0, glob@npm:^11.0.1":
   version: 11.0.1
   resolution: "glob@npm:11.0.1"
   dependencies:
