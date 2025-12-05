@@ -13,7 +13,7 @@ import {
 } from "@rgischk/yarn-scripts-cache-api"
 
 import { readConfig } from "./readConfig"
-import { buildCaches } from "./buildCaches"
+import { buildRegistries } from "./buildRegistries"
 import {
     updateScriptExecutionResultFromCache,
     updateCacheFromScriptExecutionResult,
@@ -23,6 +23,7 @@ import {
     isCacheReadDisabled,
     isCacheWriteDisabled,
 } from "./isCacheDisabled"
+import os from "os"
 
 async function buildReport(
     extra: WrapScriptExecutionExtra,
@@ -64,13 +65,13 @@ const wrapScriptExecution: WrapScriptExecution = async (
         return executor
     }
 
-    const caches = await buildCaches(config, {
+    const registries = await buildRegistries(config, {
         project,
         locator,
         scriptName,
         extra,
     })
-    if (caches.length === 0) {
+    if (registries.cacheRegistry.length === 0) {
         report.reportError(
             MessageName.UNNAMED,
             "Script was configured to be cached but no cache implementation was found! Please make sure to add cache implementations via their own plugin.",
@@ -86,9 +87,21 @@ const wrapScriptExecution: WrapScriptExecution = async (
                 extra,
                 scriptToCache,
                 report,
-                caches,
+                registries.cacheRegistry,
             )
             if (cacheResult.type === "SUCCESS") {
+                const usedAt = Date.now()
+                const usedBy = os.hostname()
+
+                for (const statisticsService of registries.statisticsServiceRegistry) {
+                    await statisticsService.recordCacheHit(
+                        cacheResult.cacheEntry,
+                        cacheResult.cache,
+                        usedAt,
+                        usedBy,
+                    )
+                }
+
                 const createdAt = new Date(
                     cacheResult.cacheEntry.value.createdAt,
                 ).toUTCString()
@@ -103,7 +116,12 @@ const wrapScriptExecution: WrapScriptExecution = async (
             }
         }
 
+        const executionStartTime = Date.now()
+
         const result = await executor()
+
+        const executionEndTime = Date.now()
+        const scriptExecutionTime = executionEndTime - executionStartTime
 
         if (result === 0 && !isCacheWriteDisabled(config)) {
             await reportDuration(
@@ -117,8 +135,9 @@ const wrapScriptExecution: WrapScriptExecution = async (
                         extra,
                         scriptToCache,
                         originalCacheKey,
+                        scriptExecutionTime,
                         report,
-                        caches,
+                        registries.cacheRegistry,
                     )
                 },
             )

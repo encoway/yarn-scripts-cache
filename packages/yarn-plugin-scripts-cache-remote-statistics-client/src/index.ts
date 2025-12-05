@@ -10,7 +10,7 @@ import {
     YarnScriptsCacheHooks,
 } from "@rgischk/yarn-scripts-cache-api"
 
-import { NexusCache } from "./NexusCache"
+import { RemoteStatisticsService } from "./RemoteStatisticsService"
 
 async function buildReport(
     extra: WrapScriptExecutionExtra,
@@ -29,13 +29,13 @@ async function buildReport(
 }
 
 const beforeYarnScriptsCacheUsage: BeforeYarnScriptsCacheUsage = async (
-    cacheRegistry: CacheRegistry,
-    _: StatisticsServiceRegistry,
+    _: CacheRegistry,
+    statisticsServiceRegistry: StatisticsServiceRegistry,
     config: Config,
     wrapScriptExecutionArgs: InitiatingScriptExecutionParameters,
 ) => {
     const report = await buildReport(wrapScriptExecutionArgs.extra)
-    cacheRegistry.push(new NexusCache(config, report))
+    statisticsServiceRegistry.push(new RemoteStatisticsService(config, report))
 }
 
 const hooks: YarnScriptsCacheHooks = {

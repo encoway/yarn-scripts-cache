@@ -66,11 +66,12 @@ The following environment variables can be used to overwrite the according optio
 * `YSC_READ_DISABLED` Disable reading and restoring script results from all caches.
 * `YSC_WRITE_DISABLED` Disable updating any caches with script results.
 
-### Cache configuration options
+### Plugin configuration options
 
-For the configuration options of the different cache implementations, see their respective README files:
+For the configuration options of the different plugins (cache implementations and statistics service implementations), see their respective README files:
 * [File Cache](./packages/yarn-plugin-scripts-cache-file/README.md)
 * [Nexus Cache](./packages/yarn-plugin-scripts-cache-nexus/README.md)
+* [Remote Statistics Service](./packages/yarn-plugin-scripts-cache-remote-statistics-client/README.md)
 
 ## Cache implementations
 

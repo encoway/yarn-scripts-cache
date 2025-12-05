@@ -26,7 +26,7 @@ export type Config = {
     cacheWriteDisabled?: boolean
 
     /**
-     * Configuration options for cache implementations.
+     * Configuration options for plugin implementations like caches or statistics services.
      */
     cacheConfigs?: {
         [cacheName: string]: any
@@ -120,9 +120,12 @@ export function readIntConfigValue<T>(
     configFieldName: string,
     defaultValue: T,
 ): number | T {
-    const maxAgeEnvironmentValue = process.env[environmentVariableName]
-    if (maxAgeEnvironmentValue && !isNaN(parseInt(maxAgeEnvironmentValue))) {
-        return parseInt(maxAgeEnvironmentValue)
+    const environmentVariableValue = process.env[environmentVariableName]
+    if (
+        environmentVariableValue &&
+        !isNaN(parseInt(environmentVariableValue))
+    ) {
+        return parseInt(environmentVariableValue)
     }
     if (
         config.cacheConfigs &&
@@ -141,9 +144,9 @@ export function readStringConfigValue<T>(
     configFieldName: string,
     defaultValue: T,
 ): string | T {
-    const maxAgeEnvironmentValue = process.env[environmentVariableName]
-    if (maxAgeEnvironmentValue) {
-        return maxAgeEnvironmentValue
+    const environmentVariableValue = process.env[environmentVariableName]
+    if (environmentVariableValue) {
+        return environmentVariableValue
     }
     if (
         config.cacheConfigs &&
@@ -162,9 +165,9 @@ export function readBooleanConfigValue(
     configFieldName: string,
     defaultValue: boolean,
 ): boolean {
-    const maxAgeEnvironmentValue = process.env[environmentVariableName]
-    if (maxAgeEnvironmentValue) {
-        return maxAgeEnvironmentValue === "true"
+    const environmentVariableValue = process.env[environmentVariableName]
+    if (environmentVariableValue) {
+        return environmentVariableValue === "true"
     }
     if (
         config.cacheConfigs &&

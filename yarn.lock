@@ -1263,6 +1263,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rgischk/yarn-plugin-scripts-cache-remote-statistics-client@workspace:packages/yarn-plugin-scripts-cache-remote-statistics-client":
+  version: 0.0.0-use.local
+  resolution: "@rgischk/yarn-plugin-scripts-cache-remote-statistics-client@workspace:packages/yarn-plugin-scripts-cache-remote-statistics-client"
+  dependencies:
+    "@rgischk/yarn-scripts-cache-api": "workspace:*"
+    "@types/node": "npm:^22.13.0"
+    "@types/node-fetch": "npm:^2.6.12"
+    "@yarnpkg/builder": "npm:^4.2.0"
+    "@yarnpkg/core": "npm:^4.2.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
+    node-fetch: "npm:^3.3.2"
+    prettier: "npm:^3.4.2"
+    typescript: "npm:~5.7.3"
+  languageName: unknown
+  linkType: soft
+
 "@rgischk/yarn-plugin-scripts-cache@workspace:packages/yarn-plugin-scripts-cache":
   version: 0.0.0-use.local
   resolution: "@rgischk/yarn-plugin-scripts-cache@workspace:packages/yarn-plugin-scripts-cache"

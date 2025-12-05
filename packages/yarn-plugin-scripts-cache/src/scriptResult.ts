@@ -31,6 +31,7 @@ export async function updateCacheFromScriptExecutionResult(
     extra: WrapScriptExecutionExtra,
     scriptToCache: ScriptToCache,
     originalCacheKey: CacheEntryKey | undefined,
+    scriptExecutionTime: number,
     streamReport: StreamReport,
     caches: Cache[],
 ) {
@@ -59,6 +60,10 @@ export async function updateCacheFromScriptExecutionResult(
     const cacheEntry: CacheEntry = {
         key,
         value,
+        stats: {
+            scriptExecutionTime,
+            scriptName: scriptToCache.scriptName,
+        },
     }
     for (const cache of caches) {
         await cache.saveCacheEntry(cacheEntry)

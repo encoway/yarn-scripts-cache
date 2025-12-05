@@ -3,6 +3,7 @@ import { Configuration, Plugin, StreamReport } from "@yarnpkg/core"
 import {
     BeforeYarnScriptsCacheUsage,
     CacheRegistry,
+    StatisticsServiceRegistry,
     Config,
     InitiatingScriptExecutionParameters,
     WrapScriptExecutionExtra,
@@ -29,6 +30,7 @@ async function buildReport(
 
 const beforeYarnScriptsCacheUsage: BeforeYarnScriptsCacheUsage = async (
     cacheRegistry: CacheRegistry,
+    _: StatisticsServiceRegistry,
     config: Config,
     wrapScriptExecutionArgs: InitiatingScriptExecutionParameters,
 ) => {

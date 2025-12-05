@@ -39,6 +39,7 @@ export interface Cache {
 export type CacheEntry = {
     key: CacheEntryKey
     value: CacheEntryValue
+    stats?: CacheEntryStats
 }
 
 /**
@@ -117,4 +118,18 @@ export type GlobFileContents = {
  */
 export type FileContents = {
     [file: string]: string
+}
+
+/**
+ * Statistics about a cache entry.
+ */
+export type CacheEntryStats = {
+    /**
+     * The time it took to perform the original script execution in milliseconds.
+     */
+    scriptExecutionTime: number
+    /**
+     * The name of the script being cached.
+     */
+    scriptName: string
 }
