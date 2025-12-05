@@ -103,7 +103,7 @@ On this page, press the "Choose a tag" button and enter a tag matching the versi
 
 Make the "Release title" the same as the tag and enter a short description of your release.
 
-**Important:** Manually attach the three bundle files by uploading them:
+**Important:** Manually attach the four bundle files by uploading them:
 * `packages/yarn-plugin-scripts-cache/bundles/@yarnpkg/plugin-scripts-cache.js`
 * `packages/yarn-plugin-scripts-cache-file/bundles/@yarnpkg/plugin-scripts-cache-file.js`
 * `packages/yarn-plugin-scripts-cache-nexus/bundles/@yarnpkg/plugin-scripts-cache-nexus.js`
