@@ -1,6 +1,6 @@
 {
     "name": "@rgischk/yarn-plugin-scripts-cache-remote-statistics-client",
-    "version": "4.8.1",
+    "version": "4.9.0",
     "description": "Implementation of the StatisticsService, that sends the statistics to a remove server.",
     "main": "./src/index.ts",
     "license": "MIT",
