@@ -107,3 +107,4 @@ Make the "Release title" the same as the tag and enter a short description of yo
 * `packages/yarn-plugin-scripts-cache/bundles/@yarnpkg/plugin-scripts-cache.js`
 * `packages/yarn-plugin-scripts-cache-file/bundles/@yarnpkg/plugin-scripts-cache-file.js`
 * `packages/yarn-plugin-scripts-cache-nexus/bundles/@yarnpkg/plugin-scripts-cache-nexus.js`
+* `packages/yarn-plugin-scripts-cache-remote-statistics-client/bundles/@yarnpkg/plugin-scripts-cache-remote-statistics-client.js`
