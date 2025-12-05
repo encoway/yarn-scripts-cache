@@ -11,7 +11,7 @@
         "@eslint/js": "^9.39.1",
         "@types/react": "^19.2.7",
         "@types/react-dom": "^19.2.3",
-        "@vitejs/plugin-react": "^4.7.0",
+        "@vitejs/plugin-react": "^5.1.1",
         "eslint": "^9.39.1",
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.4.24",
@@ -19,7 +19,7 @@
         "prettier": "^3.7.4",
         "typescript": "~5.7.3",
         "typescript-eslint": "^8.48.1",
-        "vite": "^6.4.1"
+        "vite": "^7.2.6"
     },
     "scripts": {
         "dummy-start": "vite",
