@@ -1,7 +1,7 @@
 {
-    "name": "@rgischk/yarn-plugin-scripts-cache-nexus",
+    "name": "@rgischk/yarn-plugin-scripts-cache-remote",
     "version": "4.9.0",
-    "description": "Cache implementation for yarn-scripts-cache using a remote sonatype nexus repository.",
+    "description": "Cache implementation for yarn-scripts-cache using a remote HTTP repository.",
     "main": "./src/index.ts",
     "license": "MIT",
     "author": "Roman Gischkowski <roman.gischkowski@encoway.de>",
@@ -13,7 +13,7 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/encoway/yarn-scripts-cache.git",
-        "directory": "packages/yarn-plugin-scripts-cache-nexus"
+        "directory": "packages/yarn-plugin-scripts-cache-remote"
     },
     "homepage": "https://github.com/encoway/yarn-scripts-cache#readme",
     "scripts": {

@@ -22,8 +22,8 @@
         }
     ],
     "cacheConfigs": {
-        "nexus": {
-            "host": "http://localhost:8081"
+        "remote": {
+            "url": "http://localhost:8081/content/sites/yarn-scripts-cache"
         }
     }
 }

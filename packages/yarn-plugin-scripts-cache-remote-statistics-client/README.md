@@ -11,7 +11,7 @@ This package collects statistics about the cache usage and sends them to a remot
 
 The following configuration options are available:
 
-### Disable nexus cache
+### Disable statistics service
 
 Disables this statistics service entirely.
 

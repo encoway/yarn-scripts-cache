@@ -12,75 +12,69 @@ import {
     readStringConfigValue,
 } from "@rgischk/yarn-scripts-cache-api"
 
-const NAME = "nexus"
+const NAME = "remote"
 const ORDER = 100
 
 /**
  * Whether this cache is disabled. Defaults to false.
  */
-const CACHE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_NEXUS_DISABLED"
+const CACHE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_REMOTE_DISABLED"
 const CACHE_DISABLED_CONFIG_FIELD = "cacheDisabled"
 const CACHE_DISABLED_DEFAULT_VALUE = false
 
 /**
  * Whether reading from this cache is disabled. Defaults to false.
  */
-const CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE = "YSC_NEXUS_READ_DISABLED"
+const CACHE_READ_DISABLED_ENVIRONMENT_VARIABLE = "YSC_REMOTE_READ_DISABLED"
 const CACHE_READ_DISABLED_CONFIG_FIELD = "cacheReadDisabled"
 const CACHE_READ_DISABLED_DEFAULT_VALUE = false
 
 /**
  * Whether writing to this cache is disabled. Defaults to false.
  */
-const CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_NEXUS_WRITE_DISABLED"
+const CACHE_WRITE_DISABLED_ENVIRONMENT_VARIABLE = "YSC_REMOTE_WRITE_DISABLED"
 const CACHE_WRITE_DISABLED_CONFIG_FIELD = "cacheWriteDisabled"
 const CACHE_WRITE_DISABLED_DEFAULT_VALUE = false
 
 /**
- * The host of the nexus instance to use as a cache. Note: If the host is not configured, this cache will be disabled.
- * Example: http://localhost:8081
+ * The URL of the remote server to use as a cache. It should point to a repository that supports HTTP PUT/GET/HEAD requests,
+ * e.g. a Nexus 2 server with a "site (hosted)" repository or a JFrog Artifactory instance with a "generic" repository.
+ * Note: If the URL is not configured, this cache will be disabled.
+ * Example: http://localhost:8081/content/sites/artifacts-cache
  */
-const HOST_ENVIRONMENT_VARIABLE = "YSC_NEXUS_HOST"
-const HOST_CONFIG_FIELD = "host"
+const URL_ENVIRONMENT_VARIABLE = "YSC_REMOTE_URL"
+const URL_CONFIG_FIELD = "url"
 
 /**
- * The name of the nexus repository to store the cache entries in. The repository should be of type "raw (hosted)".
- * Defaults to yarn-scripts-cache.
- */
-const REPOSITORY_ENVIRONMENT_VARIABLE = "YSC_NEXUS_REPOSITORY"
-const REPOSITORY_CONFIG_FIELD = "repository"
-const REPOSITORY_DEFAULT_VALUE = "yarn-scripts-cache"
-
-/**
- * The nexus username used to authenticate when uploading cache entries. Make sure this user is allowed to upload
+ * The remote username used to authenticate when uploading cache entries. Make sure this user is allowed to upload
  * components to the configured repository. Note: If the username is not configured, the cache will not be updated.
  */
-const USERNAME_ENVIRONMENT_VARIABLE = "YSC_NEXUS_USERNAME"
+const USERNAME_ENVIRONMENT_VARIABLE = "YSC_REMOTE_USERNAME"
 const USERNAME_CONFIG_FIELD = "username"
 
 /**
- * The password for the nexus username used to authenticate when uploading cache entries. It is not recommended to store
+ * The password or access token for the remote username used to authenticate when uploading cache entries. It is not recommended to store
  * the password in the config file, as the file is not encrypted. Note: If the password is not configured, the cache
  * will not be updated.
  */
-const PASSWORD_ENVIRONMENT_VARIABLE = "YSC_NEXUS_PASSWORD"
+const PASSWORD_ENVIRONMENT_VARIABLE = "YSC_REMOTE_PASSWORD"
 const PASSWORD_CONFIG_FIELD = "password"
 
 /**
- * The maximum amount of attempts when performing a network request to the nexus instance. Defaults to 3.
+ * The maximum amount of attempts when performing a network request to the remote server instance. Defaults to 3.
  */
-const MAX_RETRIES_ENVIRONMENT_VARIABLE = "YSC_NEXUS_MAX_RETRIES"
+const MAX_RETRIES_ENVIRONMENT_VARIABLE = "YSC_REMOTE_MAX_RETRIES"
 const MAX_RETRIES_CONFIG_FIELD = "maxRetries"
 const MAX_RETRIES_DEFAULT_VALUE = 3
 
 /**
  * Whether verbose output should be generated. This is useful for analysing errors. Defaults to false.
  */
-const VERBOSE_ENVIRONMENT_VARIABLE = "YSC_NEXUS_VERBOSE"
+const VERBOSE_ENVIRONMENT_VARIABLE = "YSC_REMOTE_VERBOSE"
 const VERBOSE_RETRIES_CONFIG_FIELD = "verbose"
 const VERBOSE_RETRIES_DEFAULT_VALUE = false
 
-export class NexusCache implements Cache {
+export class RemoteCache implements Cache {
     name: string
     order: number
     config: Config
@@ -98,19 +92,18 @@ export class NexusCache implements Cache {
             return
         }
 
-        const host = this.getHost()
-        const repository = this.getRepository()
+        const remoteUrl = this.getUrl()
         const username = this.getUsername()
         const password = this.getPassword()
         const maxRetries = this.getMaxRetries()
         const verbose = this.getVerbose()
 
-        if (!host || !username || !password) {
+        if (!remoteUrl || !username || !password) {
             return
         }
 
         const filename = buildFilename(cacheEntry.key)
-        const url = buildUrl(host, repository, filename)
+        const url = buildUrl(remoteUrl, filename)
         const uploader = () =>
             uploadJsonAsset(
                 url,
@@ -136,23 +129,22 @@ export class NexusCache implements Cache {
             return undefined
         }
 
-        const host = this.getHost()
-        const repository = this.getRepository()
+        const remoteUrl = this.getUrl()
         const maxRetries = this.getMaxRetries()
         const verbose = this.getVerbose()
 
-        if (!host) {
+        if (!remoteUrl) {
             if (verbose) {
                 this.report.reportWarning(
                     MessageName.UNNAMED,
-                    "Nexus cache is disabled because no host was configured!",
+                    "Remote cache is disabled because no remote URL was configured!",
                 )
             }
             return
         }
 
         const filename = buildFilename(cacheEntryKey)
-        const url = buildUrl(host, repository, filename)
+        const url = buildUrl(remoteUrl, filename)
         const downloader = () =>
             downloadJsonAsset<CacheEntry>(url, verbose, this.report)
         const cacheEntry = await retry(
@@ -213,23 +205,13 @@ export class NexusCache implements Cache {
         )
     }
 
-    private getHost() {
+    private getUrl() {
         return readStringConfigValue(
             this.config,
             NAME,
-            HOST_ENVIRONMENT_VARIABLE,
-            HOST_CONFIG_FIELD,
+            URL_ENVIRONMENT_VARIABLE,
+            URL_CONFIG_FIELD,
             undefined,
-        )
-    }
-
-    private getRepository() {
-        return readStringConfigValue(
-            this.config,
-            NAME,
-            REPOSITORY_ENVIRONMENT_VARIABLE,
-            REPOSITORY_CONFIG_FIELD,
-            REPOSITORY_DEFAULT_VALUE,
         )
     }
 
@@ -274,8 +256,8 @@ export class NexusCache implements Cache {
     }
 }
 
-function buildUrl(host: string, repository: string, filename: string): string {
-    return `${host}/content/sites/${repository}/${filename}`
+function buildUrl(remoteUrl: string, filename: string): string {
+    return `${remoteUrl}/${filename}`
 }
 
 function buildFilename(cacheEntryKey: CacheEntryKey): string {
