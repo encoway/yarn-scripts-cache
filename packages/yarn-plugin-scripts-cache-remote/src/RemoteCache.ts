@@ -130,14 +130,16 @@ export class RemoteCache implements Cache {
         }
 
         const remoteUrl = this.getUrl()
+        const username = this.getUsername()
+        const password = this.getPassword()
         const maxRetries = this.getMaxRetries()
         const verbose = this.getVerbose()
 
-        if (!remoteUrl) {
+        if (!remoteUrl || !username || !password) {
             if (verbose) {
                 this.report.reportWarning(
                     MessageName.UNNAMED,
-                    "Remote cache is disabled because no remote URL was configured!",
+                    "Remote cache is disabled because remote URL, username and/or password are missing in the configuration!",
                 )
             }
             return
@@ -146,7 +148,7 @@ export class RemoteCache implements Cache {
         const filename = buildFilename(cacheEntryKey)
         const url = buildUrl(remoteUrl, filename)
         const downloader = () =>
-            downloadJsonAsset<CacheEntry>(url, verbose, this.report)
+            downloadJsonAsset<CacheEntry>(url, username, password, verbose, this.report)
         const cacheEntry = await retry(
             downloader,
             maxRetries,
@@ -410,12 +412,17 @@ async function uploadJsonAsset(
 
 async function downloadJsonAsset<T>(
     url: string,
+    username: string,
+    password: string,
     verbose: boolean,
     report: StreamReport,
 ): Promise<T | "CACHE_MISS" | "FAILED"> {
     let response
     try {
-        response = await fetch(url)
+        response = await fetch(url, {
+            method: "GET",
+            headers: buildHeaders(username, password),
+        })
     } catch (error) {
         if (verbose) {
             report.reportErrorOnce(
