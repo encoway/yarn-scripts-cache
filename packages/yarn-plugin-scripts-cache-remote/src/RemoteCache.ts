@@ -135,11 +135,11 @@ export class RemoteCache implements Cache {
         const maxRetries = this.getMaxRetries()
         const verbose = this.getVerbose()
 
-        if (!remoteUrl || !username || !password) {
+        if (!remoteUrl) {
             if (verbose) {
                 this.report.reportWarning(
                     MessageName.UNNAMED,
-                    "Remote cache is disabled because remote URL, username and/or password are missing in the configuration!",
+                    "Remote cache is disabled because no remote URL was configured!",
                 )
             }
             return
@@ -268,12 +268,14 @@ function buildFilename(cacheEntryKey: CacheEntryKey): string {
     return `YSC_${hash.digest("base64url")}`
 }
 
-function buildHeaders(username: string, password: string): Headers {
+function buildHeaders(username: string | undefined, password: string | undefined): Headers {
     const headers = new Headers()
-    headers.append(
-        "Authorization",
-        `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`,
-    )
+    if (username && password) {
+        headers.append(
+            "Authorization",
+            `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`,
+        )
+    }
     return headers
 }
 
@@ -412,8 +414,8 @@ async function uploadJsonAsset(
 
 async function downloadJsonAsset<T>(
     url: string,
-    username: string,
-    password: string,
+    username: string | undefined,
+    password: string | undefined,
     verbose: boolean,
     report: StreamReport,
 ): Promise<T | "CACHE_MISS" | "FAILED"> {
