@@ -5,10 +5,11 @@ A Yarn Scripts Cache implementation using a repository with HTTP PUT/GET/HEAD ac
 ## Repository setup
 
 The repository setup depends on the repository manager in use. For example:
-* Sonatype Nexus Repository Manager 2: Repository must be of type "site (hosted)".
-* JFrog Artifactory: Repository must be of type "generic".
 
-The permissions must be set accordingly. Typically only the CI/CD user is allowed to upload components, while local developers should only be allowed to 
+- Sonatype Nexus Repository Manager 2: Repository must be of type "site (hosted)".
+- JFrog Artifactory: Repository must be of type "generic".
+
+The permissions must be set accordingly. Typically only the CI/CD user is allowed to upload components, while local developers should only be allowed to
 download components.
 
 ## Configuration

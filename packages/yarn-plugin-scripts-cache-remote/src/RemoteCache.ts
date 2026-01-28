@@ -148,7 +148,13 @@ export class RemoteCache implements Cache {
         const filename = buildFilename(cacheEntryKey)
         const url = buildUrl(remoteUrl, filename)
         const downloader = () =>
-            downloadJsonAsset<CacheEntry>(url, username, password, verbose, this.report)
+            downloadJsonAsset<CacheEntry>(
+                url,
+                username,
+                password,
+                verbose,
+                this.report,
+            )
         const cacheEntry = await retry(
             downloader,
             maxRetries,
@@ -268,7 +274,10 @@ function buildFilename(cacheEntryKey: CacheEntryKey): string {
     return `YSC_${hash.digest("base64url")}`
 }
 
-function buildHeaders(username: string | undefined, password: string | undefined): Headers {
+function buildHeaders(
+    username: string | undefined,
+    password: string | undefined,
+): Headers {
     const headers = new Headers()
     if (username && password) {
         headers.append(
