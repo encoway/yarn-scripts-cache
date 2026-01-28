@@ -70,7 +70,7 @@ The following environment variables can be used to overwrite the according optio
 
 For the configuration options of the different plugins (cache implementations and statistics service implementations), see their respective README files:
 * [File Cache](./packages/yarn-plugin-scripts-cache-file/README.md)
-* [Nexus Cache](./packages/yarn-plugin-scripts-cache-nexus/README.md)
+* [Remote Cache](./packages/yarn-plugin-scripts-cache-remote/README.md)
 * [Remote Statistics Service](./packages/yarn-plugin-scripts-cache-remote-statistics-client/README.md)
 
 ## Cache implementations
@@ -87,10 +87,11 @@ The [file cache](./packages/yarn-plugin-scripts-cache-file/README.md) stores the
 This is a very basic cache that is a good option as the first cache to use.
 It works great together with remote caches.
 
-### Nexus cache
+### Remote cache
 
-The [nexus cache](./packages/yarn-plugin-scripts-cache-nexus/README.md) stores the cache entries in a Sonatype Nexus Repository Manager 2.
-Since this is a remote cache, it can be shared between multiple developers, even including a CI/CD system.
+The [remote cache](./packages/yarn-plugin-scripts-cache-remote/README.md) stores the cache entries in a remote repository with HTTP PUT/GET/HEAD access,
+e.g. provided by Sonatype Nexus Repository Manager 2 or JFrog Artifactory.
+Being a remote cache, it can be shared between multiple developers, even including a CI/CD system.
 This can significantly decrease build times in big teams working on complex monorepos.
 
 ### Create a new cache implementation

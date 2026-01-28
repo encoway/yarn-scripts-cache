@@ -10,7 +10,7 @@ import {
     YarnScriptsCacheHooks,
 } from "@rgischk/yarn-scripts-cache-api"
 
-import { NexusCache } from "./NexusCache"
+import { RemoteCache } from "./RemoteCache"
 
 async function buildReport(
     extra: WrapScriptExecutionExtra,
@@ -35,7 +35,7 @@ const beforeYarnScriptsCacheUsage: BeforeYarnScriptsCacheUsage = async (
     wrapScriptExecutionArgs: InitiatingScriptExecutionParameters,
 ) => {
     const report = await buildReport(wrapScriptExecutionArgs.extra)
-    cacheRegistry.push(new NexusCache(config, report))
+    cacheRegistry.push(new RemoteCache(config, report))
 }
 
 const hooks: YarnScriptsCacheHooks = {
